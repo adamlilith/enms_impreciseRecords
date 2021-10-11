@@ -11,10 +11,9 @@
 ### report statistics on change in EOO ###
 ### report statistics on univariate niche breadth ###
 ### report statistics on multivariate niche volume ###
-### report statistics on change in climate change exposure ###
+### report metrics on change in climate change exposure ###
 ### plot increase in EOO and niche breadth as function of number of precise records using base R ###
 ### plot distribution of different types of occurrences across species ###
-### statistical analysis of EOO ###
 ### statistical analyses of climate change exposure ###
 
 
@@ -257,7 +256,7 @@
 # say('### report statistics on change in EOO ###')
 # say('##########################################')
 
-	# # univariate niche breadth
+	# # EOO
 	# x <- read.csv('./Analysis/Extent of Occurrence/!Extent of Occurrence.csv')
 	
 	# say('Difference in EOO:', pre=1)
@@ -270,6 +269,9 @@
 		# medianDelta <- round(median(100 * delta), 1)
 		# rng <- round(100 * rng, 1)
 		
+		# wcox <- wilcox.test(acc, all, paired=TRUE, alternative='two.sided')
+		# print(wcox)
+
 		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').', post=1)
 		# say('Number (%) of species experiencing a doubling in EOO: ', sum(delta > 2), ' (', round(100 * sum(delta > 2) / nrow(x), 1), ').')
 		# say('Number (%) of species experiencing a tripling in EOO: ', sum(delta > 3), ' (', round(100 * sum(delta > 3) / nrow(x), 1), ').')
@@ -294,6 +296,8 @@
 		# rng <- round(100 * rng, 1)
 		
 		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
+		# wcox <- wilcox.test(acc, all, paired=TRUE, alternative='two.sided')
+		# print(wcox)
 
 	# say('Difference in MAP niche breadth:', pre=1)
 
@@ -306,47 +310,49 @@
 		# rng <- round(100 * rng, 1)
 		
 		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').', post=2)
+		# wcox <- wilcox.test(acc, all, paired=TRUE, alternative='two.sided')
+		# print(wcox)
 
-say('######################################################')
-say('### report statistics on multivariate niche volume ###')
-say('######################################################')
+# say('######################################################')
+# say('### report statistics on multivariate niche volume ###')
+# say('######################################################')
 
-	# multivariate niche volume
-	x <- read.csv('./Analysis/Multivariate Niche Volume/!pcaVolume_df.csv')
+	# # multivariate niche volume
+	# x <- read.csv('./Analysis/Multivariate Niche Volume/!pcaVolume_df.csv')
 	
-	say('Difference in niche volume:', pre=1)
+	# say('Difference in niche volume:', pre=1)
 
-		acc <- x$accurate_vol
-		all <- x$nearest_vol
-		delta <- (all - acc) / acc
-		rng <- range(delta)
+		# acc <- x$accurate_vol
+		# all <- x$nearest_vol
+		# delta <- (all - acc) / acc
+		# rng <- range(delta)
 		
-		medianDelta <- round(median(100 * delta), 1)
-		rng <- round(100 * rng, 1)
+		# medianDelta <- round(median(100 * delta), 1)
+		# rng <- round(100 * rng, 1)
 		
-		say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').', post=2)
+		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').', post=2)
 
-		wcox <- wilcox.test(acc, all, paired=FALSE, alternative='two.sided')
-		print(wcox)
+		# wcox <- wilcox.test(acc, all, paired=TRUE, alternative='two.sided')
+		# print(wcox)
 
-	say('Difference in area volume:', pre=1)
+	# say('Difference in area volume:', pre=1)
 
-		acc <- x$accurate_area
-		all <- x$nearest_area
-		delta <- (all - acc) / acc
-		rng <- range(delta)
+		# acc <- x$accurate_area
+		# all <- x$nearest_area
+		# delta <- (all - acc) / acc
+		# rng <- range(delta)
 		
-		medianDelta <- round(median(100 * delta), 1)
-		rng <- round(100 * rng, 1)
+		# medianDelta <- round(median(100 * delta), 1)
+		# rng <- round(100 * rng, 1)
 		
-		say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').', post=2)
+		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').', post=2)
 
-		wcox <- wilcox.test(acc, all, paired=FALSE, alternative='two.sided')
-		print(wcox)
+		# wcox <- wilcox.test(acc, all, paired=TRUE, alternative='two.sided')
+		# print(wcox)
 
-# say('##############################################################')
-# say('### report statistics on change in climate change exposure ###')
-# say('##############################################################')
+# say('###########################################################')
+# say('### report metrics on change in climate change exposure ###')
+# say('###########################################################')
 
 	# # climate change exposure
 	# x <- read.csv('./Analysis/ENMs/!Climate Change Exposure - Areal Values for Current, Future, Stable, Gain, and Loss.csv')
@@ -642,42 +648,6 @@ say('######################################################')
 # say('### statistical analyses of climate change exposure ###')
 # say('#######################################################')
 	
-	# say('EOO', level=2)
-		
-		# data <- read.csv('./Analysis/Extent of Occurrence/!Extent of Occurrence.csv')
-		# col1 <- 'accRange_km2'
-		# col2 <- 'accInaccAdminRange_km2'
-		
-		# wcox <- wilcox.test(data[ , col1], data[ , col2], paired=TRUE, alternative='two.sided')
-		# print(wcox)
-		
-	# say('univariate niche breadth, MAT', level=2)
-	
-		# data <- read.csv('./Analysis/Univariate Niche Breadth/!Univariate Niche Breadth.csv')
-		# col1 <- 'nicheBreathBio1_acc'
-		# col2 <- 'nicheBreathBio1_closest'
-		
-		# wcox <- wilcox.test(data[ , col1], data[ , col2], paired=TRUE, alternative='two.sided')
-		# print(wcox)
-		
-	# say('univariate niche breadth, MAP', level=2)
-	
-		# data <- read.csv('./Analysis/Univariate Niche Breadth/!Univariate Niche Breadth.csv')
-		# col1 <- 'nicheBreathBio12_acc'
-		# col2 <- 'nicheBreathBio12_closest'
-		
-		# wcox <- wilcox.test(data[ , col1], data[ , col2], paired=TRUE, alternative='two.sided')
-		# print(wcox)
-		
-	# say('multivariate niche volume', level=2)
-	
-		# data <- read.csv('./Analysis/Multivariate Niche Volume/!pcaVolume_df.csv')
-		# col1 <- 'accurate'
-		# col2 <- 'nearest'
-		
-		# wcox <- wilcox.test(data[ , col1], data[ , col2], paired=TRUE, alternative='two.sided')
-		# print(wcox)
-
 	# say('PRESENT-DAY climatically suitable area within precise MCP', level=2)
 	
 		# data <- read.csv('./Analysis/ENMs/!Climate Change Exposure - Areal Values for Current, Future, Stable, Gain, and Loss.csv')

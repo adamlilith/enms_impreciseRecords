@@ -9,7 +9,6 @@
 ### multivariate niche breadth ###
 ### climate change exposure ###
 
-
 #############
 ### setup ###
 #############
@@ -91,47 +90,80 @@
 	# ggsave(paste0('./Analysis/Univariate Niche Breadth/!Increase in Univariate Niche Breadth.pdf'), width=8, height=9, units='in')
 	# dev.off()
 
-# say('##################################')
-# say('### multivariate niche breadth ###')
-# say('##################################')
+say('##################################')
+say('### multivariate niche breadth ###')
+say('##################################')
 
-	# data <- read.csv('./Analysis/Multivariate Niche Volume/!pcaVolume_df.csv')
-	# ancillary <- read.csv('./Analysis/Univariate Niche Breadth/!Univariate Niche Breadth.csv')
-	# data$species <- ancillary$species
-	# n <- length(unique(data$species))
+	data <- read.csv('./Analysis/Multivariate Niche Volume/!pcaVolume_df.csv')
+	ancillary <- read.csv('./Analysis/Univariate Niche Breadth/!Univariate Niche Breadth.csv')
+	data$species <- ancillary$species
+	n <- length(unique(data$species))
 
-	# data$species <- gsub(data$species, pattern='Asclepias', replacement='A.')
-	# numRecs <- ancillary$numAccs
-	# names(numRecs) <- data$species
-	# numRecs <- sort(numRecs, FALSE)
-	# data$species <- factor(data$species, levels=names(numRecs))
+	data$species <- gsub(data$species, pattern='Asclepias', replacement='A.')
+	numRecs <- ancillary$numAccs
+	names(numRecs) <- data$species
+	numRecs <- sort(numRecs, FALSE)
+	data$species <- factor(data$species, levels=names(numRecs))
 
-	# types <- c('closest', 'mean', 'centroid', 'farthest')
+	### niche volume
+
+	types <- c('nearest_vol', 'mean_vol', 'centroid_vol', 'farthest_vol')
+	accCol <- 'accurate_vol'
 	
-	# accCol <- 'accurate'
-	# levels <- c('nearest', 'mean', 'centroid', 'farthest')
-	# names(levels) <- types
+	levels <- c('nearest_vol', 'mean_vol', 'centroid_vol', 'farthest_vol')
+	names(levels) <- types
 
-	# x <- data.frame(
-		# species = rep(data$species, length(levels)),
-		# type = rep(types, each=n),
-		# breadth = (c(data[ , levels[1]], data[ , levels[2]], data[ , levels[3]], data[ , levels[4]]) - data[ , accCol]) / data[ , accCol]
-	# )
+	x <- data.frame(
+		species = rep(data$species, length(levels)),
+		type = rep(types, each=n),
+		breadth = (c(data[ , levels[1]], data[ , levels[2]], data[ , levels[3]], data[ , levels[4]]) - data[ , accCol]) / data[ , accCol]
+	)
 	
-	# x$type <- factor(x$type, levels=types)
+	x$type <- factor(x$type, levels=types)
 	
-	# p <- ggplot(data=x, aes(x=species, y=breadth, group=type)) +
-		# geom_point(aes(col=type, shape=type), size=2.2) +
-		# scale_shape_manual(values=c('closest'=16, 'mean'=3, 'centroid'=5, 'farthest'=15)) +
-		# scale_y_continuous(labels=scales::percent, trans='log10') +
-		# labs(x=NULL, y=paste0('Increase in niche volume (%)')) +
-		# theme(axis.text.y=element_text(face='italic')) +
-		# coord_flip()
+	p <- ggplot(data=x, aes(x=species, y=breadth, group=type)) +
+		geom_point(aes(col=type, shape=type), size=2.2) +
+		scale_shape_manual(labels=c('nearest_vol'='Closest', 'mean_vol'='Mean', 'centroid_vol'='Centroid', 'farthest_vol'='Farthest'), values=c('nearest_vol'=16, 'mean_vol'=5, 'centroid_vol'=3, 'farthest_vol'=1)) +
+		scale_color_manual(labels=c('nearest_vol'='Closest', 'mean_vol'='Mean', 'centroid_vol'='Centroid', 'farthest_vol'='Farthest'), values=c('nearest_vol'='#e41a1c', 'mean_vol'='#377eb8', 'centroid_vol'='#4daf4a', 'farthest_vol'='#e41a1c')) +
+		scale_y_continuous(labels=scales::percent, trans='log10') +
+		labs(x=NULL, y=paste0('Increase in niche volume (%)')) +
+		theme(axis.text.y=element_text(face='italic')) +
+		coord_flip()
 		
-	# print(p)
+	print(p)
 	
-	# ggsave(paste0('./Analysis/Multivariate Niche Volume/!Increase in Multivariate Niche Volume.pdf'), width=8, height=9, units='in')
-	# dev.off()
+	ggsave(paste0('./Analysis/Multivariate Niche Volume/!Increase in Multivariate Niche Volume.pdf'), width=8, height=9, units='in')
+	dev.off()
+
+	### niche surface area
+
+	types <- c('nearest_area', 'mean_area', 'centroid_area', 'farthest_area')
+	accCol <- 'accurate_area'
+	
+	levels <- c('nearest_area', 'mean_area', 'centroid_area', 'farthest_area')
+	names(levels) <- types
+
+	x <- data.frame(
+		species = rep(data$species, length(levels)),
+		type = rep(types, each=n),
+		breadth = (c(data[ , levels[1]], data[ , levels[2]], data[ , levels[3]], data[ , levels[4]]) - data[ , accCol]) / data[ , accCol]
+	)
+	
+	x$type <- factor(x$type, levels=types)
+	
+	p <- ggplot(data=x, aes(x=species, y=breadth, group=type)) +
+		geom_point(aes(col=type, shape=type), size=2.2) +
+		scale_shape_manual(labels=c('nearest_area'='Closest', 'mean_area'='Mean', 'centroid_area'='Centroid', 'farthest_area'='Farthest'), values=c('nearest_area'=16, 'mean_area'=5, 'centroid_area'=3, 'farthest_area'=1)) +
+		scale_color_manual(labels=c('nearest_area'='Closest', 'mean_area'='Mean', 'centroid_area'='Centroid', 'farthest_area'='Farthest'), values=c('nearest_area'='#e41a1c', 'mean_area'='#377eb8', 'centroid_area'='#4daf4a', 'farthest_area'='#e41a1c')) +
+		scale_y_continuous(labels=scales::percent, trans='log10') +
+		labs(x=NULL, y=paste0('Increase in niche surface area (%)')) +
+		theme(axis.text.y=element_text(face='italic')) +
+		coord_flip()
+		
+	print(p)
+	
+	ggsave(paste0('./Analysis/Multivariate Niche Volume/!Increase in Multivariate Niche Surface Area.pdf'), width=8, height=9, units='in')
+	dev.off()
 
 # say('###############################')
 # say('### climate change exposure ###')

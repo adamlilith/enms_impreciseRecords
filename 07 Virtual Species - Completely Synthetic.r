@@ -45,8 +45,8 @@
 	library(omnibus)
 	library(statisfactory)
 	
-	source(paste0(drive, '/Ecology/Drive/R/enmSdm/R/predictEnmSdm.r'))
-	source(paste0(drive, '/Ecology/Drive/R/enmSdm/R/predictMaxEnt.r'))
+	# source(paste0(drive, '/Ecology/Drive/R/enmSdm/R/predictEnmSdm.r'))
+	# source(paste0(drive, '/Ecology/Drive/R/enmSdm/R/predictMaxEnt.r'))
 	
 	
 	ll <- c('longitude', 'latitude')
@@ -121,864 +121,875 @@
 	# dirCreate('./Data/WorldClim/cmip6_ensemble_ssp585_2061-2080')
 	# writeRaster(bc, './Data/WorldClim/cmip6_ensemble_ssp585_2061-2080/bioclim.tif', overwrite=TRUE)
 
-# say('##################################')
-# say('### generate simulated species ###')
-# say('##################################')	
+say('##################################')
+say('### generate simulated species ###')
+say('##################################')	
 
-	# ### user-defined
-	# ################
+	### user-defined
+	################
 	
-		# series <- expand.grid(totalErrorless = 2^(0:12), numPrecise = seq(5, 30, by=5))
-		# series$totalErrorless <- series$totalErrorless + series$numPrecise
-
-		# # series <- series[27, , drop=FALSE]
-		# # series <- series[28, , drop=FALSE]
-		# # series <- series[67, , drop=FALSE]
-		# series <- series[13, , drop=FALSE]
-
-		# repStart <- 1
-		# repEnd <- 200
-
-		# buffSize_km <- 300 # around sites for calibration region
+		series <- data.frame()
+		for (totalErrorless in c(20, 40, 80, 160, 320)) {
 		
-		# # maxent settings
-		# regMult <- c(seq(0.5, 3, by=0.5), 4, 5)
-		# maxEntClasses <- 'lpq'
-		
-		# # bounds for runif() for gamma distribution rate parameter for MVN variance
-		# minNicheRate <- 7.5
-		# maxNicheRate <- 30
-		
-	# ### data
-	# ########
-		
-		# say('Load data...')
-		
-		# # PCA
-		# load('./Analysis/PCA on North American Climate.rda')
-
-		# # state/county environmental data
-		# load('./Data/Environment for North American Counties at Resolution 10 arcmin for Present.rda')
-		# mask <- raster('./Regions/mask_northAmerica.tif')
-
-		# # North American spatial polygons
-		# load('./Regions/GADM Ver 3pt6 North America Level 1 WGS84.rda')
-		# load('./Regions/GADM Ver 3pt6 North America Level 2 WGS84.rda')
-		# load('./Regions/GADM Ver 3pt6 North America Level 2 Albers.rda')
+			totalPrecise <- seq(5, min(totalErrorless - 5, 30), by=5)
 			
-		# nam2Sp <- nam2Sp[nam2Sp$NAME_1 != 'Hawaii', ]
-		# nam2SpEa <- nam2SpEa[nam2SpEa$NAME_1 != 'Hawaii', ]
-		# nam2SpEa$nam2area_km2 <- gArea(nam2SpEa, byid=TRUE) / 1000^2
-		# nam2Sp$nam2area_km2 <- nam2SpEa$nam2area_km2
-		# maxArea_km2 <- nam2SpEa$nam2area_km2[nam2SpEa$NAME_1 == 'California' & nam2SpEa$NAME_2 == 'San Bernardino']
-	
-		# # contemporary climate rasters
-		# sqRasts <- if (drive == 'C:') {
-			# stack(paste0('D:/Ecology/Climate/WORLDCLIM Ver 2.1 January 2020/wc2.1_10m_bio/wc2.1_10m_bio_', 1:19, '.tif'))
-		# } else if (drive == 'E:') {
-			# stack(paste0('E:/Ecology/Climate/WorldClim/worldclim_2.1_10arcmin_historical/wc2.1_10m_bio_', 1:19, '.tif'))
-		# }
-		
-		# # future climate rasters
-		# futScenario <- paste0('ensemble of ', paste(c('BCC-CSM2-MR', 'CNRM-ESM2-1', 'CanESM5', 'IPSL-CM6A-LR', 'MIROC-ES2L'), collapse=', '))
-		# futRasts <- stack('./Data/WorldClim/cmip6_ensemble_ssp585_2061-2080/bioclim.tif')
-		
-		# rm(nam2SpEa); gc()
-
-	# ### apply PCA to climate rasters
-	# ################################
-	
-		# say('PCA rasters...')
-	
-		# ### contemporary rasters
-		
-			# sqRasts <- sqRasts * mask
-			# names(sqRasts) <- paste0('bio', 1:19)
-
-			# # PCA on climate (only)
-			# climDf <- as.data.frame(sqRasts)
-			# nonNas <- which(complete.cases(climDf))
-			# climDf <- climDf[nonNas, ]
+			for (thisTotalPrecise in totalPrecise) {
 			
-			# pcPredictionNoNas <- predictEnmSdm(pca, climDf)
-			# colnames(pcPredictionNoNas) <- paste0('pc', 1:19)
-
-			# # predict PCA back to rasters
-			# pcPrediction <- as.data.frame(sqRasts)
-			# pcPrediction[nonNas, ] <- pcPredictionNoNas
+				totalImprecise <- 2^(0:16)
+				totalImprecise <- totalImprecise[totalImprecise < totalErrorless - max(thisTotalPrecise)]
+				totalImprecise <- c(totalImprecise, totalErrorless - thisTotalPrecise)
 			
-			# sqPcaRasts <- sqRasts[[1:3]] * NA
-			# for (pc in 1:3) sqPcaRasts <- setValues(sqPcaRasts, values=pcPrediction[ , pc], layer=pc)
-			# names(sqPcaRasts) <- paste0('pc', 1:3)
-			
-			# sqPcaDf <- as.data.frame(sqPcaRasts)
-			# sqPcaDfNoNA <- sqPcaDf[complete.cases(sqPcaDf), ]
-			# sqPcaDfNoNAMat <- as.matrix(sqPcaDfNoNA)
-
-			# # get climate for just Mexico and USA for selecting niche mean value
-			# conusMex <- nam1Sp[nam1Sp$NAME_0 != 'Canada' & nam1Sp$NAME_1 != 'Alaska' & nam1Sp$NAME_1 != 'Hawaii', ]
-			# conusMexMask <- crop(mask, conusMex)
-			# conusMexMask <- rasterize(conusMex, conusMexMask)
-			# conusMexMask <- conusMexMask * 0 + 1
-			# sqPcaRastsConusMex <- sqPcaRasts * conusMexMask
-			# areaConusMexMask_km2 <- area(sqPcaRastsConusMex)
-			# areaConusMexMask_km2 <- as.data.frame(areaConusMexMask_km2)
-			# names(areaConusMexMask_km2) <- 'area_km2'
-			
-			# sqPcaDfConusMex <- as.data.frame(sqPcaRastsConusMex)
-			# names(sqPcaDfConusMex) <- paste0('PC', 1:3)
-			# sqPcaDfConusMex <- cbind(sqPcaDfConusMex, areaConusMexMask_km2)
-			# sqPcaDfConusMexNoNA <- sqPcaDfConusMex[complete.cases(sqPcaDfConusMex), ]
-			
-			# rm(climDf, conusMex, conusMexMask, sqPcaDfConusMex, areaConusMexMask_km2, sqPcaDfNoNA); gc()
-
-		# ### future rasters
+				this <- expand.grid(totalErrorless = totalErrorless, totalPrecise=thisTotalPrecise, totalImprecise=totalImprecise)
+				series <- rbind(series, this)
 				
-			# futRasts <- futRasts * mask
-			# names(futRasts) <- paste0('bio', 1:19)
-
-			# # PCA on climate (only)
-			# climDf <- as.data.frame(futRasts)
-			# nonNas <- which(complete.cases(climDf))
-			# climDf <- climDf[nonNas, ]
+			}
 			
-			# pcPredictionNoNas <- predictEnmSdm(pca, climDf)
-			# colnames(pcPredictionNoNas) <- paste0('pc', 1:19)
-			
-			# # predict PCA back to rasters
-			# pcPrediction <- as.data.frame(futRasts)
-			# pcPrediction[nonNas, ] <- pcPredictionNoNas
-			
-			# futPcaRasts <- futRasts[[1:3]] * NA
-			# for (pc in 1:3) futPcaRasts <- setValues(futPcaRasts, values=pcPrediction[ , pc], layer=pc)
-			# names(futPcaRasts) <- paste0('pc', 1:3)
-			
-			# futPcaDf <- as.data.frame(futPcaRasts)
-			# futPcaDfNoNA <- futPcaDf[complete.cases(futPcaDf), ]
-			# futPcaDfNoNAMat <- as.matrix(futPcaDfNoNA)
-
-			# rm(futRasts, climDf, pcPrediction, futPcaDfNoNA); gc()
-			
-	# ### area raster
-	# ###############
-
-		# areaRast_km2 <- raster::area(sqPcaRasts[[1]])
-		# areaRast_km2 <- areaRast_km2 * mask
-		# areaVect_km2 <- as.vector(areaRast_km2)
-		# areaVect_km2 <- areaVect_km2[!is.na(areaVect_km2)]
-
-	# ### worker function: simulate species, draw samples, model, evaluate
-	# ####################################################################
-
-		# worker <- compiler::cmpfun(function() {
+		}
 		
-			# ### generate species
-			# ####################
+		series <- series[1:25, , drop=FALSE] # sumisu
+		# series <- series[26:50, , drop=FALSE] # sumisu
+		# series <- series[51:75, , drop=FALSE] # sumisu
+		# series <- series[76:100, , drop=FALSE] # sumisu
+		# series <- series[101:125, , drop=FALSE] #1
+		# series <- series[126:150, , drop=FALSE] #1
+		# series <- series[151:175, , drop=FALSE] #1
+		# series <- series[176:200, , drop=FALSE] #1
+		# series <- series[201:208, , drop=FALSE] # unassigned
+		
+		repStart <- 1
+		repEnd <- 200
 
-				# say('make species', post=0)
+		buffSize_km <- 300 # around sites for calibration region
+		
+		# maxent settings
+		regMult <- c(seq(0.5, 3, by=0.5), 4, 5)
+		maxEntClasses <- 'lpq'
+		
+		# bounds for runif() for gamma distribution rate parameter for MVN variance
+		minNicheRate <- 7.5
+		maxNicheRate <- 30
+		
+	### data
+	########
+		
+		say('Load data...')
+		
+		# PCA
+		load('./Analysis/PCA on North American Climate.rda')
 
-				# validRast <- FALSE
+		# state/county environmental data
+		load('./Data/Environment for North American Counties at Resolution 10 arcmin for Present.rda')
+		mask <- raster('./Regions/mask_northAmerica.tif')
 
-				# count <- 1
-				# while (!validRast) {
+		# North American spatial polygons
+		load('./Regions/GADM Ver 3pt6 North America Level 1 WGS84.rda')
+		load('./Regions/GADM Ver 3pt6 North America Level 2 WGS84.rda')
+		load('./Regions/GADM Ver 3pt6 North America Level 2 Albers.rda')
+			
+		nam2Sp <- nam2Sp[nam2Sp$NAME_1 != 'Hawaii', ]
+		nam2SpEa <- nam2SpEa[nam2SpEa$NAME_1 != 'Hawaii', ]
+		nam2SpEa$nam2area_km2 <- gArea(nam2SpEa, byid=TRUE) / 1000^2
+		nam2Sp$nam2area_km2 <- nam2SpEa$nam2area_km2
+		maxArea_km2 <- nam2SpEa$nam2area_km2[nam2SpEa$NAME_1 == 'California' & nam2SpEa$NAME_2 == 'San Bernardino']
+	
+		# contemporary climate rasters
+		sqRasts <- if (drive == 'C:') {
+			stack(paste0('D:/Ecology/Climate/WORLDCLIM Ver 2.1 January 2020/wc2.1_10m_bio/wc2.1_10m_bio_', 1:19, '.tif'))
+		} else if (drive == 'E:') {
+			stack(paste0('E:/Ecology/Climate/WorldClim/worldclim_2.1_10arcmin_historical/wc2.1_10m_bio_', 1:19, '.tif'))
+		}
+		
+		# future climate rasters
+		futScenario <- paste0('ensemble of ', paste(c('BCC-CSM2-MR', 'CNRM-ESM2-1', 'CanESM5', 'IPSL-CM6A-LR', 'MIROC-ES2L'), collapse=', '))
+		futRasts <- stack('./Data/WorldClim/cmip6_ensemble_ssp585_2061-2080/bioclim.tif')
+		
+		rm(nam2SpEa); gc()
 
-					# nicheShape <- 1 # niche variance shape parameter
-					# nicheRate1 <- runif(1, minNicheRate, maxNicheRate) # niche variance rate parameter
-					# nicheRate2 <- runif(1, minNicheRate, maxNicheRate) # niche variance rate parameter
-					# nicheRate3 <- runif(1, minNicheRate, maxNicheRate) # niche variance rate parameter
-					
-					# # # modeling pre-niche with multivariate normal
-					# # nicheExtremes1 <- range(sqPcaDfConusMexNoNA$PC1)
-					# # nicheExtremes2 <- range(sqPcaDfConusMexNoNA$PC2)
-					# # nicheExtremes3 <- range(sqPcaDfConusMexNoNA$PC3)
-					
-					# # nicheRange1 <- diff(nicheExtremes1)
-					# # nicheRange2 <- diff(nicheExtremes2)
-					# # nicheRange3 <- diff(nicheExtremes3)
-					
-					# # nicheExtremes1[1] <- nicheExtremes1[1] - 0.1 * nicheRange1
-					# # nicheExtremes1[2] <- nicheExtremes1[2] + 0.1 * nicheRange1
-					
-					# # nicheExtremes2[1] <- nicheExtremes2[1] - 0.1 * nicheRange2
-					# # nicheExtremes2[2] <- nicheExtremes2[2] + 0.1 * nicheRange2
-					
-					# # nicheExtremes3[1] <- nicheExtremes3[1] - 0.1 * nicheRange3
-					# # nicheExtremes3[2] <- nicheExtremes3[2] + 0.1 * nicheRange3
-					
-					# # nicheCenter <- c(
-						# # runif(1, nicheExtremes1[1], nicheExtremes1[2]),
-						# # runif(1, nicheExtremes2[1], nicheExtremes2[2]),
-						# # runif(1, nicheExtremes3[1], nicheExtremes3[2])
-					# # )
-					
-					# nicheCenter <- c(NA, NA, NA)
-					# while (any(is.na(nicheCenter))) {
-						# nicheCenter <- unlist(sqPcaDfConusMexNoNA[sample(1:nrow(sqPcaDfConusMexNoNA), 1, prob=sqPcaDfConusMexNoNA$area_km2), , drop=TRUE])
-					# }
-					
-					# nicheCenter <- nicheCenter[1:3]
-					
-					# var1 <- rgamma(1, nicheShape, nicheRate1)
-					# var2 <- rgamma(1, nicheShape, nicheRate2)
-					# var3 <- rgamma(1, nicheShape, nicheRate3)
+	### apply PCA to climate rasters
+	################################
+	
+		say('PCA rasters...')
+	
+		### contemporary rasters
+		
+			sqRasts <- sqRasts * mask
+			names(sqRasts) <- paste0('bio', 1:19)
 
-					# corr1v2 <- rbeta(1, 5, 5) * 2 - 1
-					# corr1v3 <- rbeta(1, 5, 5) * 2 - 1
-					# corr2v3 <- rbeta(1, 5, 5) * 2 - 1
+			# PCA on climate (only)
+			climDf <- as.data.frame(sqRasts)
+			nonNas <- which(complete.cases(climDf))
+			climDf <- climDf[nonNas, ]
+			
+			pcPredictionNoNas <- predictEnmSdm(pca, climDf)
+			colnames(pcPredictionNoNas) <- paste0('pc', 1:19)
+
+			# predict PCA back to rasters
+			pcPrediction <- as.data.frame(sqRasts)
+			pcPrediction[nonNas, ] <- pcPredictionNoNas
+			
+			sqPcaRasts <- sqRasts[[1:3]] * NA
+			for (pc in 1:3) sqPcaRasts <- setValues(sqPcaRasts, values=pcPrediction[ , pc], layer=pc)
+			names(sqPcaRasts) <- paste0('pc', 1:3)
+			
+			sqPcaDf <- as.data.frame(sqPcaRasts)
+			sqPcaDfNoNA <- sqPcaDf[complete.cases(sqPcaDf), ]
+			sqPcaDfNoNAMat <- as.matrix(sqPcaDfNoNA)
+
+			# get climate for just Mexico and USA for selecting niche mean value
+			conusMex <- nam1Sp[nam1Sp$NAME_0 != 'Canada' & nam1Sp$NAME_1 != 'Alaska' & nam1Sp$NAME_1 != 'Hawaii', ]
+			conusMexMask <- crop(mask, conusMex)
+			conusMexMask <- rasterize(conusMex, conusMexMask)
+			conusMexMask <- conusMexMask * 0 + 1
+			sqPcaRastsConusMex <- sqPcaRasts * conusMexMask
+			areaConusMexMask_km2 <- area(sqPcaRastsConusMex)
+			areaConusMexMask_km2 <- as.data.frame(areaConusMexMask_km2)
+			names(areaConusMexMask_km2) <- 'area_km2'
+			
+			sqPcaDfConusMex <- as.data.frame(sqPcaRastsConusMex)
+			names(sqPcaDfConusMex) <- paste0('PC', 1:3)
+			sqPcaDfConusMex <- cbind(sqPcaDfConusMex, areaConusMexMask_km2)
+			sqPcaDfConusMexNoNA <- sqPcaDfConusMex[complete.cases(sqPcaDfConusMex), ]
+			
+			rm(climDf, conusMex, conusMexMask, sqPcaDfConusMex, areaConusMexMask_km2, sqPcaDfNoNA); gc()
+
+		### future rasters
+				
+			futRasts <- futRasts * mask
+			names(futRasts) <- paste0('bio', 1:19)
+
+			# PCA on climate (only)
+			climDf <- as.data.frame(futRasts)
+			nonNas <- which(complete.cases(climDf))
+			climDf <- climDf[nonNas, ]
+			
+			pcPredictionNoNas <- predictEnmSdm(pca, climDf)
+			colnames(pcPredictionNoNas) <- paste0('pc', 1:19)
+			
+			# predict PCA back to rasters
+			pcPrediction <- as.data.frame(futRasts)
+			pcPrediction[nonNas, ] <- pcPredictionNoNas
+			
+			futPcaRasts <- futRasts[[1:3]] * NA
+			for (pc in 1:3) futPcaRasts <- setValues(futPcaRasts, values=pcPrediction[ , pc], layer=pc)
+			names(futPcaRasts) <- paste0('pc', 1:3)
+			
+			futPcaDf <- as.data.frame(futPcaRasts)
+			futPcaDfNoNA <- futPcaDf[complete.cases(futPcaDf), ]
+			futPcaDfNoNAMat <- as.matrix(futPcaDfNoNA)
+
+			rm(futRasts, climDf, pcPrediction, futPcaDfNoNA); gc()
+			
+	### area raster
+	###############
+
+		areaRast_km2 <- raster::area(sqPcaRasts[[1]])
+		areaRast_km2 <- areaRast_km2 * mask
+		areaVect_km2 <- as.vector(areaRast_km2)
+		areaVect_km2 <- areaVect_km2[!is.na(areaVect_km2)]
+
+	### worker function: simulate species, draw samples, model, evaluate
+	####################################################################
+
+		worker <- compiler::cmpfun(function() {
+		
+			### generate species
+			####################
+
+				say('make species', post=0)
+
+				validRast <- FALSE
+
+				count <- 1
+				while (!validRast) {
+
+					nicheShape <- 1 # niche variance shape parameter
+					nicheRate1 <- runif(1, minNicheRate, maxNicheRate) # niche variance rate parameter
+					nicheRate2 <- runif(1, minNicheRate, maxNicheRate) # niche variance rate parameter
+					nicheRate3 <- runif(1, minNicheRate, maxNicheRate) # niche variance rate parameter
 					
-					# corr <- matrix(
-						# c(var1, corr1v2, corr1v3,
-						# corr1v2, var2, corr2v3,
-						# corr1v3, corr2v3, var3),
-						# nrow=3, byrow=TRUE
+					# # modeling pre-niche with multivariate normal
+					# nicheExtremes1 <- range(sqPcaDfConusMexNoNA$PC1)
+					# nicheExtremes2 <- range(sqPcaDfConusMexNoNA$PC2)
+					# nicheExtremes3 <- range(sqPcaDfConusMexNoNA$PC3)
+					
+					# nicheRange1 <- diff(nicheExtremes1)
+					# nicheRange2 <- diff(nicheExtremes2)
+					# nicheRange3 <- diff(nicheExtremes3)
+					
+					# nicheExtremes1[1] <- nicheExtremes1[1] - 0.1 * nicheRange1
+					# nicheExtremes1[2] <- nicheExtremes1[2] + 0.1 * nicheRange1
+					
+					# nicheExtremes2[1] <- nicheExtremes2[1] - 0.1 * nicheRange2
+					# nicheExtremes2[2] <- nicheExtremes2[2] + 0.1 * nicheRange2
+					
+					# nicheExtremes3[1] <- nicheExtremes3[1] - 0.1 * nicheRange3
+					# nicheExtremes3[2] <- nicheExtremes3[2] + 0.1 * nicheRange3
+					
+					# nicheCenter <- c(
+						# runif(1, nicheExtremes1[1], nicheExtremes1[2]),
+						# runif(1, nicheExtremes2[1], nicheExtremes2[2]),
+						# runif(1, nicheExtremes3[1], nicheExtremes3[2])
 					# )
 					
-					# densities <- dmvnorm(sqPcaDfNoNAMat, mean=nicheCenter, sigma=corr)
-					# maxSqDensities <- max(densities)
-					# densities <- densities / maxSqDensities
+					nicheCenter <- c(NA, NA, NA)
+					while (any(is.na(nicheCenter))) {
+						nicheCenter <- unlist(sqPcaDfConusMexNoNA[sample(1:nrow(sqPcaDfConusMexNoNA), 1, prob=sqPcaDfConusMexNoNA$area_km2), , drop=TRUE])
+					}
 					
-					# densitiesSum <- sum(densities)
-					# validRast <- !is.na(densitiesSum) & densitiesSum > 0
-
-					# count <- count + 1
-
-				# } # keep trying to construct valid niche
-				# count
-				
-				# ## burn densities to present raster
+					nicheCenter <- nicheCenter[1:3]
 					
-				# sqNicheRast <- mask * NA
-				# densitiesForRast <- rep(NA, ncell(sqNicheRast))
-				# nonNa <- which(complete.cases(sqPcaDf))
-				# densitiesForRast[nonNa] <- densities
-				# sqNicheRast <- setValues(sqNicheRast, values=densitiesForRast)
-				
-				# # burn densities to future raster
-				# densities <- dmvnorm(futPcaDfNoNAMat, mean=nicheCenter, sigma=corr)
-				# densities <- densities / maxSqDensities
+					var1 <- rgamma(1, nicheShape, nicheRate1)
+					var2 <- rgamma(1, nicheShape, nicheRate2)
+					var3 <- rgamma(1, nicheShape, nicheRate3)
 
-				# futNicheRast <- mask * NA
-				# densitiesForRast <- rep(NA, ncell(futNicheRast))
-				# nonNa <- which(complete.cases(futPcaDf))
-				# densitiesForRast[nonNa] <- densities
-				# futNicheRast <- setValues(futNicheRast, values=densitiesForRast)
-				
-				# names(sqNicheRast) <- names(futNicheRast) <- 'niche'
-				
-			# ### generate records
-			# ####################
-			
-				# say('| records', post=0)
-			
-				# # precise
-				# preciseRecs <- randomPoints(sqNicheRast, thisNumPrecise, prob=TRUE)
-				# vagueErrorlessRecs <- sampleRast(sqNicheRast, thisNumErrorless - thisNumPrecise, prob=TRUE)
-				# names(preciseRecs) <- names(vagueErrorlessRecs) <- ll
-				
-				# # administrative
-				# allCountiesAtVagueErrorless <- extract(nam2Sp, vagueErrorlessRecs)
-				# allCountiesAtVagueErrorless$point.ID <- NULL
-				# nondupCountiesAtVagueErrorless <- allCountiesAtVagueErrorless[!duplicated(allCountiesAtVagueErrorless), , drop=FALSE]
-				
-				# # errorless
-				# errorlessRecs <- rbind(preciseRecs, vagueErrorlessRecs)
-				# errorlessRecs <- elimCellDups(errorlessRecs, sqNicheRast)
-			
-				# say(nrow(errorlessRecs), ' errorless with ', nrow(nondupCountiesAtVagueErrorless), ' non-duplicate admins', post=0)
-			
-			# ### define calibration regions
-			# ##############################
-			
-				# say('| calib regions', post=0)
-			
-				# # errorless
-				# errorlessRecsSp <- SpatialPoints(errorlessRecs[ , 1:2], proj4string=getCRS('wgs84', TRUE))
-				# errorlessRecsSpEa <- sp::spTransform(errorlessRecsSp, getCRS('albersNA', TRUE))
-
-				# errorlessRecsVectEa <- vect(errorlessRecsSpEa)
-				# errorlessMcpVectEa <- convHull(errorlessRecsVectEa)
-				# errorlessMcpSpEa <- as(errorlessMcpVectEa, 'Spatial')
-				# errorlessBuffSpEa <- gBuffer(errorlessMcpSpEa, width=buffSize_km * 1000)
-				# errorlessBuffSp <- sp::spTransform(errorlessBuffSpEa, getCRS('wgs84', TRUE))
-
-				# errorlessMcpBuffMask <- rasterize(errorlessBuffSp, sqPcaRasts)
-				
-				# errorlessMaskedSqPcaRasts <- errorlessMcpBuffMask * sqPcaRasts
-				# names(errorlessMaskedSqPcaRasts) <- names(sqPcaRasts)
-				
-				# errorlessMaskedFutPcaRasts <- errorlessMcpBuffMask * futPcaRasts
-				# names(errorlessMaskedFutPcaRasts) <- names(sqPcaRasts)
-				
-				# # precise
-				# preciseRecsSp <- SpatialPoints(preciseRecs[ , 1:2, drop=FALSE], proj4string=getCRS('wgs84', TRUE))
-				# preciseRecsSpEa <- sp::spTransform(preciseRecsSp, getCRS('albersNA', TRUE))
-				# preciseRecVectEa <- vect(preciseRecsSpEa)
-				# preciseMcpVectEa <- convHull(preciseRecVectEa)
-				# preciseMcpSpEa <- if (thisNumPrecise < 3) {
-					# SpatialPoints(geom(preciseMcpVectEa)[ , c('x', 'y'), drop=FALSE], getCRS('albersNA', TRUE))
-				# } else {
-					# as(preciseMcpVectEa, 'Spatial')
-				# }
-				# preciseBuffSpEa <- gBuffer(preciseMcpSpEa, width=buffSize_km * 1000)
-				
-				# preciseBuffSp <- sp::spTransform(preciseBuffSpEa, getCRS('wgs84', TRUE))
-				# preciseMcpBuffMask <- rasterize(preciseBuffSp, sqPcaRasts)
-				
-				# preciseMaskedSqPcaRasts <- preciseMcpBuffMask * sqPcaRasts
-				# names(preciseMaskedSqPcaRasts) <- names(sqPcaRasts)
-				
-				# # precise + admin
-				# adminSp <- nam2Sp[nam2Sp$NAME_1 == nondupCountiesAtVagueErrorless$NAME_1[1] & nam2Sp$NAME_2 == nondupCountiesAtVagueErrorless$NAME_2[1], ]
-				# if (nrow(nondupCountiesAtVagueErrorless) > 1) {
-					# for (i in 2:nrow(nondupCountiesAtVagueErrorless)) {
-						# adminSp <- rbind(
-							# adminSp,
-							# nam2Sp[nam2Sp$NAME_1 == nondupCountiesAtVagueErrorless$NAME_1[i] & nam2Sp$NAME_2 == nondupCountiesAtVagueErrorless$NAME_2[i], ]
-						# )
-					# }
-				# }
-				
-				# adminSpEa <- sp::spTransform(adminSp, getCRS('albersNA', TRUE))
-				
-				# vagueMcpSpEa <- mcpFromPolygons(adminSpEa, preciseRecsSpEa)
-				# vagueBuffSpEa <- gBuffer(vagueMcpSpEa, byid=FALSE, width=buffSize_km * 1000)
-				# vagueBuffSp <- sp::spTransform(vagueBuffSpEa, getCRS('wgs84', TRUE))
-				
-				# vagueMcpBuffMask <- rasterize(vagueBuffSp, sqPcaRasts)
-				
-				# vagueMaskedSqPcaRasts <- vagueMcpBuffMask * sqPcaRasts
-				# names(vagueMaskedSqPcaRasts) <- names(sqPcaRasts)
-				
-			# # ### plot
-			# # ########
-			
-				# # par(oma=c(0, 0, 0, 0), mfrow=c(1, 2))
-
-				# # # present
-				# # cols <- colorRampPalette(c('gray80', 'green', 'forestgreen'))
-				# # cols <- cols(10)
-				# # main <- paste0('SQ ', thisNumErrorless, ' (', nrow(errorlessRecs), ') el ', thisNumPrecise, ' pr')
-				# # plot(trim(errorlessMcpBuffMask), col=NA, legend=FALSE, main=main)
-				# # plot(sqNicheRast, col=cols, legend=FALSE, add=TRUE)
-				# # plot(adminSp, border='orange4', add=TRUE)
-				# # points(errorlessRecsSp, pch='.')
-				# # points(preciseRecsSp, col='red', pch='.')
-				
-				# # plot(vagueMcpSpEa, border='orange', add=TRUE)
-				# # plot(errorlessBuffSp, add=TRUE)
-				# # plot(preciseBuffSp, border='red', add=TRUE)
-				# # plot(vagueBuffSp, border='orange4', add=TRUE)
-
-				# # # future delta
-				# # main <- paste0('fut delta')
-				# # plot(trim(errorlessMcpBuffMask), col=NA, legend=FALSE, main=main)
-				# # delta <- sqNicheRast - futNicheRast
-				# # extreme <- roundTo(max(abs(c(minValue(delta), maxValue(delta)))), 0.1, ceiling)
-				# # cols <- colorRampPalette(c('forestgreen', 'lightgreen', 'gray80',  'gray80', 'firebrick1', 'firebrick4'))
-				# # cols <- cols(2 * extreme / 0.1 - 1)
-				# # plot(delta, breaks=seq(-extreme, extreme, by=0.1), legend=TRUE, add=TRUE)
-				# # points(errorlessRecsSp, pch='.')
-				# # points(preciseRecsSp, col='red', pch='.')
-				
-				# # plot(vagueMcpSpEa, border='orange', add=TRUE)
-				# # plot(errorlessBuffSp, add=TRUE)
-				# # plot(preciseBuffSp, border='red', add=TRUE)
-				# # plot(vagueBuffSp, border='orange4', add=TRUE)
-
-			# ### background sites
-			# #####################
-				
-				# say('| bgs', post=0)
-				
-				# # errorless
-				# bgInErrorlessBuffTrain <- randomPoints(errorlessMcpBuffMask, 10000)
-				# bgInErrorlessBuffEval <- randomPoints(errorlessMcpBuffMask, 10000)
-
-				# # precise
-				# bgInPreciseBuff <- if (thisNumPrecise < 5) {
-					# sampleRast(preciseMcpBuffMask, cellStats(preciseMcpBuffMask, 'sum'), replace=FALSE, prob=FALSE)
-				# } else {
-					# randomPoints(preciseMcpBuffMask, 10000)
-				# }
-				
-				# # precise + vague
-				# bgInVagueBuff <- randomPoints(vagueMcpBuffMask, 10000)
-
-			# ### environmental data
-			# ######################
-			
-				# say('| env data', post=0)
-			
-				# ### errorless: present
-				
-				# # training occurrences and backgrounds
-				# errorlessRecsEnv <- extract(sqPcaRasts, errorlessRecs)
-				# errorlessTrainBgEnv <- extract(sqPcaRasts, bgInErrorlessBuffTrain)
-				# errorlessTrainBgEnv <- errorlessTrainBgEnv[complete.cases(errorlessTrainBgEnv), , drop=FALSE]
-				
-				# errorlessData <- rbind(errorlessRecsEnv, errorlessTrainBgEnv)
-				# presBg <- c(rep(1, nrow(errorlessRecs)), rep(0, nrow(errorlessTrainBgEnv)))
-				# errorlessData <- cbind(presBg, errorlessData)
-				# errorlessData <- as.data.frame(errorlessData)
-
-				# # evaluation sites in buffered MCP around errorless sites
-				# errorlessEvalBgSqEnv <- extract(sqPcaRasts, bgInErrorlessBuffEval)
-				# ok <- complete.cases(errorlessEvalBgSqEnv)
-				# bgInErrorlessBuffEval <- bgInErrorlessBuffEval[ok, , drop=FALSE]
-				# errorlessEvalBgSqEnv <- errorlessEvalBgSqEnv[ok, , drop=FALSE]
-
-				# errorlessEvalBgFutEnv <- extract(futPcaRasts, bgInErrorlessBuffEval)
-				# ok <- complete.cases(errorlessEvalBgFutEnv)
-				# errorlessEvalBgFutEnv <- errorlessEvalBgFutEnv[ok, , drop=FALSE]
-
-				# ### precise
-				# preciseRecsEnv <- extract(sqPcaRasts, preciseRecs)
-				# preciseBgEnv <- extract(sqPcaRasts, bgInPreciseBuff)
-				# preciseBgEnv <- preciseBgEnv[complete.cases(preciseBgEnv), , drop=FALSE]
-
-				# preciseData <- rbind(preciseRecsEnv, preciseBgEnv)
-				# presBg <- c(rep(1, nrow(preciseRecs)), rep(0, nrow(preciseBgEnv)))
-				# preciseData <- cbind(presBg, preciseData)
-				# preciseData <- as.data.frame(preciseData)
-
-				# ### precise + vague
-				# adminEnvExt <- extract(sqPcaRasts, adminSp)
-
-				# preciseMeanEnv <- colMeans(preciseRecsEnv)
-				# adminEnv <- data.frame()
-				# for (i in 1:nrow(adminSp)) {
-					# thisCountyEnv <- if (!is(adminEnvExt[[i]], 'matrix')) {
-						# matrix(adminEnvExt[[i]], nrow=1)
-					# } else {
-						# adminEnvExt[[i]]
-					# }
+					corr1v2 <- rbeta(1, 5, 5) * 2 - 1
+					corr1v3 <- rbeta(1, 5, 5) * 2 - 1
+					corr2v3 <- rbeta(1, 5, 5) * 2 - 1
 					
-					# dists <- sqrt(
-						# rowSums(
-							# cbind(
-								# (preciseMeanEnv[1] - thisCountyEnv[ , 1])^2,
-								# (preciseMeanEnv[2] - thisCountyEnv[ , 2])^2,
-								# (preciseMeanEnv[3] - thisCountyEnv[ , 3])^2
-							# )
-						# )
-					# )
+					corr <- matrix(
+						c(var1, corr1v2, corr1v3,
+						corr1v2, var2, corr2v3,
+						corr1v3, corr2v3, var3),
+						nrow=3, byrow=TRUE
+					)
+					
+					densities <- dmvnorm(sqPcaDfNoNAMat, mean=nicheCenter, sigma=corr)
+					maxSqDensities <- max(densities)
+					densities <- densities / maxSqDensities
+					
+					densitiesSum <- sum(densities)
+					validRast <- !is.na(densitiesSum) & densitiesSum > 0
+
+					count <- count + 1
+
+				} # keep trying to construct valid niche
+				count
+				
+				## burn densities to present raster
+					
+				sqNicheRast <- mask * NA
+				densitiesForRast <- rep(NA, ncell(sqNicheRast))
+				nonNa <- which(complete.cases(sqPcaDf))
+				densitiesForRast[nonNa] <- densities
+				sqNicheRast <- setValues(sqNicheRast, values=densitiesForRast)
+				
+				# burn densities to future raster
+				densities <- dmvnorm(futPcaDfNoNAMat, mean=nicheCenter, sigma=corr)
+				densities <- densities / maxSqDensities
+
+				futNicheRast <- mask * NA
+				densitiesForRast <- rep(NA, ncell(futNicheRast))
+				nonNa <- which(complete.cases(futPcaDf))
+				densitiesForRast[nonNa] <- densities
+				futNicheRast <- setValues(futNicheRast, values=densitiesForRast)
+				
+				names(sqNicheRast) <- names(futNicheRast) <- 'niche'
+				
+			### generate records
+			####################
+			
+				say('| records', post=0)
+			
+				# errorless
+				errorlessRecs <- randomPoints(sqNicheRast, numErrorless, prob=TRUE)
+				preciseRecs <- errorlessRecs[1:numPrecise, , drop=FALSE]
+				impreciseErrorlessRecs <- errorlessRecs[(numPrecise + 1):(numPrecise + numImprecise), , drop=FALSE]
+			
+				# administrative
+				impreciseCounties <- extract(nam2Sp, impreciseErrorlessRecs)
+				impreciseCounties$point.ID <- NULL
+				impreciseCounties <- impreciseCounties[!duplicated(impreciseCounties), , drop=FALSE]
+				
+				say(nrow(impreciseCounties), ' non-duplicate admin(s)', post=0)
+			
+			### define calibration regions
+			##############################
+			
+				say('| calib regions', post=0)
+			
+				# errorless
+				errorlessRecsSp <- SpatialPoints(errorlessRecs[ , 1:2], proj4string=getCRS('wgs84', TRUE))
+				errorlessRecsSpEa <- sp::spTransform(errorlessRecsSp, getCRS('albersNA', TRUE))
+
+				errorlessRecsVectEa <- vect(errorlessRecsSpEa)
+				errorlessMcpVectEa <- convHull(errorlessRecsVectEa)
+				errorlessMcpSpEa <- as(errorlessMcpVectEa, 'Spatial')
+				errorlessBuffSpEa <- gBuffer(errorlessMcpSpEa, width=buffSize_km * 1000)
+				errorlessBuffSp <- sp::spTransform(errorlessBuffSpEa, getCRS('wgs84', TRUE))
+
+				errorlessMcpBuffMask <- rasterize(errorlessBuffSp, sqPcaRasts)
+				
+				errorlessMaskedSqPcaRasts <- errorlessMcpBuffMask * sqPcaRasts
+				names(errorlessMaskedSqPcaRasts) <- names(sqPcaRasts)
+				
+				errorlessMaskedFutPcaRasts <- errorlessMcpBuffMask * futPcaRasts
+				names(errorlessMaskedFutPcaRasts) <- names(sqPcaRasts)
+				
+				# precise
+				preciseRecsSp <- SpatialPoints(preciseRecs[ , 1:2, drop=FALSE], proj4string=getCRS('wgs84', TRUE))
+				preciseRecsSpEa <- sp::spTransform(preciseRecsSp, getCRS('albersNA', TRUE))
+				preciseRecVectEa <- vect(preciseRecsSpEa)
+				preciseMcpVectEa <- convHull(preciseRecVectEa)
+				preciseMcpSpEa <- if (numPrecise < 3) {
+					SpatialPoints(geom(preciseMcpVectEa)[ , c('x', 'y'), drop=FALSE], getCRS('albersNA', TRUE))
+				} else {
+					as(preciseMcpVectEa, 'Spatial')
+				}
+				preciseBuffSpEa <- gBuffer(preciseMcpSpEa, width=buffSize_km * 1000)
+				
+				preciseBuffSp <- sp::spTransform(preciseBuffSpEa, getCRS('wgs84', TRUE))
+				preciseMcpBuffMask <- rasterize(preciseBuffSp, sqPcaRasts)
+				
+				preciseMaskedSqPcaRasts <- preciseMcpBuffMask * sqPcaRasts
+				names(preciseMaskedSqPcaRasts) <- names(sqPcaRasts)
+				
+				# precise + admin
+				adminSp <- nam2Sp[nam2Sp$NAME_1 == impreciseCounties$NAME_1[1] & nam2Sp$NAME_2 == impreciseCounties$NAME_2[1], ]
+				if (nrow(impreciseCounties) > 1) {
+					for (i in 2:nrow(impreciseCounties)) {
+						adminSp <- rbind(
+							adminSp,
+							nam2Sp[nam2Sp$NAME_1 == impreciseCounties$NAME_1[i] & nam2Sp$NAME_2 == impreciseCounties$NAME_2[i], ]
+						)
+					}
+				}
+				
+				adminSpEa <- sp::spTransform(adminSp, getCRS('albersNA', TRUE))
+				
+				impreciseMcpSpEa <- mcpFromPolygons(adminSpEa, preciseRecsSpEa)
+				impreciseBuffSpEa <- gBuffer(impreciseMcpSpEa, byid=FALSE, width=buffSize_km * 1000)
+				impreciseBuffSp <- sp::spTransform(impreciseBuffSpEa, getCRS('wgs84', TRUE))
+				
+				impreciseMcpBuffMask <- rasterize(impreciseBuffSp, sqPcaRasts)
+				
+				impreciseMaskedSqPcaRasts <- impreciseMcpBuffMask * sqPcaRasts
+				names(impreciseMaskedSqPcaRasts) <- names(sqPcaRasts)
+				
+			# ### plot
+			# ########
+			
+				# par(oma=c(0, 0, 0, 0), mfrow=c(1, 2))
+
+				# # present
+				# cols <- colorRampPalette(c('gray80', 'green', 'forestgreen'))
+				# cols <- cols(10)
+				# main <- paste0('SQ ', thisNumErrorless, ' (', nrow(errorlessRecs), ') el ', thisNumPrecise, ' pr')
+				# plot(trim(errorlessMcpBuffMask), col=NA, legend=FALSE, main=main)
+				# plot(sqNicheRast, col=cols, legend=FALSE, add=TRUE)
+				# plot(adminSp, border='orange4', add=TRUE)
+				# points(errorlessRecsSp, pch='.')
+				# points(preciseRecsSp, col='red', pch='.')
+				
+				# plot(impreciseMcpSpEa, border='orange', add=TRUE)
+				# plot(errorlessBuffSp, add=TRUE)
+				# plot(preciseBuffSp, border='red', add=TRUE)
+				# plot(impreciseBuffSp, border='orange4', add=TRUE)
+
+				# # future delta
+				# main <- paste0('fut delta')
+				# plot(trim(errorlessMcpBuffMask), col=NA, legend=FALSE, main=main)
+				# delta <- sqNicheRast - futNicheRast
+				# plot(delta, legend=TRUE, add=TRUE)
+				# points(errorlessRecsSp, pch='.')
+				# points(preciseRecsSp, col='red', pch='.')
+				
+				# plot(impreciseMcpSpEa, border='orange', add=TRUE)
+				# plot(errorlessBuffSp, add=TRUE)
+				# plot(preciseBuffSp, border='red', add=TRUE)
+				# plot(impreciseBuffSp, border='orange4', add=TRUE)
+
+			### background sites
+			#####################
+				
+				say('| bgs', post=0)
+				
+				# errorless
+				bgInErrorlessBuffTrain <- randomPoints(errorlessMcpBuffMask, 10000)
+				bgInErrorlessBuffEval <- randomPoints(errorlessMcpBuffMask, 10000)
+
+				# precise
+				bgInPreciseBuff <- if (numPrecise < 5) {
+					sampleRast(preciseMcpBuffMask, cellStats(preciseMcpBuffMask, 'sum'), replace=FALSE, prob=FALSE)
+				} else {
+					randomPoints(preciseMcpBuffMask, 10000)
+				}
+				
+				# precise + imprecise
+				bgInImpreciseBuff <- randomPoints(impreciseMcpBuffMask, 10000)
+
+			### environmental data
+			######################
+			
+				say('| env data', post=0)
+			
+				### errorless: present
+				
+				# training occurrences and backgrounds
+				errorlessRecsEnv <- extract(sqPcaRasts, errorlessRecs)
+				errorlessTrainBgEnv <- extract(sqPcaRasts, bgInErrorlessBuffTrain)
+				errorlessTrainBgEnv <- errorlessTrainBgEnv[complete.cases(errorlessTrainBgEnv), , drop=FALSE]
+				
+				errorlessData <- rbind(errorlessRecsEnv, errorlessTrainBgEnv)
+				presBg <- c(rep(1, nrow(errorlessRecs)), rep(0, nrow(errorlessTrainBgEnv)))
+				errorlessData <- cbind(presBg, errorlessData)
+				errorlessData <- as.data.frame(errorlessData)
+
+				# evaluation sites in buffered MCP around errorless sites
+				errorlessEvalBgSqEnv <- extract(sqPcaRasts, bgInErrorlessBuffEval)
+				ok <- complete.cases(errorlessEvalBgSqEnv)
+				bgInErrorlessBuffEval <- bgInErrorlessBuffEval[ok, , drop=FALSE]
+				errorlessEvalBgSqEnv <- errorlessEvalBgSqEnv[ok, , drop=FALSE]
+
+				errorlessEvalBgFutEnv <- extract(futPcaRasts, bgInErrorlessBuffEval)
+				ok <- complete.cases(errorlessEvalBgFutEnv)
+				errorlessEvalBgFutEnv <- errorlessEvalBgFutEnv[ok, , drop=FALSE]
+
+				### precise
+				preciseRecsEnv <- extract(sqPcaRasts, preciseRecs)
+				preciseBgEnv <- extract(sqPcaRasts, bgInPreciseBuff)
+				preciseBgEnv <- preciseBgEnv[complete.cases(preciseBgEnv), , drop=FALSE]
+
+				preciseData <- rbind(preciseRecsEnv, preciseBgEnv)
+				presBg <- c(rep(1, nrow(preciseRecs)), rep(0, nrow(preciseBgEnv)))
+				preciseData <- cbind(presBg, preciseData)
+				preciseData <- as.data.frame(preciseData)
+
+				### precise + imprecise
+				adminEnvExt <- extract(sqPcaRasts, adminSp)
+
+				preciseMeanEnv <- colMeans(preciseRecsEnv)
+				adminEnv <- data.frame()
+				for (i in 1:nrow(adminSp)) {
+					thisCountyEnv <- if (!is(adminEnvExt[[i]], 'matrix')) {
+						matrix(adminEnvExt[[i]], nrow=1)
+					} else {
+						adminEnvExt[[i]]
+					}
+					
+					dists <- sqrt(
+						rowSums(
+							cbind(
+								(preciseMeanEnv[1] - thisCountyEnv[ , 1])^2,
+								(preciseMeanEnv[2] - thisCountyEnv[ , 2])^2,
+								(preciseMeanEnv[3] - thisCountyEnv[ , 3])^2
+							)
+						)
+					)
 					
 						
-					# closestIndex <- which.min(dists)
-					# adminEnv <- rbind(adminEnv, thisCountyEnv[closestIndex, , drop=FALSE])
-				# }
+					closestIndex <- which.min(dists)
+					adminEnv <- rbind(adminEnv, thisCountyEnv[closestIndex, , drop=FALSE])
+				}
 				
-				# names(adminEnv) <- names(sqPcaRasts)
+				names(adminEnv) <- names(sqPcaRasts)
 				
-				# vagueRecsEnv <- rbind(preciseRecsEnv, adminEnv)
-				# vagueBgEnv <- extract(sqPcaRasts, bgInVagueBuff)
-				# vagueBgEnv <- vagueBgEnv[complete.cases(vagueBgEnv), , drop=FALSE]
+				impreciseRecsEnv <- rbind(preciseRecsEnv, adminEnv)
+				impreciseBgEnv <- extract(sqPcaRasts, bgInImpreciseBuff)
+				impreciseBgEnv <- impreciseBgEnv[complete.cases(impreciseBgEnv), , drop=FALSE]
 				
-				# vagueData <- rbind(vagueRecsEnv, vagueBgEnv)
-				# presBg <- c(rep(1, nrow(preciseRecs) + nrow(adminSp)), rep(0, nrow(vagueBgEnv)))
-				# vagueData <- cbind(presBg, vagueData)
-				# vagueData <- as.data.frame(vagueData)
+				impreciseData <- rbind(impreciseRecsEnv, impreciseBgEnv)
+				presBg <- c(rep(1, nrow(preciseRecs) + nrow(adminSp)), rep(0, nrow(impreciseBgEnv)))
+				impreciseData <- cbind(presBg, impreciseData)
+				impreciseData <- as.data.frame(impreciseData)
 
-			# ### model
-			# #########
+			### model
+			#########
 				
-				# say('| model', post=0)
+				say('| model', post=0)
 				
-				# errorlessModel <- trainMaxNet(errorlessData, regMult=regMult, classes=maxEntClasses)
-				# preciseModel <- if (thisNumPrecise >= 5) {
-					# trainMaxNet(preciseData, regMult=regMult, classes=maxEntClasses)
-				# } else {
-					# trainMaxEnt(preciseData, regMult=regMult, classes=maxEntClasses)
-				# }
-				# vagueModel <- trainMaxNet(vagueData, regMult=regMult, classes=maxEntClasses)
+				errorlessModel <- trainMaxNet(errorlessData, regMult=regMult, classes=maxEntClasses)
+				preciseModel <- if (numPrecise >= 5) {
+					trainMaxNet(preciseData, regMult=regMult, classes=maxEntClasses)
+				} else {
+					trainMaxEnt(preciseData, regMult=regMult, classes=maxEntClasses)
+				}
+				impreciseModel <- trainMaxNet(impreciseData, regMult=regMult, classes=maxEntClasses)
 
-			# ### predictions to evaluation background sites in buffered MCP around errorless records
-			# #######################################################################################
+			### predictions to evaluation background sites in buffered MCP around errorless records
+			#######################################################################################
 				
-				# say('| predict', post=0)
+				say('| predict', post=0)
 				
-				# errorlessPredToSq <- predictEnmSdm(errorlessModel, errorlessEvalBgSqEnv, maxentFun='enmSdm', type='cloglog')
-				# precisePredToSq <- predictEnmSdm(preciseModel, errorlessEvalBgSqEnv, maxentFun='enmSdm', type='cloglog')
-				# vaguePredToSq <- predictEnmSdm(vagueModel, errorlessEvalBgSqEnv, maxentFun='enmSdm', type='cloglog')
+				errorlessPredToSq <- predictEnmSdm(errorlessModel, errorlessEvalBgSqEnv, maxentFun='enmSdm', type='cloglog')
+				precisePredToSq <- predictEnmSdm(preciseModel, errorlessEvalBgSqEnv, maxentFun='enmSdm', type='cloglog')
+				imprecisePredToSq <- predictEnmSdm(impreciseModel, errorlessEvalBgSqEnv, maxentFun='enmSdm', type='cloglog')
 
-				# errorlessPredToFut <- predictEnmSdm(errorlessModel, errorlessEvalBgFutEnv, maxentFun='enmSdm', type='cloglog')
-				# precisePredToFut <- predictEnmSdm(preciseModel, errorlessEvalBgFutEnv, maxentFun='enmSdm', type='cloglog')
-				# vaguePredToFut <- predictEnmSdm(vagueModel, errorlessEvalBgFutEnv, maxentFun='enmSdm', type='cloglog')
+				errorlessPredToFut <- predictEnmSdm(errorlessModel, errorlessEvalBgFutEnv, maxentFun='enmSdm', type='cloglog')
+				precisePredToFut <- predictEnmSdm(preciseModel, errorlessEvalBgFutEnv, maxentFun='enmSdm', type='cloglog')
+				imprecisePredToFut <- predictEnmSdm(impreciseModel, errorlessEvalBgFutEnv, maxentFun='enmSdm', type='cloglog')
 
-			# ### evaluate calibration accuracy
-			# #################################
+			### evaluate calibration accuracy
+			#################################
 
-				# say('| calib acc', post=0)
+				say('| calib acc', post=0)
 
-				# ### vs present
+				### vs present
 
-				# # truth
-				# bgNiche <- extract(sqNicheRast, bgInErrorlessBuffEval)
-				# if (any(is.na(bgNiche))) bgNiche <- bgNiche[!is.na(bgNiche)]
+				# truth
+				bgNiche <- extract(sqNicheRast, bgInErrorlessBuffEval)
+				if (any(is.na(bgNiche))) bgNiche <- bgNiche[!is.na(bgNiche)]
 				
-				# # estimates
-				# bgNicheTrans <- logitAdj(bgNiche, epsilon = 0.001)
-				# errorlessPredTrans <- logitAdj(errorlessPredToSq, epsilon = 0.001) + runif(length(errorlessPredToSq) -eps(), eps())
-				# precisePredTrans <- logitAdj(precisePredToSq, epsilon = 0.001) + runif(length(precisePredToSq) -eps(), eps())
-				# vaguePredTrans <- logitAdj(vaguePredToSq, epsilon = 0.001) + runif(length(vaguePredToSq) -eps(), eps())
+				# estimates
+				bgNicheTrans <- logitAdj(bgNiche, epsilon = 0.001)
+				errorlessPredTrans <- logitAdj(errorlessPredToSq, epsilon = 0.001) + runif(length(errorlessPredToSq) -eps(), eps())
+				precisePredTrans <- logitAdj(precisePredToSq, epsilon = 0.001) + runif(length(precisePredToSq) -eps(), eps())
+				imprecisePredTrans <- logitAdj(imprecisePredToSq, epsilon = 0.001) + runif(length(imprecisePredToSq) -eps(), eps())
 
-				# # comparison
-				# corTruthVsErrorlessSq <- cor(bgNicheTrans, errorlessPredTrans)
-				# corTruthVsPreciseSq <- cor(bgNicheTrans, precisePredTrans)
-				# corTruthVsVagueSq <- cor(bgNicheTrans, vaguePredTrans)
+				# comparison
+				corTruthVsErrorlessSq <- cor(bgNicheTrans, errorlessPredTrans)
+				corTruthVsPreciseSq <- cor(bgNicheTrans, precisePredTrans)
+				corTruthVsImpreciseSq <- cor(bgNicheTrans, imprecisePredTrans)
 			
-				# ### vs future
+				### vs future
 				
-				# # truth
-				# bgNiche <- extract(futNicheRast, bgInErrorlessBuffEval)
-				# if (any(is.na(bgNiche))) bgNiche <- bgNiche[!is.na(bgNiche)]
+				# truth
+				bgNiche <- extract(futNicheRast, bgInErrorlessBuffEval)
+				if (any(is.na(bgNiche))) bgNiche <- bgNiche[!is.na(bgNiche)]
 				
-				# # estimates
-				# bgNicheTrans <- logitAdj(bgNiche, epsilon = 0.001)
-				# errorlessPredTrans <- logitAdj(errorlessPredToFut, epsilon = 0.001) + runif(length(errorlessPredToFut) -eps(), eps())
-				# precisePredTrans <- logitAdj(precisePredToFut, epsilon = 0.001) + runif(length(precisePredToFut) -eps(), eps())
-				# vaguePredTrans <- logitAdj(vaguePredToFut, epsilon = 0.001) + runif(length(vaguePredToFut) -eps(), eps())
+				# estimates
+				bgNicheTrans <- logitAdj(bgNiche, epsilon = 0.001)
+				errorlessPredTrans <- logitAdj(errorlessPredToFut, epsilon = 0.001) + runif(length(errorlessPredToFut) -eps(), eps())
+				precisePredTrans <- logitAdj(precisePredToFut, epsilon = 0.001) + runif(length(precisePredToFut) -eps(), eps())
+				imprecisePredTrans <- logitAdj(imprecisePredToFut, epsilon = 0.001) + runif(length(imprecisePredToFut) -eps(), eps())
 
-				# # comparison
-				# corTruthVsErrorlessFut <- cor(bgNicheTrans, errorlessPredTrans)
-				# corTruthVsPreciseFut <- cor(bgNicheTrans, precisePredTrans)
-				# corTruthVsVagueFut <- cor(bgNicheTrans, vaguePredTrans)
+				# comparison
+				corTruthVsErrorlessFut <- cor(bgNicheTrans, errorlessPredTrans)
+				corTruthVsPreciseFut <- cor(bgNicheTrans, precisePredTrans)
+				corTruthVsImpreciseFut <- cor(bgNicheTrans, imprecisePredTrans)
 			
-			# ### evaluate EOO
-			# ################
+			### evaluate EOO
+			################
 
-				# say('| eoo', post=0)
+				say('| eoo', post=0)
 
-				# ### all precise
-				# eooErrorless_km2 <- gArea(errorlessMcpSpEa) / 1000^2
+				### all precise
+				eooErrorless_km2 <- gArea(errorlessMcpSpEa) / 1000^2
 
-				# ### only precise
-				# eooPrecise_km2 <- gArea(preciseMcpSpEa) / 1000^2
+				### only precise
+				eooPrecise_km2 <- gArea(preciseMcpSpEa) / 1000^2
 			
-				# # precise + vague
-				# eooVague_km2 <- gArea(vagueMcpSpEa) / 1000^2
+				# precise + imprecise
+				eooImprecise_km2 <- gArea(impreciseMcpSpEa) / 1000^2
 			
-			# ### evaluate climate change exposure
-			# ####################################
+			### evaluate climate change exposure
+			####################################
 
-				# say('| expos', post=0)
+				say('| expos', post=0)
 
-				# # thresholds
-				# predPres_errorless <- predictEnmSdm(errorlessModel, errorlessRecsEnv, maxentFun='enmSdm', type='cloglog')
-				# predPres_precise <- predictEnmSdm(preciseModel, preciseRecsEnv, maxentFun='enmSdm', type='cloglog')
-				# predPres_vague <- predictEnmSdm(vagueModel, vagueRecsEnv, maxentFun='enmSdm', type='cloglog')
+				# thresholds
+				predPres_errorless <- predictEnmSdm(errorlessModel, errorlessRecsEnv, maxentFun='enmSdm', type='cloglog')
+				predPres_precise <- predictEnmSdm(preciseModel, preciseRecsEnv, maxentFun='enmSdm', type='cloglog')
+				predPres_imprecise <- predictEnmSdm(impreciseModel, impreciseRecsEnv, maxentFun='enmSdm', type='cloglog')
 
-				# thold_errorless <- quantile(predPres_errorless, 0.1)
-				# thold_precise <- quantile(predPres_precise, 0.1)
-				# thold_vague <- quantile(predPres_vague, 0.1)
+				thold_errorless <- quantile(predPres_errorless, 0.1)
+				thold_precise <- quantile(predPres_precise, 0.1)
+				thold_imprecise <- quantile(predPres_imprecise, 0.1)
 
-				# # prediction rasters
-				# sqPredRast_errorless <- predict(errorlessMaskedSqPcaRasts, errorlessModel, clamp=FALSE, type='cloglog')
-				# sqPredRast_precise <- predict(errorlessMaskedSqPcaRasts, preciseModel, clamp=FALSE, type='cloglog')
-				# sqPredRast_vague <- predict(errorlessMaskedSqPcaRasts, vagueModel, clamp=FALSE, type='cloglog')
+				# prediction rasters
+				sqPredRast_errorless <- predict(errorlessMaskedSqPcaRasts, errorlessModel, clamp=FALSE, type='cloglog')
+				sqPredRast_precise <- predict(errorlessMaskedSqPcaRasts, preciseModel, clamp=FALSE, type='cloglog')
+				sqPredRast_imprecise <- predict(errorlessMaskedSqPcaRasts, impreciseModel, clamp=FALSE, type='cloglog')
 				
-				# futPredRast_errorless <- predict(errorlessMaskedFutPcaRasts, errorlessModel, clamp=FALSE, type='cloglog')
-				# futPredRast_precise <- predict(errorlessMaskedFutPcaRasts, preciseModel, clamp=FALSE, type='cloglog')
-				# futPredRast_vague <- predict(errorlessMaskedFutPcaRasts, vagueModel, clamp=FALSE, type='cloglog')
+				futPredRast_errorless <- predict(errorlessMaskedFutPcaRasts, errorlessModel, clamp=FALSE, type='cloglog')
+				futPredRast_precise <- predict(errorlessMaskedFutPcaRasts, preciseModel, clamp=FALSE, type='cloglog')
+				futPredRast_imprecise <- predict(errorlessMaskedFutPcaRasts, impreciseModel, clamp=FALSE, type='cloglog')
 				
-				# # threshold rasters
-				# sqPredRast_errorless <- sqPredRast_errorless >= thold_errorless
-				# sqPredRast_precise <- sqPredRast_precise >= thold_precise
-				# sqPredRast_vague <- sqPredRast_vague >= thold_vague
+				# threshold rasters
+				sqPredRast_errorless <- sqPredRast_errorless >= thold_errorless
+				sqPredRast_precise <- sqPredRast_precise >= thold_precise
+				sqPredRast_imprecise <- sqPredRast_imprecise >= thold_imprecise
 				
-				# futPredRast_errorless <- futPredRast_errorless >= thold_errorless
-				# futPredRast_precise <- futPredRast_precise >= thold_precise
-				# futPredRast_vague <- futPredRast_vague >= thold_vague
+				futPredRast_errorless <- futPredRast_errorless >= thold_errorless
+				futPredRast_precise <- futPredRast_precise >= thold_precise
+				futPredRast_imprecise <- futPredRast_imprecise >= thold_imprecise
 
-				# # suitable area
-				# sqSuitArea_errorless_km2 <- cellStats(areaRast_km2 * sqPredRast_errorless, 'sum')
-				# sqSuitArea_precise_km2 <- cellStats(areaRast_km2 * sqPredRast_precise, 'sum')
-				# sqSuitArea_vague_km2 <- cellStats(areaRast_km2 * sqPredRast_vague, 'sum')
+				# suitable area
+				sqSuitArea_errorless_km2 <- cellStats(areaRast_km2 * sqPredRast_errorless, 'sum')
+				sqSuitArea_precise_km2 <- cellStats(areaRast_km2 * sqPredRast_precise, 'sum')
+				sqSuitArea_imprecise_km2 <- cellStats(areaRast_km2 * sqPredRast_imprecise, 'sum')
 				
-				# futSuitArea_errorless_km2 <- cellStats(areaRast_km2 * futPredRast_errorless, 'sum')
-				# futSuitArea_precise_km2 <- cellStats(areaRast_km2 * futPredRast_precise, 'sum')
-				# futSuitArea_vague_km2 <- cellStats(areaRast_km2 * futPredRast_vague, 'sum')
+				futSuitArea_errorless_km2 <- cellStats(areaRast_km2 * futPredRast_errorless, 'sum')
+				futSuitArea_precise_km2 <- cellStats(areaRast_km2 * futPredRast_precise, 'sum')
+				futSuitArea_imprecise_km2 <- cellStats(areaRast_km2 * futPredRast_imprecise, 'sum')
 
-				# # stable suitable area
-				# stable_errorless <- futPredRast_errorless * sqPredRast_errorless * areaRast_km2
-				# stable_precise <- futPredRast_precise * sqPredRast_precise * areaRast_km2
-				# stable_vague <- futPredRast_vague * sqPredRast_vague * areaRast_km2
+				# stable suitable area
+				stable_errorless <- futPredRast_errorless * sqPredRast_errorless * areaRast_km2
+				stable_precise <- futPredRast_precise * sqPredRast_precise * areaRast_km2
+				stable_imprecise <- futPredRast_imprecise * sqPredRast_imprecise * areaRast_km2
 				
-				# stableArea_errorless_km2 <- cellStats(stable_errorless, 'sum')
-				# stableArea_precise_km2 <- cellStats(stable_precise, 'sum')
-				# stableArea_vague_km2 <- cellStats(stable_vague, 'sum')
+				stableArea_errorless_km2 <- cellStats(stable_errorless, 'sum')
+				stableArea_precise_km2 <- cellStats(stable_precise, 'sum')
+				stableArea_imprecise_km2 <- cellStats(stable_imprecise, 'sum')
 				
-				# # gained/lost area
-				# deltaArea_errorless <- areaRast_km2 * (futPredRast_errorless - sqPredRast_errorless)
-				# deltaArea_precise <- areaRast_km2 * (futPredRast_precise - sqPredRast_precise)
-				# deltaArea_vague <- areaRast_km2 * (futPredRast_vague - sqPredRast_vague)
+				# gained/lost area
+				deltaArea_errorless <- areaRast_km2 * (futPredRast_errorless - sqPredRast_errorless)
+				deltaArea_precise <- areaRast_km2 * (futPredRast_precise - sqPredRast_precise)
+				deltaArea_imprecise <- areaRast_km2 * (futPredRast_imprecise - sqPredRast_imprecise)
 				
 
-				# gainFx <- function(x) ifelse(x > 0, x, NA)
-				# gainArea_errorless <- calc(deltaArea_errorless, fun=gainFx)
-				# gainArea_precise <- calc(deltaArea_precise, fun=gainFx)
-				# gainArea_vague <- calc(deltaArea_vague, fun=gainFx)
+				gainFx <- function(x) ifelse(x > 0, x, NA)
+				gainArea_errorless <- calc(deltaArea_errorless, fun=gainFx)
+				gainArea_precise <- calc(deltaArea_precise, fun=gainFx)
+				gainArea_imprecise <- calc(deltaArea_imprecise, fun=gainFx)
 				
-				# gainArea_errorless_km2 <- cellStats(gainArea_errorless, 'sum')
-				# gainArea_precise_km2 <- cellStats(gainArea_precise, 'sum')
-				# gainArea_vague_km2 <- cellStats(gainArea_vague, 'sum')
+				gainArea_errorless_km2 <- cellStats(gainArea_errorless, 'sum')
+				gainArea_precise_km2 <- cellStats(gainArea_precise, 'sum')
+				gainArea_imprecise_km2 <- cellStats(gainArea_imprecise, 'sum')
 				
 				
-				# lostFx <- function(x) ifelse(x < 0, -1 * x, NA)
-				# lostArea_errorless <- calc(deltaArea_errorless, fun=lostFx)
-				# lostArea_precise <- calc(deltaArea_precise, fun=lostFx)
-				# lostArea_vague <- calc(deltaArea_vague, fun=lostFx)
+				lostFx <- function(x) ifelse(x < 0, -1 * x, NA)
+				lostArea_errorless <- calc(deltaArea_errorless, fun=lostFx)
+				lostArea_precise <- calc(deltaArea_precise, fun=lostFx)
+				lostArea_imprecise <- calc(deltaArea_imprecise, fun=lostFx)
 				
-				# lostArea_errorless_km2 <- cellStats(lostArea_errorless, 'sum')
-				# lostArea_precise_km2 <- cellStats(lostArea_precise, 'sum')
-				# lostArea_vague_km2 <- cellStats(lostArea_vague, 'sum')
+				lostArea_errorless_km2 <- cellStats(lostArea_errorless, 'sum')
+				lostArea_precise_km2 <- cellStats(lostArea_precise, 'sum')
+				lostArea_imprecise_km2 <- cellStats(lostArea_imprecise, 'sum')
 
-			# ### multivariate niche breadth
-			# ##############################
+			### multivariate niche breadth
+			##############################
 
-				# errorlessConvHullStats <- if (thisNumPrecise >= 4) {
-					# convhulln(errorlessRecsEnv, options='FA')
-				# } else {
-					# list(area=NA, vol=NA)
-				# }
+				errorlessConvHullStats <- if (numPrecise >= 4) {
+					convhulln(errorlessRecsEnv, options='FA')
+				} else {
+					list(area=NA, vol=NA)
+				}
 
-				# preciseConvHullStats <- if (thisNumPrecise >= 4) {
-					# convhulln(preciseRecsEnv, options='FA')
-				# } else {
-					# list(area=NA, vol=NA)
-				# }
+				preciseConvHullStats <- if (numPrecise >= 4) {
+					convhulln(preciseRecsEnv, options='FA')
+				} else {
+					list(area=NA, vol=NA)
+				}
 
-				# vagueConvHullStats <- if (nrow(vagueRecsEnv) >= 4) {
-					# convhulln(vagueRecsEnv, options='FA')
-				# } else {
-					# list(area=NA, vol=NA)
-				# }
+				impreciseConvHullStats <- if (nrow(impreciseRecsEnv) >= 4) {
+					convhulln(impreciseRecsEnv, options='FA')
+				} else {
+					list(area=NA, vol=NA)
+				}
 			
-			# ### univariate niche breadth
-			# ############################
+			### univariate niche breadth
+			############################
 			
-				# ### errorless
-				# # MAT
-				# x <- extract(sqRasts[[1]], errorlessRecsSp)
-				# errorlessNicheBreadthMat_range_degC <- diff(range(x))
-				# errorlessNicheBreadthMat_095_degC <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
-				# errorlessNicheBreadthMat_090_degC <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
+				### errorless
+				# MAT
+				x <- extract(sqRasts[[1]], errorlessRecsSp)
+				errorlessNicheBreadthMat_range_degC <- diff(range(x))
+				errorlessNicheBreadthMat_095_degC <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
+				errorlessNicheBreadthMat_090_degC <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
-				# # TAP
-				# x <- extract(sqRasts[[12]], errorlessRecsSp)
-				# errorlessNicheBreadthTap_range_mm <- diff(range(x))
-				# errorlessNicheBreadthTap_095_mm <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
-				# errorlessNicheBreadthTap_090_mm <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
+				# TAP
+				x <- extract(sqRasts[[12]], errorlessRecsSp)
+				errorlessNicheBreadthTap_range_mm <- diff(range(x))
+				errorlessNicheBreadthTap_095_mm <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
+				errorlessNicheBreadthTap_090_mm <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
-				# ### precise
-				# # MAT
-				# x <- extract(sqRasts[[1]], preciseRecsSp)
-				# preciseNicheBreadthMat_range_degC <- diff(range(x))
-				# preciseNicheBreadthMat_095_degC <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
-				# preciseNicheBreadthMat_090_degC <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
+				### precise
+				# MAT
+				x <- extract(sqRasts[[1]], preciseRecsSp)
+				preciseNicheBreadthMat_range_degC <- diff(range(x))
+				preciseNicheBreadthMat_095_degC <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
+				preciseNicheBreadthMat_090_degC <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
-				# # TAP
-				# x <- extract(sqRasts[[12]], preciseRecsSp)
-				# preciseNicheBreadthTap_range_mm <- diff(range(x))
-				# preciseNicheBreadthTap_095_mm <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
-				# preciseNicheBreadthTap_090_mm <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
+				# TAP
+				x <- extract(sqRasts[[12]], preciseRecsSp)
+				preciseNicheBreadthTap_range_mm <- diff(range(x))
+				preciseNicheBreadthTap_095_mm <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
+				preciseNicheBreadthTap_090_mm <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
-				# ### precise + vague
-				# # MAT
-				# adminEnvExt <- extract(sqRasts[[1]], adminSp)
-				# preciseRecsEnv <- extract(sqRasts[[1]], preciseRecs)
+				### precise + imprecise
+				# MAT
+				adminEnvExt <- extract(sqRasts[[1]], adminSp)
+				preciseRecsEnv <- extract(sqRasts[[1]], preciseRecs)
 
-				# preciseMeanEnv <- mean(preciseRecsEnv)
-				# adminEnv <- numeric()
-				# for (i in 1:nrow(adminSp)) {
-					# thisCountyEnv <- adminEnvExt[[i]]
-					# closestIndex <- which.min(abs(preciseMeanEnv - thisCountyEnv))
-					# adminEnv <- c(adminEnv, thisCountyEnv[closestIndex])
-				# }
+				preciseMeanEnv <- mean(preciseRecsEnv)
+				adminEnv <- numeric()
+				for (i in 1:nrow(adminSp)) {
+					thisCountyEnv <- adminEnvExt[[i]]
+					closestIndex <- which.min(abs(preciseMeanEnv - thisCountyEnv))
+					adminEnv <- c(adminEnv, thisCountyEnv[closestIndex])
+				}
 				
-				# x <- c(preciseRecsEnv, adminEnv)
-				# vagueNicheBreadthMat_range_degC <- diff(range(x))
-				# vagueNicheBreadthMat_095_degC <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
-				# vagueNicheBreadthMat_090_degC <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
+				x <- c(preciseRecsEnv, adminEnv)
+				impreciseNicheBreadthMat_range_degC <- diff(range(x))
+				impreciseNicheBreadthMat_095_degC <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
+				impreciseNicheBreadthMat_090_degC <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
-				# # TAP
-				# adminEnvExt <- extract(sqRasts[[12]], adminSp)
-				# preciseRecsEnv <- extract(sqRasts[[12]], preciseRecs)
+				# TAP
+				adminEnvExt <- extract(sqRasts[[12]], adminSp)
+				preciseRecsEnv <- extract(sqRasts[[12]], preciseRecs)
 
-				# preciseMeanEnv <- mean(preciseRecsEnv)
-				# adminEnv <- numeric()
-				# for (i in 1:nrow(adminSp)) {
-					# thisCountyEnv <- adminEnvExt[[i]]
-					# closestIndex <- which.min(abs(preciseMeanEnv - thisCountyEnv))
-					# adminEnv <- c(adminEnv, thisCountyEnv[closestIndex])
-				# }
+				preciseMeanEnv <- mean(preciseRecsEnv)
+				adminEnv <- numeric()
+				for (i in 1:nrow(adminSp)) {
+					thisCountyEnv <- adminEnvExt[[i]]
+					closestIndex <- which.min(abs(preciseMeanEnv - thisCountyEnv))
+					adminEnv <- c(adminEnv, thisCountyEnv[closestIndex])
+				}
 				
-				# x <- c(preciseRecsEnv, adminEnv)
-				# vagueNicheBreadthTap_range_mm <- diff(range(x))
-				# vagueNicheBreadthTap_095_mm <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
-				# vagueNicheBreadthTap_090_mm <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
+				x <- c(preciseRecsEnv, adminEnv)
+				impreciseNicheBreadthTap_range_mm <- diff(range(x))
+				impreciseNicheBreadthTap_095_mm <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
+				impreciseNicheBreadthTap_090_mm <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
-			# ### remember
-			# ############
+			### remember
+			############
 			
-				# say('| remember')
+				say('| remember')
 			
-				# thisRemember <- data.frame(
+				thisRemember <- data.frame(
 
-					# rep = rep,
-					# futScenario = futScenario,
+					rep = rep,
+					futScenario = futScenario,
 
-					# numErrorless = thisNumErrorless,
-					# numActualErrorless = nrow(errorlessRecs),
-					# numPrecise = thisNumPrecise,
-					# numVagueErrorless = thisNumErrorless - thisNumPrecise,
-					# numAdmin = nrow(adminSp),
+					numErrorless = numErrorless,
+					numPrecise = numPrecise,
+					numImpreciseErrorless = numImprecise,
+					numAdmin = nrow(adminSp),
 					
-					# nicheShape = nicheShape,
-					# nicheRate1 = nicheRate1,
-					# nicheRate2 = nicheRate2,
-					# nicheRate3 = nicheRate3,
-					# minNicheRate = minNicheRate,
-					# maxNicheRate = maxNicheRate,
-					# mean1 = nicheCenter[1],
-					# mean2 = nicheCenter[2],
-					# mean3 = nicheCenter[3],
-					# var1 = var1,
-					# var2 = var2,
-					# var3 = var3,
-					# corr1v2 = corr1v2,
-					# corr1v3 = corr1v3,
-					# corr2v3 = corr2v3,
+					nicheShape = nicheShape,
+					nicheRate1 = nicheRate1,
+					nicheRate2 = nicheRate2,
+					nicheRate3 = nicheRate3,
+					minNicheRate = minNicheRate,
+					maxNicheRate = maxNicheRate,
+					mean1 = nicheCenter[1],
+					mean2 = nicheCenter[2],
+					mean3 = nicheCenter[3],
+					var1 = var1,
+					var2 = var2,
+					var3 = var3,
+					corr1v2 = corr1v2,
+					corr1v3 = corr1v3,
+					corr2v3 = corr2v3,
 					
-					# buffSize_km = buffSize_km,
-					# regMult = paste(regMult, collapse=', '),
-					# maxEntClasses = maxEntClasses,
+					buffSize_km = buffSize_km,
+					regMult = paste(regMult, collapse=', '),
+					maxEntClasses = maxEntClasses,
 					
-					# # univariate niche breadth
-					# errorlessNicheBreadthMat_range_degC = errorlessNicheBreadthMat_range_degC,
-					# preciseNicheBreadthMat_range_degC = preciseNicheBreadthMat_range_degC,
-					# vagueNicheBreadthMat_range_degC = vagueNicheBreadthMat_range_degC,
+					# univariate niche breadth
+					errorlessNicheBreadthMat_range_degC = errorlessNicheBreadthMat_range_degC,
+					preciseNicheBreadthMat_range_degC = preciseNicheBreadthMat_range_degC,
+					impreciseNicheBreadthMat_range_degC = impreciseNicheBreadthMat_range_degC,
 
-					# errorlessNicheBreadthMat_095_degC = errorlessNicheBreadthMat_095_degC,
-					# preciseNicheBreadthMat_095_degC = preciseNicheBreadthMat_095_degC,
-					# vagueNicheBreadthMat_095_degC = vagueNicheBreadthMat_095_degC,
+					errorlessNicheBreadthMat_095_degC = errorlessNicheBreadthMat_095_degC,
+					preciseNicheBreadthMat_095_degC = preciseNicheBreadthMat_095_degC,
+					impreciseNicheBreadthMat_095_degC = impreciseNicheBreadthMat_095_degC,
 
-					# errorlessNicheBreadthMat_090_degC = errorlessNicheBreadthMat_090_degC,
-					# preciseNicheBreadthMat_090_degC = preciseNicheBreadthMat_090_degC,
-					# vagueNicheBreadthMat_090_degC = vagueNicheBreadthMat_090_degC,
+					errorlessNicheBreadthMat_090_degC = errorlessNicheBreadthMat_090_degC,
+					preciseNicheBreadthMat_090_degC = preciseNicheBreadthMat_090_degC,
+					impreciseNicheBreadthMat_090_degC = impreciseNicheBreadthMat_090_degC,
 					
-					# errorlessNicheBreadthTap_range_mm = errorlessNicheBreadthTap_range_mm,
-					# preciseNicheBreadthTap_range_mm = preciseNicheBreadthTap_range_mm,
-					# vagueNicheBreadthTap_range_mm = vagueNicheBreadthTap_range_mm,
+					errorlessNicheBreadthTap_range_mm = errorlessNicheBreadthTap_range_mm,
+					preciseNicheBreadthTap_range_mm = preciseNicheBreadthTap_range_mm,
+					impreciseNicheBreadthTap_range_mm = impreciseNicheBreadthTap_range_mm,
 
-					# errorlessNicheBreadthTap_095_mm = errorlessNicheBreadthTap_095_mm,
-					# preciseNicheBreadthTap_095_mm = preciseNicheBreadthTap_095_mm,
-					# vagueNicheBreadthTap_095_mm = vagueNicheBreadthTap_095_mm,
+					errorlessNicheBreadthTap_095_mm = errorlessNicheBreadthTap_095_mm,
+					preciseNicheBreadthTap_095_mm = preciseNicheBreadthTap_095_mm,
+					impreciseNicheBreadthTap_095_mm = impreciseNicheBreadthTap_095_mm,
 
-					# errorlessNicheBreadthTap_090_mm = errorlessNicheBreadthTap_090_mm,
-					# preciseNicheBreadthTap_090_mm = preciseNicheBreadthTap_090_mm,
-					# vagueNicheBreadthTap_090_mm = vagueNicheBreadthTap_090_mm,
+					errorlessNicheBreadthTap_090_mm = errorlessNicheBreadthTap_090_mm,
+					preciseNicheBreadthTap_090_mm = preciseNicheBreadthTap_090_mm,
+					impreciseNicheBreadthTap_090_mm = impreciseNicheBreadthTap_090_mm,
 					
-					# # multivariate niche breadth
-					# errorlessConvHullArea = errorlessConvHullStats$area,
-					# preciseConvHullArea = preciseConvHullStats$area,
-					# vagueConvHullArea = vagueConvHullStats$area,
+					# multivariate niche breadth
+					errorlessConvHullArea = errorlessConvHullStats$area,
+					preciseConvHullArea = preciseConvHullStats$area,
+					impreciseConvHullArea = impreciseConvHullStats$area,
 					
-					# errorlessConvHullVol = errorlessConvHullStats$vol,
-					# preciseConvHullVol = preciseConvHullStats$vol,
-					# vagueConvHullVol = vagueConvHullStats$vol,
+					errorlessConvHullVol = errorlessConvHullStats$vol,
+					preciseConvHullVol = preciseConvHullStats$vol,
+					impreciseConvHullVol = impreciseConvHullStats$vol,
 					
-					# # ENM calibration
-					# corTruthVsErrorlessSq = corTruthVsErrorlessSq,
-					# corTruthVsPreciseSq = corTruthVsPreciseSq,
-					# corTruthVsVagueSq = corTruthVsVagueSq,
+					# ENM calibration
+					corTruthVsErrorlessSq = corTruthVsErrorlessSq,
+					corTruthVsPreciseSq = corTruthVsPreciseSq,
+					corTruthVsImpreciseSq = corTruthVsImpreciseSq,
 					
-					# corTruthVsErrorlessFut = corTruthVsErrorlessFut,
-					# corTruthVsPreciseFut = corTruthVsPreciseFut,
-					# corTruthVsVagueFut = corTruthVsVagueFut,
+					corTruthVsErrorlessFut = corTruthVsErrorlessFut,
+					corTruthVsPreciseFut = corTruthVsPreciseFut,
+					corTruthVsImpreciseFut = corTruthVsImpreciseFut,
 					
-					# # EOO
-					# eooErrorless_km2 = eooErrorless_km2,
-					# eooPrecise_km2 = eooPrecise_km2,
-					# eooVague_km2 = eooVague_km2,
+					# EOO
+					eooErrorless_km2 = eooErrorless_km2,
+					eooPrecise_km2 = eooPrecise_km2,
+					eooImprecise_km2 = eooImprecise_km2,
 					
-					# # ENM range and climate exposure
-					# sqSuitArea_errorless_km2 = sqSuitArea_errorless_km2,
-					# sqSuitArea_precise_km2 = sqSuitArea_precise_km2,
-					# sqSuitArea_vague_km2 = sqSuitArea_vague_km2,
+					# ENM range and climate exposure
+					sqSuitArea_errorless_km2 = sqSuitArea_errorless_km2,
+					sqSuitArea_precise_km2 = sqSuitArea_precise_km2,
+					sqSuitArea_imprecise_km2 = sqSuitArea_imprecise_km2,
 					
-					# futSuitArea_errorless_km2 = futSuitArea_errorless_km2,
-					# futSuitArea_precise_km2 = futSuitArea_precise_km2,
-					# futSuitArea_vague_km2 = futSuitArea_vague_km2,
+					futSuitArea_errorless_km2 = futSuitArea_errorless_km2,
+					futSuitArea_precise_km2 = futSuitArea_precise_km2,
+					futSuitArea_imprecise_km2 = futSuitArea_imprecise_km2,
 					
-					# stableArea_errorless_km2 = stableArea_errorless_km2,
-					# stableArea_precise_km2 = stableArea_precise_km2,
-					# stableArea_vague_km2 = stableArea_vague_km2,
+					stableArea_errorless_km2 = stableArea_errorless_km2,
+					stableArea_precise_km2 = stableArea_precise_km2,
+					stableArea_imprecise_km2 = stableArea_imprecise_km2,
 					
-					# gainArea_errorless_km2 = gainArea_errorless_km2,
-					# gainArea_precise_km2 = gainArea_precise_km2,
-					# gainArea_vague_km2 = gainArea_vague_km2,
+					gainArea_errorless_km2 = gainArea_errorless_km2,
+					gainArea_precise_km2 = gainArea_precise_km2,
+					gainArea_imprecise_km2 = gainArea_imprecise_km2,
 					
-					# lostArea_errorless_km2 = lostArea_errorless_km2,
-					# lostArea_precise_km2 = lostArea_precise_km2,
-					# lostArea_vague_km2 = lostArea_vague_km2
+					lostArea_errorless_km2 = lostArea_errorless_km2,
+					lostArea_precise_km2 = lostArea_precise_km2,
+					lostArea_imprecise_km2 = lostArea_imprecise_km2
 					
-				# )
+				)
 				
-			# thisRemember
+			thisRemember
 			
-		# })
-				
+		})
+
+	### MAIN
+	########
 	
-
-	# ### MAIN
-	# ########
+	for (countSeries in 1:nrow(series)) {
 	
-	# for (countSeries in 1:nrow(series)) {
-	
-		# thisNumErrorless <- series$totalErrorless[countSeries]
-		# thisNumPrecise <- series$numPrecise[countSeries]
+		numErrorless <- series$totalErrorless[countSeries]
+		numPrecise <- series$totalPrecise[countSeries]
+		numImprecise <- series$totalImprecise[countSeries]
 
-		# # initiate/re-initiate storage
-		# if (file.exists(paste0('./Analysis/Virtual Species/Virtual Species Synthetic Results - Errorless ', thisNumErrorless, ' Precise ', thisNumPrecise, '.csv'))) {
-			# remember <- read.csv(paste0('./Analysis/Virtual Species/Virtual Species Synthetic Results - Errorless ', thisNumErrorless, ' Precise ', thisNumPrecise, '.csv'))
-			# repStart <- max(remember$rep) + 1
-		# } else {
-			# remember <- data.frame()
-			# repStart <- 1
-		# }
+		# initiate/re-initiate storage
+		if (file.exists(paste0('./Analysis/Virtual Species/Virtual Species Synthetic Results - Errorless ', thisNumErrorless, ' Precise ', thisNumPrecise, '.csv'))) {
+			remember <- read.csv(paste0('./Analysis/Virtual Species/Virtual Species Synthetic Results - Errorless ', thisNumErrorless, ' Precise ', thisNumPrecise, '.csv'))
+			repStart <- max(remember$rep) + 1
+		} else {
+			remember <- data.frame()
+			repStart <- 1
+		}
 		
-		# rep <- repStart
-		# while (rep  <= repEnd) {
+		rep <- repStart
+		while (rep  <= repEnd) {
 
-			# say('[', thisNumErrorless, ' errorless | ', thisNumPrecise, ' precise | rep ', rep, ']', post=0)
+			say('[', thisNumErrorless, ' errorless | ', thisNumPrecise, ' precise | rep ', rep, ']', post=0)
 
-			# # simulate and model species
-			# thisRemember <- tryCatch(worker(), error=function(cond) FALSE)
+			# simulate and model species
+			thisRemember <- tryCatch(worker(), error=function(cond) FALSE)
 			
-			# say('')
-			# if (!is(thisRemember, 'logical')) {
+			say('')
+			if (!is(thisRemember, 'logical')) {
 
-				# remember <- rbind(remember, thisRemember, make.row.names=FALSE)
-				# rep <- rep + 1
+				remember <- rbind(remember, thisRemember, make.row.names=FALSE)
+				rep <- rep + 1
 			
-				# say(' SQ truth vs errorless ......... ', round(mean(remember$corTruthVsErrorlessSq, na.rm=TRUE), 2))
-				# say(' SQ truth vs precise ........... ', round(mean(remember$corTruthVsPreciseSq, na.rm=TRUE), 2))
-				# say(' SQ truth vs precise + vague ... ', round(mean(remember$corTruthVsVagueSq, na.rm=TRUE), 2), post=2)
+				say(' SQ truth vs errorless ......... ', round(mean(remember$corTruthVsErrorlessSq, na.rm=TRUE), 2))
+				say(' SQ truth vs precise ........... ', round(mean(remember$corTruthVsPreciseSq, na.rm=TRUE), 2))
+				say(' SQ truth vs precise + imprecise ... ', round(mean(remember$corTruthVsImpreciseSq, na.rm=TRUE), 2), post=2)
 
-				# say(' Future truth vs errorless ......... ', round(mean(remember$corTruthVsErrorlessFut, na.rm=TRUE), 2))
-				# say(' Future truth vs precise ........... ', round(mean(remember$corTruthVsPreciseFut, na.rm=TRUE), 2))
-				# say(' Future truth vs precise + vague ... ', round(mean(remember$corTruthVsVagueFut, na.rm=TRUE), 2), post=2)
+				say(' Future truth vs errorless ......... ', round(mean(remember$corTruthVsErrorlessFut, na.rm=TRUE), 2))
+				say(' Future truth vs precise ........... ', round(mean(remember$corTruthVsPreciseFut, na.rm=TRUE), 2))
+				say(' Future truth vs precise + imprecise ... ', round(mean(remember$corTruthVsImpreciseFut, na.rm=TRUE), 2), post=2)
 				
-			# }
+			}
 
-			# write.csv(remember, paste0('./Analysis/Virtual Species/Virtual Species Synthetic Results - Errorless ', thisNumErrorless, ' Precise ', thisNumPrecise, '.csv'), row.names=FALSE)
+			write.csv(remember, paste0('./Analysis/Virtual Species/Virtual Species Synthetic Results - Errorless ', thisNumErrorless, ' Precise ', thisNumPrecise, '.csv'), row.names=FALSE)
 
-		# } # next rep
+		} # next rep
 
-		# gc()
+		gc()
 
-	# } # next set in series
+	} # next set in series
 
 # say('#######################')
 # say('### collate results ###')
@@ -1020,12 +1031,12 @@
 	
 	# errorlessCol <- 'black'
 	# preciseCol <- 'black'
-	# vagueCol <- 'black'
+	# impreciseCol <- 'black'
 	
 	# errorlessFill <- 'white'
 	# preciseFill <- '#1b9e77' # '#66c2a5'
-	# # vagueFill <- '#d95f02' # '#fc8d62'
-	# vagueFill <- '#fc8d62'
+	# # impreciseFill <- '#d95f02' # '#fc8d62'
+	# impreciseFill <- '#fc8d62'
 	
 	# # calculations
 	# lower <- (1 - inner) / 2
@@ -1038,10 +1049,10 @@
 	# y <- min(c(
 		# quantile(results$corTruthVsErrorlessSq, lower, na.rm=TRUE),
 		# quantile(results$corTruthVsPreciseSq, lower, na.rm=TRUE),
-		# quantile(results$corTruthVsVagueSq, lower, na.rm=TRUE),
+		# quantile(results$corTruthVsImpreciseSq, lower, na.rm=TRUE),
 		# quantile(results$corTruthVsErrorlessFut, lower, na.rm=TRUE),
 		# quantile(results$corTruthVsPreciseFut, lower, na.rm=TRUE),
-		# quantile(results$corTruthVsVagueFut, lower, na.rm=TRUE)
+		# quantile(results$corTruthVsImpreciseFut, lower, na.rm=TRUE)
 	# ))
 	
 	# ylim <- c(roundTo(y, 1E-9, floor), 1)
@@ -1080,36 +1091,36 @@
 			# yErrorlessSq <- na.omit(thisResults$corTruthVsErrorlessSq[thisResults$numErrorless == numErrorless])
 			# yErrorlessFut <- na.omit(thisResults$corTruthVsErrorlessFut[thisResults$numErrorless == numErrorless])
 			
-			# yVagueSq <- na.omit(thisResults$corTruthVsVagueSq[thisResults$numErrorless == numErrorless])
-			# yVagueFut <- na.omit(thisResults$corTruthVsVagueFut[thisResults$numErrorless == numErrorless])
+			# yImpreciseSq <- na.omit(thisResults$corTruthVsImpreciseSq[thisResults$numErrorless == numErrorless])
+			# yImpreciseFut <- na.omit(thisResults$corTruthVsImpreciseFut[thisResults$numErrorless == numErrorless])
 			
 			# tall <- rbind(
 				# tall,
 				# data.frame(
 					# data = c('errorless', 'precise + imprecise'),
 					# numErrorless = numErrorless,
-					# middleSq = c(median(yErrorlessSq), median(yVagueSq)),
-					# lowerSq = c(quantile(yErrorlessSq, lower), quantile(yVagueSq, lower)),
-					# upperSq = c(quantile(yErrorlessSq, upper), quantile(yVagueSq, upper)),
-					# middleFut = c(median(yErrorlessFut), median(yVagueFut)),
-					# lowerFut = c(quantile(yErrorlessFut, lower), quantile(yVagueFut, lower)),
-					# upperFut = c(quantile(yErrorlessFut, upper), quantile(yVagueFut, upper))
+					# middleSq = c(median(yErrorlessSq), median(yImpreciseSq)),
+					# lowerSq = c(quantile(yErrorlessSq, lower), quantile(yImpreciseSq, lower)),
+					# upperSq = c(quantile(yErrorlessSq, upper), quantile(yImpreciseSq, upper)),
+					# middleFut = c(median(yErrorlessFut), median(yImpreciseFut)),
+					# lowerFut = c(quantile(yErrorlessFut, lower), quantile(yImpreciseFut, lower)),
+					# upperFut = c(quantile(yErrorlessFut, upper), quantile(yImpreciseFut, upper))
 				# )
 			# )
 		
 		# } # next number of errorless occurrences
 		
-		# tall$numVagueErrorless <- tall$numErrorless - numPrecise
-		# tall$numVagueErrorless[tall$data == 'precise'] <- 0
-		# tall$numVagueErrorless <- as.factor(tall$numVagueErrorless)
+		# tall$numImpreciseErrorless <- tall$numErrorless - numPrecise
+		# tall$numImpreciseErrorless[tall$data == 'precise'] <- 0
+		# tall$numImpreciseErrorless <- as.factor(tall$numImpreciseErrorless)
 		
 		# tallPrecise <- tall[tall$data=='precise', ]
 		
 		# ### plot!
-		# sq[[countPrecise]] <- ggplot(tall, aes(x=numVagueErrorless, y=middleSq, fill=data, color=data)) +
+		# sq[[countPrecise]] <- ggplot(tall, aes(x=numImpreciseErrorless, y=middleSq, fill=data, color=data)) +
 			# geom_boxplot(middle=tall$middleSq, lower=tall$lowerSq, upper=tall$upperSq, size=0.2) +
-			# scale_fill_manual(values=c(errorlessFill, preciseFill, vagueFill)) +
-			# scale_color_manual(values=c(errorlessCol, preciseCol, vagueCol)) +
+			# scale_fill_manual(values=c(errorlessFill, preciseFill, impreciseFill)) +
+			# scale_color_manual(values=c(errorlessCol, preciseCol, impreciseCol)) +
 			# scale_size(guide='none') +
 			# coord_cartesian(ylim=ylim) +
 			# ggtitle(paste0(letterSq, ') Present: ', numPrecise, ' precise occurrences')) + 
@@ -1121,10 +1132,10 @@
 				# legend.position='bottom'
 			# )
 			
-		# fut[[countPrecise]] <- ggplot(tall, aes(x=numVagueErrorless, y=middleFut, fill=data)) +
+		# fut[[countPrecise]] <- ggplot(tall, aes(x=numImpreciseErrorless, y=middleFut, fill=data)) +
 			# geom_boxplot(middle=tall$middleFut, lower=tall$lowerFut, upper=tall$upperFut, size=0.2) +
-			# scale_fill_manual(values=c(errorlessFill, preciseFill, vagueFill)) +
-			# scale_color_manual(values=c(errorlessCol, preciseCol, vagueCol)) +
+			# scale_fill_manual(values=c(errorlessFill, preciseFill, impreciseFill)) +
+			# scale_color_manual(values=c(errorlessCol, preciseCol, impreciseCol)) +
 			# scale_size(guide='none') +
 			# coord_cartesian(ylim=ylim) +
 			# ggtitle(paste0(letterFut, ') Future: ', numPrecise, ' precise occurrences')) + 
@@ -1177,10 +1188,10 @@
 	# inner <- 0.9 # inner quantile of each box
 	
 	# preciseCol <- 'black'
-	# vagueCol <- 'black'
+	# impreciseCol <- 'black'
 	
 	# preciseFill <- '#66c2a5'
-	# vagueFill <- '#fc8d62'
+	# impreciseFill <- '#fc8d62'
 	
 	# # calculations
 	# lower <- (1 - inner) / 2
@@ -1192,12 +1203,12 @@
 	# # y-axis limits
 	# mins <- min(c(
 		# quantile(results$eooPrecise_km2 / results$eooErrorless_km2, lower, na.rm=TRUE),
-		# quantile(results$eooVague_km2 / results$eooErrorless_km2, lower, na.rm=TRUE)
+		# quantile(results$eooImprecise_km2 / results$eooErrorless_km2, lower, na.rm=TRUE)
 	# ))
 	
 	# maxs <- max(c(
 		# quantile(results$eooPrecise_km2 / results$eooErrorless_km2, upper, na.rm=TRUE),
-		# quantile(results$eooVague_km2 / results$eooErrorless_km2, upper, na.rm=TRUE)
+		# quantile(results$eooImprecise_km2 / results$eooErrorless_km2, upper, na.rm=TRUE)
 	# ))
 	
 	# ylim <- c(roundTo(mins, 0.05, floor), roundTo(maxs, 0.1, ceiling))
@@ -1234,36 +1245,36 @@
 				# tall,
 				# data.frame(
 					# data = c('precise'),
-					# numVagueErrorless = numErrorless - numPrecise,
+					# numImpreciseErrorless = numErrorless - numPrecise,
 					# middle = median(precise),
 					# lower = quantile(precise, lower),
 					# upper = quantile(precise, upper)
 				# )
 			# )
 		
-			# vague <- thisResults$eooVague_km2[thisResults$numErrorless == numErrorless]
-			# vague <- na.omit(vague / errorless)
+			# imprecise <- thisResults$eooImprecise_km2[thisResults$numErrorless == numErrorless]
+			# imprecise <- na.omit(imprecise / errorless)
 			
 			# tall <- rbind(
 				# tall,
 				# data.frame(
 					# data = c('precise + imprecise'),
-					# numVagueErrorless = numErrorless - numPrecise,
-					# middle = median(vague),
-					# lower = quantile(vague, lower),
-					# upper = quantile(vague, upper)
+					# numImpreciseErrorless = numErrorless - numPrecise,
+					# middle = median(imprecise),
+					# lower = quantile(imprecise, lower),
+					# upper = quantile(imprecise, upper)
 				# )
 			# )
 		
 		# } # next number of errorless occurrences
 		
-		# tall$numVagueErrorless <- as.factor(tall$numVagueErrorless)
+		# tall$numImpreciseErrorless <- as.factor(tall$numImpreciseErrorless)
 		
 		# ### plot!
-		# p[[countPrecise]] <- ggplot(tall, aes(x=numVagueErrorless, y=middle, fill=data, color=data)) +
+		# p[[countPrecise]] <- ggplot(tall, aes(x=numImpreciseErrorless, y=middle, fill=data, color=data)) +
 			# geom_boxplot(middle=tall$middle, lower=tall$lower, upper=tall$upper, size=0.2) +
-			# scale_fill_manual(values=c(preciseFill, vagueFill)) +
-			# scale_color_manual(values=c(preciseCol, vagueCol)) +
+			# scale_fill_manual(values=c(preciseFill, impreciseFill)) +
+			# scale_color_manual(values=c(preciseCol, impreciseCol)) +
 			# scale_y_continuous(breaks=ybreaks) +
 			# scale_size(guide='none') +
 			# coord_cartesian(ylim=ylim) +
@@ -1308,13 +1319,13 @@
 	# inner <- 0.9 # inner quantile of each box
 	
 	# preciseCol <- alpha('#1b9e77', 0.4)
-	# vagueCol <- alpha('#d95f02', 0.4)
+	# impreciseCol <- alpha('#d95f02', 0.4)
 	
 	# preciseFill <- alpha('#1b9e77', 0.3)
-	# vagueFill <- alpha('#d95f02', 0.3)
+	# impreciseFill <- alpha('#d95f02', 0.3)
 	
 	# preciseLine <- '#105c45'
-	# vagueLine <- '#924001'
+	# impreciseLine <- '#924001'
 	
 	# # calculations
 	# lower <- (1 - inner) / 2
@@ -1324,7 +1335,7 @@
 	# load('./Analysis/Virtual Species/!Collated Results.rda')
 	
 	# # y-axis limits
-	# y <- c(results$eooPrecise_km2 / results$eooErrorless_km2, results$eooVague_km2 / results$eooErrorless_km2)
+	# y <- c(results$eooPrecise_km2 / results$eooErrorless_km2, results$eooImprecise_km2 / results$eooErrorless_km2)
 	# ylim <- c(0, max(2, quantile(y, inner)))
 	# xlim <- c(0, max(results$numAdmin))
 	
@@ -1346,15 +1357,15 @@
 		# numAdmin <- thisResults$numAdmin
 		# errorless <- thisResults$eooErrorless_km2
 		# precise <- thisResults$eooPrecise_km2
-		# vague <- thisResults$eooVague_km2
+		# imprecise <- thisResults$eooImprecise_km2
 		
 		# precise <- precise / errorless
-		# vague <- vague / errorless
+		# imprecise <- imprecise / errorless
 		
 		# tall <- data.frame(
 			# numAdmin = rep(numAdmin, 2),
-			# data = c(rep('precise', length(precise)), rep('precise + imprecise', length(vague))),
-			# ratio = c(precise, vague)
+			# data = c(rep('precise', length(precise)), rep('precise + imprecise', length(imprecise))),
+			# ratio = c(precise, imprecise)
 		# )
 		
 		# if (any(precise > ylim[2])) {
@@ -1362,10 +1373,10 @@
 			# say('numAdmin values: ', numAdmin[precise > ylim[2]])
 			# say('y values: ', precise[precise > ylim[2]])
 		# }
-		# if (any(vague > ylim[2])) {
-			# say('Number of vague not shown: ', sum(vague > ylim[2]), pre=2)
-			# say('numAdmin values: ', numAdmin[vague > ylim[2]])
-			# say('y values: ', vague[vague > ylim[2]])
+		# if (any(imprecise > ylim[2])) {
+			# say('Number of imprecise not shown: ', sum(imprecise > ylim[2]), pre=2)
+			# say('numAdmin values: ', numAdmin[imprecise > ylim[2]])
+			# say('y values: ', imprecise[imprecise > ylim[2]])
 		# }
 		
 		# # calculate quantiles for regression
@@ -1379,13 +1390,13 @@
 		# upperQuantPrecise <- exp(predict(upperQuantPrecise, this, type='response'))
 
 		# this <- tall[tall$data == 'precise + imprecise', ]
-		# middleQuantVague <- qgam(log(ratio) ~ s(numAdmin, bs='cr'), data=this, qu=0.5)
-		# lowerQuantVague <- qgam(log(ratio) ~ s(numAdmin, bs='cr'), data=this, qu=lower)
-		# upperQuantVague <- qgam(log(ratio) ~ s(numAdmin, bs='cr'), data=this, qu=upper)
+		# middleQuantImprecise <- qgam(log(ratio) ~ s(numAdmin, bs='cr'), data=this, qu=0.5)
+		# lowerQuantImprecise <- qgam(log(ratio) ~ s(numAdmin, bs='cr'), data=this, qu=lower)
+		# upperQuantImprecise <- qgam(log(ratio) ~ s(numAdmin, bs='cr'), data=this, qu=upper)
 		
-		# middleQuantVague <- exp(predict(middleQuantVague, this, type='response'))
-		# lowerQuantVague <- exp(predict(lowerQuantVague, this, type='response'))
-		# upperQuantVague <- exp(predict(upperQuantVague, this, type='response'))
+		# middleQuantImprecise <- exp(predict(middleQuantImprecise, this, type='response'))
+		# lowerQuantImprecise <- exp(predict(lowerQuantImprecise, this, type='response'))
+		# upperQuantImprecise <- exp(predict(upperQuantImprecise, this, type='response'))
 
 		# middlePrecise <- data.frame(
 			# numAdmin = tall$numAdmin,
@@ -1393,21 +1404,21 @@
 			# middle = middleQuantPrecise
 		# )
 		
-		# middleVague <- data.frame(
+		# middleImprecise <- data.frame(
 			# numAdmin = tall$numAdmin,
-			# data = rep('precise', length(lowerQuantVague)),
-			# middle = middleQuantVague
+			# data = rep('precise', length(lowerQuantImprecise)),
+			# middle = middleQuantImprecise
 		# )
 		
 		# middlePrecise <- middlePrecise[!duplicated(middlePrecise), ]
-		# middleVague <- middleVague[!duplicated(middleVague), ]
+		# middleImprecise <- middleImprecise[!duplicated(middleImprecise), ]
 
 		# order <- order(tall$numAdmin[tall$data=='precise'])
 		# numAdmin <- thisResults$numAdmin[order]
 		# quants <- data.frame(
 			# numAdmin = c(numAdmin, rev(numAdmin), numAdmin, rev(numAdmin)),
-			# ratio = c(lowerQuantPrecise[order], rev(upperQuantPrecise[order]), lowerQuantVague[order], rev(upperQuantVague[order])),
-			# data = c(rep('precise', 2 * length(lowerQuantPrecise)), rep('precise + imprecise', 2 * length(lowerQuantVague)))
+			# ratio = c(lowerQuantPrecise[order], rev(upperQuantPrecise[order]), lowerQuantImprecise[order], rev(upperQuantImprecise[order])),
+			# data = c(rep('precise', 2 * length(lowerQuantPrecise)), rep('precise + imprecise', 2 * length(lowerQuantImprecise)))
 		# )
 		
 		# quants <- quants[!duplicated(quants), ]
@@ -1416,11 +1427,11 @@
 		# p[[countPrecise]] <- ggplot() +
 			# geom_point(data=tall, size=0.5, aes(x=numAdmin, y=ratio, shape=data, color=data)) +
 			# geom_polygon(data=quants, mapping=aes(x=numAdmin, y=ratio, fill=data)) +
-			# scale_fill_manual(values=c('precise'=preciseFill, 'precise + imprecise'=vagueFill)) +
-			# scale_color_manual(values=c('precise'=preciseCol, 'precise + imprecise'=vagueCol)) +
+			# scale_fill_manual(values=c('precise'=preciseFill, 'precise + imprecise'=impreciseFill)) +
+			# scale_color_manual(values=c('precise'=preciseCol, 'precise + imprecise'=impreciseCol)) +
 			# scale_shape_manual(values=c('precise'=2, 'precise + imprecise'=1)) +
 			# geom_line(data=middlePrecise, aes(x=numAdmin, y=middle), color=preciseLine, size=1, lineend='round') +
-			# geom_line(data=middleVague, aes(x=numAdmin, y=middle), color=vagueLine, size=1, lineend='round') +
+			# geom_line(data=middleImprecise, aes(x=numAdmin, y=middle), color=impreciseLine, size=1, lineend='round') +
 			# ggtitle(paste0(letter, ') ', numPrecise, ' precise occurrences')) + 
 			# xlab('Additional imprecise occurrences') +
 			# ylab('Ratio of estimated-to-errorless\nextent of occurrence') +
@@ -1463,10 +1474,10 @@
 	# inner <- 0.9 # inner quantile of each box
 	
 	# preciseCol <- 'black'
-	# vagueCol <- 'black'
+	# impreciseCol <- 'black'
 	
 	# preciseFill <- '#66c2a5'
-	# vagueFill <- '#fc8d62'
+	# impreciseFill <- '#fc8d62'
 	
 	# # calculations
 	# lower <- (1 - inner) / 2
@@ -1478,16 +1489,16 @@
 	# # y-axis limits
 	# mins <- min(c(
 		# quantile(results$preciseNicheBreadthMat_range_degC / results$errorlessNicheBreadthMat_range_degC, lower, na.rm=TRUE),
-		# quantile(results$vagueNicheBreadthMat_range_degC / results$errorlessNicheBreadthMat_range_degC, lower, na.rm=TRUE),
+		# quantile(results$impreciseNicheBreadthMat_range_degC / results$errorlessNicheBreadthMat_range_degC, lower, na.rm=TRUE),
 		# quantile(results$preciseNicheBreadthTap_range_mm / results$errorlessNicheBreadthTap_range_mm, lower, na.rm=TRUE),
-		# quantile(results$vagueNicheBreadthTap_range_mm / results$errorlessNicheBreadthTap_range_mm, lower, na.rm=TRUE)
+		# quantile(results$impreciseNicheBreadthTap_range_mm / results$errorlessNicheBreadthTap_range_mm, lower, na.rm=TRUE)
 	# ))
 	
 	# maxs <- max(c(
 		# quantile(results$preciseNicheBreadthMat_range_degC / results$errorlessNicheBreadthMat_range_degC, upper, na.rm=TRUE),
-		# quantile(results$vagueNicheBreadthMat_range_degC / results$errorlessNicheBreadthMat_range_degC, upper, na.rm=TRUE),
+		# quantile(results$impreciseNicheBreadthMat_range_degC / results$errorlessNicheBreadthMat_range_degC, upper, na.rm=TRUE),
 		# quantile(results$preciseNicheBreadthTap_range_mm / results$errorlessNicheBreadthTap_range_mm, lower, na.rm=TRUE),
-		# quantile(results$vagueNicheBreadthTap_range_mm / results$errorlessNicheBreadthTap_range_mm, lower, na.rm=TRUE)
+		# quantile(results$impreciseNicheBreadthTap_range_mm / results$errorlessNicheBreadthTap_range_mm, lower, na.rm=TRUE)
 	# ))
 	
 	# ylim <- c(roundTo(mins, 0.05, floor), roundTo(maxs, 0.1, ceiling))
@@ -1520,38 +1531,38 @@
 			# preciseMat <- thisResults$preciseNicheBreadthMat_range_degC[thisResults$numErrorless == numErrorless]
 			# preciseTap <- thisResults$preciseNicheBreadthTap_range_mm[thisResults$numErrorless == numErrorless]
 			
-			# vagueMat <- thisResults$vagueNicheBreadthMat_range_degC[thisResults$numErrorless == numErrorless]
-			# vagueTap <- thisResults$vagueNicheBreadthTap_range_mm[thisResults$numErrorless == numErrorless]
+			# impreciseMat <- thisResults$impreciseNicheBreadthMat_range_degC[thisResults$numErrorless == numErrorless]
+			# impreciseTap <- thisResults$impreciseNicheBreadthTap_range_mm[thisResults$numErrorless == numErrorless]
 			
 			# preciseMat <- na.omit(preciseMat / errorlessMat)
 			# preciseTap <- na.omit(preciseTap / errorlessTap)
 
-			# vagueMat <- na.omit(vagueMat / errorlessMat)
-			# vagueTap <- na.omit(vagueTap / errorlessTap)
+			# impreciseMat <- na.omit(impreciseMat / errorlessMat)
+			# impreciseTap <- na.omit(impreciseTap / errorlessTap)
 			
 			# tall <- rbind(
 				# tall,
 				# data.frame(
 					# data = c('precise', 'precise + imprecise'),
-					# numVagueErrorless = rep(numErrorless - numPrecise, 2),
-					# middleMat = c(median(preciseMat), median(vagueMat)),
-					# lowerMat = c(quantile(preciseMat, lower), quantile(vagueMat, lower)),
-					# upperMat = c(quantile(preciseMat, upper), quantile(vagueMat, upper)),
-					# middleTap = c(median(preciseTap), median(vagueTap)),
-					# lowerTap = c(quantile(preciseTap, lower), quantile(vagueTap, lower)),
-					# upperTap = c(quantile(preciseTap, upper), quantile(vagueTap, upper))
+					# numImpreciseErrorless = rep(numErrorless - numPrecise, 2),
+					# middleMat = c(median(preciseMat), median(impreciseMat)),
+					# lowerMat = c(quantile(preciseMat, lower), quantile(impreciseMat, lower)),
+					# upperMat = c(quantile(preciseMat, upper), quantile(impreciseMat, upper)),
+					# middleTap = c(median(preciseTap), median(impreciseTap)),
+					# lowerTap = c(quantile(preciseTap, lower), quantile(impreciseTap, lower)),
+					# upperTap = c(quantile(preciseTap, upper), quantile(impreciseTap, upper))
 				# )
 			# )
 		
 		# } # next number of errorless occurrences
 		
-		# tall$numVagueErrorless <- as.factor(tall$numVagueErrorless)
+		# tall$numImpreciseErrorless <- as.factor(tall$numImpreciseErrorless)
 		
 		# ### plot!
-		# mat[[countPrecise]] <- ggplot(tall, aes(x=numVagueErrorless, y=middleMat, fill=data, color=data)) +
+		# mat[[countPrecise]] <- ggplot(tall, aes(x=numImpreciseErrorless, y=middleMat, fill=data, color=data)) +
 			# geom_boxplot(middle=tall$middleMat, lower=tall$lowerMat, upper=tall$upperMat, size=0.2) +
-			# scale_fill_manual(values=c(preciseFill, vagueFill)) +
-			# scale_color_manual(values=c(preciseCol, vagueCol)) +
+			# scale_fill_manual(values=c(preciseFill, impreciseFill)) +
+			# scale_color_manual(values=c(preciseCol, impreciseCol)) +
 			# scale_y_continuous(breaks=ybreaks) +
 			# scale_size(guide='none') +
 			# coord_cartesian(ylim=ylim) +
@@ -1564,10 +1575,10 @@
 				# legend.position='bottom'
 			# )
 			
-		# tap[[countPrecise]] <- ggplot(tall, aes(x=numVagueErrorless, y=middleTap, fill=data, color=data)) +
+		# tap[[countPrecise]] <- ggplot(tall, aes(x=numImpreciseErrorless, y=middleTap, fill=data, color=data)) +
 			# geom_boxplot(middle=tall$middleTap, lower=tall$lowerTap, upper=tall$upperTap, size=0.2) +
-			# scale_fill_manual(values=c(preciseFill, vagueFill)) +
-			# scale_color_manual(values=c(preciseCol, vagueCol)) +
+			# scale_fill_manual(values=c(preciseFill, impreciseFill)) +
+			# scale_color_manual(values=c(preciseCol, impreciseCol)) +
 			# scale_y_continuous(breaks=ybreaks) +
 			# scale_size(guide='none') +
 			# coord_cartesian(ylim=ylim) +
@@ -1621,10 +1632,10 @@
 	# inner <- 0.9 # inner quantile of each box
 	
 	# preciseCol <- 'black'
-	# vagueCol <- 'black'
+	# impreciseCol <- 'black'
 	
 	# preciseFill <- '#66c2a5'
-	# vagueFill <- '#fc8d62'
+	# impreciseFill <- '#fc8d62'
 	
 	# # calculations
 	# lower <- (1 - inner) / 2
@@ -1636,12 +1647,12 @@
 	# ### y-axis limits: volume
 	# mins <- min(c(
 		# quantile(results$preciseConvHullVol / results$errorlessConvHullVol, lower, na.rm=TRUE),
-		# quantile(results$vagueConvHullVol / results$errorlessConvHullVol, lower, na.rm=TRUE)
+		# quantile(results$impreciseConvHullVol / results$errorlessConvHullVol, lower, na.rm=TRUE)
 	# ))
 	
 	# maxs <- max(c(
 		# quantile(results$preciseConvHullVol / results$errorlessConvHullVol, upper, na.rm=TRUE),
-		# quantile(results$vagueConvHullVol / results$errorlessConvHullVol, 1 - (1 - upper) / 2, na.rm=TRUE)
+		# quantile(results$impreciseConvHullVol / results$errorlessConvHullVol, 1 - (1 - upper) / 2, na.rm=TRUE)
 	# ))
 	
 	# ylim <- c(roundTo(mins, 0.1, floor), roundTo(maxs, 0.25, ceiling))
@@ -1658,12 +1669,12 @@
 	# ### y-axis limits: area
 	# mins <- min(c(
 		# quantile(results$preciseConvHullArea / results$errorlessConvHullArea, lower, na.rm=TRUE),
-		# quantile(results$vagueConvHullArea / results$errorlessConvHullArea, lower, na.rm=TRUE)
+		# quantile(results$impreciseConvHullArea / results$errorlessConvHullArea, lower, na.rm=TRUE)
 	# ))
 	
 	# maxs <- max(c(
 		# quantile(results$preciseConvHullArea / results$errorlessConvHullArea, upper, na.rm=TRUE),
-		# quantile(results$vagueConvHullArea / results$errorlessConvHullArea, upper, na.rm=TRUE)
+		# quantile(results$impreciseConvHullArea / results$errorlessConvHullArea, upper, na.rm=TRUE)
 	# ))
 	
 	# ylim <- c(roundTo(mins, 0.1, floor), roundTo(maxs, 0.25, ceiling))
@@ -1697,7 +1708,7 @@
 
 		# tall <- data.frame(
 			# data = 'precise',
-			# numVagueErrorless = 0,
+			# numImpreciseErrorless = 0,
 			# middleVol = median(preciseVol),
 			# lowerVol = quantile(preciseVol, lower),
 			# upperVol = quantile(preciseVol, upper),
@@ -1711,35 +1722,35 @@
 			# errorlessVol <- thisResults$errorlessConvHullVol[thisResults$numErrorless == numErrorless]
 			# errorlessArea <- thisResults$errorlessConvHullArea[thisResults$numErrorless == numErrorless]
 			
-			# vagueVol <- thisResults$vagueConvHullVol[thisResults$numErrorless == numErrorless]
-			# vagueArea <- thisResults$vagueConvHullArea[thisResults$numErrorless == numErrorless]
+			# impreciseVol <- thisResults$impreciseConvHullVol[thisResults$numErrorless == numErrorless]
+			# impreciseArea <- thisResults$impreciseConvHullArea[thisResults$numErrorless == numErrorless]
 			
-			# vagueVol <- na.omit(vagueVol / errorlessVol)
-			# vagueArea <- na.omit(vagueArea / errorlessArea)
+			# impreciseVol <- na.omit(impreciseVol / errorlessVol)
+			# impreciseArea <- na.omit(impreciseArea / errorlessArea)
 			
 			# tall <- rbind(
 				# tall,
 				# data.frame(
 					# data = c('precise + imprecise'),
-					# numVagueErrorless = numErrorless - numPrecise,
-					# middleVol = median(vagueVol),
-					# lowerVol = quantile(vagueVol, lower),
-					# upperVol = quantile(vagueVol, upper),
-					# middleArea = median(vagueArea),
-					# lowerArea = quantile(vagueArea, lower),
-					# upperArea = quantile(vagueArea, upper)
+					# numImpreciseErrorless = numErrorless - numPrecise,
+					# middleVol = median(impreciseVol),
+					# lowerVol = quantile(impreciseVol, lower),
+					# upperVol = quantile(impreciseVol, upper),
+					# middleArea = median(impreciseArea),
+					# lowerArea = quantile(impreciseArea, lower),
+					# upperArea = quantile(impreciseArea, upper)
 				# )
 			# )
 		
 		# } # next number of errorless occurrences
 		
-		# tall$numVagueErrorless <- as.factor(tall$numVagueErrorless)
+		# tall$numImpreciseErrorless <- as.factor(tall$numImpreciseErrorless)
 		
 		# ### plot!
-		# vol[[countPrecise]] <- ggplot(tall, aes(x=numVagueErrorless, y=middleVol, fill=data, color=data)) +
+		# vol[[countPrecise]] <- ggplot(tall, aes(x=numImpreciseErrorless, y=middleVol, fill=data, color=data)) +
 			# geom_boxplot(middle=tall$middleVol, lower=tall$lowerVol, upper=tall$upperVol, size=0.2) +
-			# scale_fill_manual(values=c(preciseFill, vagueFill)) +
-			# scale_color_manual(values=c(preciseCol, vagueCol)) +
+			# scale_fill_manual(values=c(preciseFill, impreciseFill)) +
+			# scale_color_manual(values=c(preciseCol, impreciseCol)) +
 			# scale_y_continuous(breaks=ybreaksVol) +
 			# scale_size(guide='none') +
 			# coord_cartesian(ylim=ylimVol) +
@@ -1752,10 +1763,10 @@
 				# legend.position='bottom'
 			# )
 			
-		# area[[countPrecise]] <- ggplot(tall, aes(x=numVagueErrorless, y=middleArea, fill=data, color=data)) +
+		# area[[countPrecise]] <- ggplot(tall, aes(x=numImpreciseErrorless, y=middleArea, fill=data, color=data)) +
 			# geom_boxplot(middle=tall$middleArea, lower=tall$lowerArea, upper=tall$upperArea, size=0.2) +
-			# scale_fill_manual(values=c(preciseFill, vagueFill)) +
-			# scale_color_manual(values=c(preciseCol, vagueCol)) +
+			# scale_fill_manual(values=c(preciseFill, impreciseFill)) +
+			# scale_color_manual(values=c(preciseCol, impreciseCol)) +
 			# scale_y_continuous(breaks=ybreaksArea) +
 			# scale_size(guide='none') +
 			# coord_cartesian(ylim=ylimArea) +
@@ -1811,10 +1822,10 @@
 	# ylims <- c(-1, 2)
 	
 	# preciseCol <- 'black'
-	# vagueCol <- 'black'
+	# impreciseCol <- 'black'
 	
 	# preciseFill <- '#66c2a5'
-	# vagueFill <- '#fc8d62'
+	# impreciseFill <- '#fc8d62'
 	
 	# # calculations
 	# lower <- (1 - inner) / 2
@@ -1851,7 +1862,7 @@
 
 		# tall <- data.frame(
 			# data = 'precise',
-			# numVagueErrorless = 0,
+			# numImpreciseErrorless = 0,
 			# lowerSq = quantile(sqDelta, lower),
 			# upperSq = quantile(sqDelta, upper),
 			# middleSq = median(sqDelta),
@@ -1863,19 +1874,19 @@
 		# for (numErrorless in numErrorlesses) {
 
 			# sqSuitErrorless <- thisResults$sqSuitArea_errorless_km2[thisResults$numErrorless == numErrorless]
-			# sqSuitVague <- thisResults$sqSuitArea_vague_km2[thisResults$numErrorless == numErrorless]
+			# sqSuitImprecise <- thisResults$sqSuitArea_imprecise_km2[thisResults$numErrorless == numErrorless]
 			
 			# futSuitErrorless <- thisResults$futSuitArea_errorless_km2[thisResults$numErrorless == numErrorless]
-			# futSuitVague <- thisResults$futSuitArea_vague_km2[thisResults$numErrorless == numErrorless]
+			# futSuitImprecise <- thisResults$futSuitArea_imprecise_km2[thisResults$numErrorless == numErrorless]
 
-			# sqDelta <- log10((sqSuitVague + 0.1) / (sqSuitErrorless + 0.1))
-			# futDelta <- log10((futSuitVague + 0.1) / (futSuitErrorless + 0.1))
+			# sqDelta <- log10((sqSuitImprecise + 0.1) / (sqSuitErrorless + 0.1))
+			# futDelta <- log10((futSuitImprecise + 0.1) / (futSuitErrorless + 0.1))
 			
 			# tall <- rbind(
 				# tall,
 				# data.frame(
 					# data = 'precise + imprecise',
-					# numVagueErrorless = numErrorless - numPrecise,
+					# numImpreciseErrorless = numErrorless - numPrecise,
 					# lowerSq = quantile(sqDelta, lower),
 					# upperSq = quantile(sqDelta, upper),
 					# middleSq = median(sqDelta),
@@ -1888,21 +1899,21 @@
 		
 		# } # next number of errorless occurrences
 		
-		# tall$numVagueErrorless <- as.factor(tall$numVagueErrorless)
+		# tall$numImpreciseErrorless <- as.factor(tall$numImpreciseErrorless)
 		
 		# ### plot!
 		# middleNice <- paste0(ifelse(tall$middleSq > 0, '+', ''), sprintf('%.2f', round(tall$middleSq, 2)))
 		
-		# sq[[countPrecise]] <- ggplot(tall, aes(x=numVagueErrorless, y=middleSq, fill=data, color=data)) +
+		# sq[[countPrecise]] <- ggplot(tall, aes(x=numImpreciseErrorless, y=middleSq, fill=data, color=data)) +
 			# geom_boxplot(middle=tall$middleSq, lower=tall$lowerSq, upper=tall$upperSq, size=0.2) +
-			# scale_fill_manual(values=c('precise'=preciseFill, 'precise + imprecise'=vagueFill)) +
-			# scale_color_manual(values=c('precise'=preciseCol, 'precise + imprecise'=vagueCol)) +
+			# scale_fill_manual(values=c('precise'=preciseFill, 'precise + imprecise'=impreciseFill)) +
+			# scale_color_manual(values=c('precise'=preciseCol, 'precise + imprecise'=impreciseCol)) +
 			# scale_size(guide='none') +
 			# coord_cartesian(ylim=ylims) +
 			# ggtitle(paste0(letter1, ') Present area: ', numPrecise, ' precise occurrences')) + 
 			# xlab('Additional errorless occurrences') +
 			# ylab(expression(atop(log[10]*' ratio', '(estimate / errorless)'))) +
-			# geom_text(x=tall$numVagueErrorless, y=ylims[2], label=middleNice, size=2, angle=90, hjust='right') +
+			# geom_text(x=tall$numImpreciseErrorless, y=ylims[2], label=middleNice, size=2, angle=90, hjust='right') +
 			# theme(
 				# text = element_text(size=10),
 				# axis.text.x = element_text(angle = 60, vjust = 0.9, hjust=1),
@@ -1911,16 +1922,16 @@
 			
 			
 		# middleNice <- paste0(ifelse(tall$middleFut > 0, '+', ''), sprintf('%.2f', round(tall$middleFut, 2)))
-		# fut[[countPrecise]] <- ggplot(tall, aes(x=numVagueErrorless, y=middleFut, fill=data, color=data)) +
+		# fut[[countPrecise]] <- ggplot(tall, aes(x=numImpreciseErrorless, y=middleFut, fill=data, color=data)) +
 			# geom_boxplot(middle=tall$middleFut, lower=tall$lowerFut, upper=tall$upperFut, size=0.2) +
-			# scale_fill_manual(values=c('precise'=preciseFill, 'precise + imprecise'=vagueFill)) +
-			# scale_color_manual(values=c('precise'=preciseCol, 'precise + imprecise'=vagueCol)) +
+			# scale_fill_manual(values=c('precise'=preciseFill, 'precise + imprecise'=impreciseFill)) +
+			# scale_color_manual(values=c('precise'=preciseCol, 'precise + imprecise'=impreciseCol)) +
 			# scale_size(guide='none') +
 			# coord_cartesian(ylim=ylims) +
 			# ggtitle(paste0(letter2, ') Future area: ', numPrecise, ' precise occurrences')) + 
 			# xlab('Additional errorless occurrences') +
 			# ylab(expression(atop(log[10]*' ratio', '(estimate / errorless)'))) +
-			# geom_text(x=tall$numVagueErrorless, y=ylims[2], label=middleNice, size=2, angle=90, hjust='right') +
+			# geom_text(x=tall$numImpreciseErrorless, y=ylims[2], label=middleNice, size=2, angle=90, hjust='right') +
 			# theme(
 				# text = element_text(size=10),
 				# axis.text.x = element_text(angle = 60, vjust = 0.9, hjust=1),

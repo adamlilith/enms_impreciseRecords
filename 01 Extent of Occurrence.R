@@ -1,9 +1,9 @@
 ### ANALYSIS OF RANGE SIZE FOR "VAGUELY-GEOREFERENCED SPECIMENS" PROJECT
 ### David Henderson 2019 | Adam B. Smith 2020
 ### 
-### source('C:/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records/Code/01 Extent of Occurrence.r')
-### source('D:/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records/Code/01 Extent of Occurrence.r')
-### source('E:/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records/Code/01 Extent of Occurrence.r')
+### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/01 Extent of Occurrence.r')
+### source('D:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/01 Extent of Occurrence.r')
+### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/01 Extent of Occurrence.r')
 
 ### CONTENTS ###
 ### setup ###
@@ -26,7 +26,7 @@
 	# drive <- 'D:'
 	drive <- 'E:'
 	
-	setwd(paste0(drive, '/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records'))
+	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
 
 	### libraries
 	library(dismo)

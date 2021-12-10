@@ -185,24 +185,34 @@ say('###################')
 		
 	}
 
-# say('##########################')
-# say('### create mask raster ###')
-# say('##########################')
+say('##########################')
+say('### create mask raster ###')
+say('##########################')
 
-	# # 1s in terrestrial cells in North America, NAs elsewhere
+	# 1s in terrestrial cells in North America, NAs elsewhere
 
-	# if (!exists('mask')) {
+	if (!exists('mask')) {
 		
-		# # elevation
-		# elev <- raster::raster('D:/Ecology/Climate/WORLDCLIM Ver 2.1 January 2020/wc2.1_10m_elev/wc2.1_10m_elev.tif')
+		# elevation
+		elev <- raster::raster('E:/Ecology/Climate/WorldClim/worldclim_2.1_30arcsec_elevation/wc2.1_30s_elev.tif')
 
-		# elev <- crop(elev, nam0Sp)
-		# mask <- rasterize(nam0Sp, elev) * 0 + 1
+		elev <- crop(elev, nam0Sp)
+		mask <- rasterize(nam0Sp, elev) * 0 + 1
 		
-		# names(mask) <- 'mask'
-		# writeRaster(mask, './Regions/mask_northAmerica', datatype='INT1U', format='GTiff')
+		# remove Hawaii
+		hawaiiSp <- nam1Sp[nam1Sp$NAME_1 == 'Hawaii', ]
+		hawaiiSpEa <- sp::spTransform(hawaiiSp, getCRS('albersNA', TRUE))
+		hawaiiBufferSpEa <- gBuffer(hawaiiSpEa, width=1000000)
+		hawaiiBufferSp <- sp::spTransform(hawaiiBufferSpEa, getCRS('wgs84', TRUE))
+		hawaiiBufferRast <- rasterize(hawaiiBufferSp, mask)
 		
-	# }
+		hawaiiBufferRast <- calc(hawaiiBufferRast, fun=function(x) ifelse(is.na(x), 1, NA))
+		mask <- mask * hawaiiBufferRast
+		
+		names(mask) <- 'mask'
+		writeRaster(mask, './Regions/mask_northAmerica', datatype='INT1U', format='GTiff', overwrite=TRUE)
+		
+	}
 
 # say('###########################')
 # say('### obtain species list ###')

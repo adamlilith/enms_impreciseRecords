@@ -29,6 +29,7 @@
 	
 	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
 
+	library(data.table)
 	library(cowplot)
 	library(ggplot2)
 	
@@ -83,142 +84,178 @@
 	
 	# load('./Data/Asclepias 02 Specimen Records with Duplicates Flagged.rda')
 	# load('./Data/Asclepias 03 Specimen Records and Environmental Data.rda')
-	
-	# ### species name
-	# tally <- data.frame(tally='Invalid species name', n=sum(records$cleanBadSpeciesName, na.rm=TRUE))
-	
-	# ### invalid year
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Invalid collection year', n=sum(records$cleanBadYear, na.rm=TRUE))
-	# )
-	
-	# ### missing coordinates
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Missing coordinates', n=sum(!complete.cases(raw[ , llGbif])))
-	# )
-	
-	# ### missing coordinates and coordinate uncertainty
-	# n <- sum(complete.cases(raw[ , llGbif]) & !complete.cases(raw$coordinateUncertaintyInMeters))
-	
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Possess coordinates but missing coordinate uncertainty', n=n)
-	# )
-	
-	# ### missing administrative information
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Missing state/province', n=sum(is.na(raw$stateProvince)))
-	# )
-	
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Missing county', n=sum(is.na(raw$county)))
-	# )
 
-	# ### administrative mismatch
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Administrative mismatch', n=sum(!records$adminMatch, na.rm=TRUE))
-	# )
+	# ### total records
+	# #################
 	
-	# ### cultivated
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Cultivated', n=sum(records$cleanCultivated, na.rm=TRUE))
-	# )
+		# N <- nrow(records)
+		# tally <- data.frame(tally='Total GBIF records', n=N, of=N, mutuallyExclusive=TRUE)
+		
+	# ### invalid
+	# ###########
+
+		# ### species name
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Invalid species name', n=sum(records$cleanBadSpeciesName, na.rm=TRUE), of=N, mutuallyExclusive=FALSE)
+		# )
+		
+		# ### invalid year
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Invalid collection year', n=sum(records$cleanBadYear, na.rm=TRUE), of=N, mutuallyExclusive=FALSE)
+		# )
+		
+		# ### administrative mismatch
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Administrative mismatch', n=sum(!records$adminMatch, na.rm=TRUE), of=N, mutuallyExclusive=FALSE)
+		# )
+
+		# records <- records[
+			# !naCompare('==', records$cleanBadSpeciesName, TRUE) &
+			# !naCompare('==', records$cleanBadYear, TRUE) &
+			# records$adminMatch, ]
+		# N <- nrow(records)
 	
-	# # missing locality information
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Missing information in locality fields', n=sum(is.na(raw$locality) & is.na(raw$verbatimLocality)))
-	# )
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Useful records after filtering', n=N, of=NA, mutuallyExclusive=NA)
+		# )
+		
+	# ### observational
+	# #################
+
+		# ### remove observational records
+		# n <- sum(naCompare('==', records$cleanObservationalRecord, TRUE))
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Observational record', n=n, of=N, mutuallyExclusive=TRUE)
+		# )
+		
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Assumed non-observational record', n=N - n, of=N, mutuallyExclusive=TRUE)
+		# )
+		
+		# records <- records[!naCompare('==', records$cleanObservationalRecord, TRUE), ]
+		# N <- nrow(records)
+
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Useful records after filtering', n=N, of=NA, mutuallyExclusive=NA)
+		# )
+
+	# ### other non-useful
+	# ####################
+		
+		# n <- sum(!records$usable)
+		
+		# ### cultivated
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Not usable (cultivated, before 1970, etc.)', n=n, of=N, mutuallyExclusive=TRUE)
+		# )
+		
+		# records <- records[records$usable, ]
+		# N <- nrow(records)
+		
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Useful records after filtering', n=N, of=NA, mutuallyExclusive=NA)
+		# )
+
+	# ### missing geographic information
+	# ##################################
+		
+		# ### missing coordinates
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Missing coordinates', n=sum(!complete.cases(records[ , llGbif])), of=N, mutuallyExclusive=FALSE)
+		# )
+		
+		# ### possess coordinates but missing coordinate uncertainty
+		# n <- sum(complete.cases(records[ , llGbif]) & !complete.cases(records$coordinateUncertaintyInMeters))
+		
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Possess coordinates but missing coordinate uncertainty', n=n, of=N, mutuallyExclusive=FALSE)
+		# )
+		
+		# ### missing administrative information
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Missing state/province', n=sum(is.na(records$stateProvince)), of=N, mutuallyExclusive=FALSE)
+		# )
+		
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Missing county', n=sum(is.na(records$county)), of=N, mutuallyExclusive=FALSE)
+		# )
+
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Missing state/province and county', n=sum(is.na(records$stateProvince) | is.na(records$county)), of=N, mutuallyExclusive=FALSE)
+		# )
+
+		# # missing locality information
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Missing information in locality fields', n=sum(is.na(records$locality) & is.na(records$verbatimLocality)), of=N, mutuallyExclusive=FALSE)
+		# )
+
+	# # ### unassignable
+	# # ################
 	
-	# ### observational records
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Observational record', n=sum(records$cleanObservationalRecord, na.rm=TRUE))
-	# )
+		# # # NB "recordType == ''" means "unassignable"
+		# # n <- sum(!isTRUENA(records$usable, ifNA=FALSE) | records$recordType == '' | is.na(records$recordType))
+
+		# # tally <- rbind(
+			# # tally,
+			# # data.frame(tally='Unassignable/unusable', n=n, of=N, mutuallyExclusive=NA)
+		# # )
 	
-	# ### outside coterminous North America
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Outside coterminous North America', n=sum(records$cleanNonCoterminiousNorthAmerica, na.rm=TRUE))
-	# )
+		# # records <- records[!(!records$usable | records$recordType == '' | is.na(records$recordType)), ]
+		# # N <- nrow(records)
+		# # tally <- rbind(
+			# # tally,
+			# # data.frame(tally='Useful records after filtering', n=N, of=NA, mutuallyExclusive=NA)
+		# # )
 	
-	# ### uncertainty too large
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Area of uncertainty too large*', n=sum(records$cleanAreaTooLarge, na.rm=TRUE))
-	# )
-	
-	# ### collected before 1970
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Collected before 1970', n=sum(records$cleanBeforeStartYear, na.rm=TRUE))
-	# )
-	
-	# ### duplicated
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Geographic duplicates', n=sum(records$cleanDuplicateRecord, na.rm=TRUE))
-	# )
-	
+	# ### assignments, all species
+	# ############################
+		
+		# n <- sum(records$recordType %in% stateAssigns) + sum(records$recordType %in% countyAssigns) + sum(records$recordType %in% inaccAssigns)
+		
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Imprecise records (all species)', n=n, of=N, mutuallyExclusive=TRUE)
+		# )
+		
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Precise records (all species)', n=sum(records$recordType %in% accAssigns), of=N, mutuallyExclusive=TRUE)
+		# )
+		
+		# records <- records[records$species %in% asclepias$meta$usableSpecies$species, ]
+		# N <- nrow(records)
+
 	# ### assignments
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='State-level record', n=sum(records$recordType %in% stateAssigns))
-	# )
-	
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='County-level record', n=sum(records$recordType %in% countyAssigns))
-	# )
+	# ###############
+		
+		# n <- sum(records$recordType %in% stateAssigns) + sum(records$recordType %in% countyAssigns) + sum(records$recordType %in% inaccAssigns)
+		
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Imprecise records (analyzed species)', n=n, of=N, mutuallyExclusive=TRUE)
+		# )
+		
+		# tally <- rbind(
+			# tally,
+			# data.frame(tally='Precise records (analyzed species)', n=sum(records$recordType %in% accAssigns), of=N, mutuallyExclusive=TRUE)
+		# )
 
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Inaccurate record', n=sum(records$recordType %in% inaccAssigns))
-	# )
-	
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Accurate record', n=sum(records$recordType %in% accAssigns))
-	# )
-	
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Final usable, all species', n=sum(records$usable))
-	# )
-	
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Final accurate, species with >= 5 accurate records', n=sum(asclepias$meta$usableSpecies[ , c('numUniqueUsableAccurateRecs')]))
-	# )
-	
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Final inaccurate, species with >= 5 accurate records', n=sum(asclepias$meta$usableSpecies[ , c('numUniqueUsableInaccurateRecs')]))
-	# )
-	
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Final administrative, species with >= 5 accurate records', n=sum(asclepias$meta$usableSpecies[ , c('numUniqueUsableAdminRecs')]))
-	# )
-	
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Final usable, species with >= 5 accurate records', n=sum(asclepias$meta$usableSpecies[ , c('numUniqueUsableAccurateRecs', 'numUniqueUsableInaccurateRecs', 'numUniqueUsableAdminRecs')]))
-	# )
-	
-	# ### total number of records
-	# tally <- rbind(
-		# tally,
-		# data.frame(tally='Total records', n=nrow(records))
-	# )
-
-	# write.csv(tally, './Analysis/Asclepias/Record Tallies.csv', row.names=FALSE)
+	# write.csv(tally, './Analysis/Record Tallies.csv', row.names=FALSE)
 	
 	
 	# say('TALLIES across species used in the analysis:')
@@ -350,195 +387,87 @@
 		# wcox <- wilcox.test(acc, all, paired=TRUE, alternative='two.sided')
 		# print(wcox)
 
-# say('###########################################################')
-# say('### report metrics on change in climate change exposure ###')
-# say('###########################################################')
+say('###########################################################')
+say('### report metrics on change in climate change exposure ###')
+say('###########################################################')
 
-	# # climate change exposure
-	# x <- read.csv('./Analysis/ENMs/!Climate Change Exposure - Areal Values for Current, Future, Stable, Gain, and Loss.csv')
+	# climate change exposure
+	x <- read.csv('./Analysis/ENMs/!Climate Change Exposure - Areal Values for Current, Future, Stable, Gain, and Loss.csv')
 	
-	# say('Difference in CURRENT climatically suitable area within EOO of precise records:', pre=1)
+	say('Difference in CURRENT climatically suitable area within BUFFERED MCP of precise & imprecise records under RCP8.5:', pre=1)
 
-		# acc <- x$mcpAccs_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# all <- x$mcpAccs_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		# delta <- (all - acc) / acc
-		# rng <- range(delta)
+		acc <- x$buffAccsInaccsAdmin_currentArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='accurate']
+		all <- x$buffAccsInaccsAdmin_currentArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='closest']
+		delta <- (all - acc) / acc
+		rng <- range(delta)
 		
-		# medianDelta <- round(median(100 * delta), 1)
-		# rng <- round(100 * rng, 1)
+		medianDelta <- round(median(100 * delta), 1)
+		rng <- round(100 * rng, 1)
 		
-		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
-		# say('Number of species with an increase (%): ', sum(delta > 0), ' (', round(100 * sum(delta > 0) / 44, 1), '%).')
+		say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
+		say('Number of species with an increase (%): ', sum(delta > 0), ' (', round(100 * sum(delta > 0) / 44, 1), '%).')
 
-	# say('Difference in CURRENT climatically suitable area within EOO of precise & imprecise records:', pre=1)
+	say('Difference in FUTURE climatically suitable area within BUFFERED MCP of precise & imprecise records under RCP8.5:', pre=1)
 
-		# acc <- x$mcpAccsInaccsAdmin_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# all <- x$mcpAccsInaccsAdmin_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		# delta <- (all - acc) / acc
-		# rng <- range(delta)
+		acc <- x$buffAccsInaccsAdmin_futArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='accurate']
+		all <- x$buffAccsInaccsAdmin_futArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='closest']
+		delta <- (all - acc) / acc
+		rng <- range(delta)
 		
-		# medianDelta <- round(median(100 * delta), 1)
-		# rng <- round(100 * rng, 1)
+		medianDelta <- round(median(100 * delta), 1)
+		rng <- round(100 * rng, 1)
 		
-		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
-		# say('Number of species with an increase (%): ', sum(delta > 0), ' (', round(100 * sum(delta > 0) / 44, 1), '%).')
+		say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
+		say('Number of species with an increase (%): ', sum(delta > 0), ' (', round(100 * sum(delta > 0) / 44, 1), '%).')
 
-	# say('Difference in FUTURE climatically suitable area within EOO of precise records under RCP4.5:', pre=1)
+	say('Difference in GAINS in climatically suitable area within BUFFERED MCP of precise & imprecise records under RCP8.5:', pre=1)
 
-		# acc <- x$mcpAccs_futArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# all <- x$mcpAccs_futArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
+		acc <- x$buffAccsInaccsAdmin_gainArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='accurate']
+		all <- x$buffAccsInaccsAdmin_gainArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='closest']
+		delta <- (all - acc) / acc
+		rng <- range(delta)
 		
-		# delta <- (all - acc) / acc
-		# rng <- range(delta)
+		medianDelta <- round(median(100 * delta), 1)
+		rng <- round(100 * rng, 1)
 		
-		# medianDelta <- round(median(100 * delta), 1)
-		# rng <- round(100 * rng, 1)
-		
-		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
-		
-	# say('Difference in FUTURE climatically suitable area within EOO of precise records under RCP8.5:', pre=1)
+		say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
+		say('Number of species with an increase (%): ', sum(delta > 0), ' (', round(100 * sum(delta > 0) / 44, 1), '%).')
 
-		# acc <- x$mcpAccs_futArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# all <- x$mcpAccs_futArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='closest']
-		
-		# delta <- (all - acc) / acc
-		# rng <- range(delta)
-		
-		# medianDelta <- round(median(100 * delta), 1)
-		# rng <- round(100 * rng, 1)
-		
-		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
-		
-	# say('Difference in FUTURE STABLE climatically suitable area within EOO of precise records:', pre=1)
+	say('Difference in LOSSES in climatically suitable area within BUFFERED MCP of precise & imprecise records under RCP8.5:', pre=1)
 
-		# acc <- x$mcpAccs_stableArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# all <- x$mcpAccs_stableArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
+		acc <- x$buffAccsInaccsAdmin_lossArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='accurate']
+		all <- x$buffAccsInaccsAdmin_lossArea_km2[x$rcp==85 & x$background=='convexHull' & x$assignMethod=='closest']
+		delta <- (all - acc) / acc
+		rng <- range(delta)
 		
-		# delta <- (all - acc) / acc
-		# rng <- range(delta)
+		medianDelta <- round(median(100 * delta), 1)
+		rng <- round(100 * rng, 1)
 		
-		# medianDelta <- round(median(100 * delta), 1)
-		# rng <- round(100 * rng, 1)
-		
-		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
-		
-	# say('Difference in LOSS of climatically suitable area within EOO of precise records relative to current suitable area:', pre=1)
+		say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
+		say('Number of species with an increase (%): ', sum(delta > 0), ' (', round(100 * sum(delta > 0) / 44, 1), '%).')
 
-		# accDelta <- x$mcpAccs_lossArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# accStart <- x$mcpAccs_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# allDelta <- x$mcpAccs_lossArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		# allStart <- x$mcpAccs_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		
-		# delta <- allDelta / allStart - accDelta / accStart
-		# rng <- range(delta)
-		
-		# medianDelta <- round(median(100 * delta), 1)
-		# rng <- round(100 * rng, 1)
-		
-		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
-		
-		# change <- accDelta / accStart
-		# medianChange <- round(100 * median(change), 1)
-		# rng <- round(100 * range(change), 1)
-		# say('Median loss using precise-only: ', medianChange, '% (', rng[1], ' to ', rng[2], '%).')
-		
-		# change <- allDelta / allStart
-		# medianChange <- round(100 * median(change), 1)
-		# rng <- round(100 * range(change), 1)
-		# say('Median loss using precise + imprecise: ', medianChange, '% (', rng[1], ' to ', rng[2], '%).')
-
-	# say('Difference in GAIN of climatically suitable area within EOO of precise records relative to current suitable area:', pre=1)
-
-		# accDelta <- x$mcpAccs_gainArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# accStart <- x$mcpAccs_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# allDelta <- x$mcpAccs_gainArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		# allStart <- x$mcpAccs_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		
-		# delta <- allDelta / allStart - accDelta / accStart
-		# rng <- range(delta)
-		
-		# medianDelta <- round(median(100 * delta), 1)
-		# rng <- round(100 * rng, 1)
-		
-		# say('Median (range): ', medianDelta, '% (', rng[1], ' to ', rng[2], ').')
-		
-		# change <- accDelta / accStart
-		# medianChange <- round(100 * median(change), 1)
-		# rng <- round(100 * range(change), 1)
-		# say('Median gain using precise-only: ', medianChange, '% (', rng[1], ' to ', rng[2], '%).')
-		
-		# change <- allDelta / allStart
-		# medianChange <- round(100 * median(change), 1)
-		# rng <- round(100 * range(change), 1)
-		# say('Median gain using precise + imprecise: ', medianChange, '% (', rng[1], ' to ', rng[2], '%).', post=1)
-		
-	# say('NET CHANGE in climatically suitable area within EOO of PRECISE records relative to current suitable area:', pre=1)
-
-		# accCurrent <- x$mcpAccs_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# accGain <- x$mcpAccs_gainArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# accLoss <- x$mcpAccs_lossArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		
-		# allCurrent <- x$mcpAccs_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		# allGain <- x$mcpAccs_gainArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		# allLoss <- x$mcpAccs_lossArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		
-		# accNet <- (accGain - accLoss) / accCurrent
-		# allNet <- (allGain - allLoss) / allCurrent
-
-		# accNetMedian <- round(median(100 * accNet))
-		# allNetMedian <- round(median(100 * allNet))
-
-		# rngAcc <- round(100 * range(accNet))
-		# rngAll <- round(100 * range(allNet))
 	
-		# say('Median precise-only (range): ', accNetMedian, '% (', rngAcc[1], ' to ', rngAcc[2], ').')
-		# say('   Number of species increasing, precise-only (%): ', sum(accNet > 0), ' (', round(100 * sum(accNet > 0) / 44), '%).')
-		# say('Median precise & imprecise (range): ', allNetMedian, '% (', rngAll[1], ' to ', rngAll[2], ').', post=1)
-		# say('   Number of species increasing, precise & imprecise (%): ', sum(allNet > 0), ' (', round(100 * sum(allNet > 0) / 44), '%).')
+	say('NatureServe CCVI rankings (Young et al. 2016p. 43+), under RCP4.5 within PRECISE EOO', pre=1)
+	say('https://www.natureserve.org/sites/default/files/guidelines_natureserveclimatechangevulnerabilityindex_r3.02_1_jun_2016.pdf')
 	
-	# say('NET CHANGE in climatically suitable area within EOO of PRECISE & IMPRECISE records relative to current suitable area:', pre=1)
-
-		# accCurrent <- x$mcpAccsInaccsAdmin_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# accGain <- x$mcpAccsInaccsAdmin_gainArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# accLoss <- x$mcpAccsInaccsAdmin_lossArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
+		accCurrent <- x$mcpAccsInaccsAdmin_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
+		accFut <- x$mcpAccsInaccsAdmin_futArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
 		
-		# allCurrent <- x$mcpAccsInaccsAdmin_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		# allGain <- x$mcpAccsInaccsAdmin_gainArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		# allLoss <- x$mcpAccsInaccsAdmin_lossArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		
-		# accNet <- (accGain - accLoss) / accCurrent
-		# allNet <- (allGain - allLoss) / allCurrent
-
-		# accNetMedian <- round(median(100 * accNet))
-		# allNetMedian <- round(median(100 * allNet))
-
-		# rngAcc <- round(100 * range(accNet))
-		# rngAll <- round(100 * range(allNet))
+		allCurrent <- x$mcpAccsInaccsAdmin_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
+		allFut <- x$mcpAccsInaccsAdmin_futArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
 	
-		# say('Median precise-only (range): ', accNetMedian, '% (', rngAcc[1], ' to ', rngAcc[2], ').')
-		# say('Median precise & imprecise (range): ', allNetMedian, '% (', rngAll[1], ' to ', rngAll[2], ').', post=1)
+		accNetChange <- (accFut - accCurrent) / accCurrent
+		allNetChange <- (allFut - allCurrent) / allCurrent
 	
-	# say('NatureServe CCVI rankings (Young et al. 2016p. 43+), under RCP4.5 within PRECISE EOO', pre=1)
-	# say('https://www.natureserve.org/sites/default/files/guidelines_natureserveclimatechangevulnerabilityindex_r3.02_1_jun_2016.pdf')
+		tholdLower <- -0.99
+		tholdUpper <- -0.5
+		say('Number (%) of species in "increased vulnerability" category (50-99% loss), precise-only: ', sum(accNetChange >= tholdLower & accNetChange < tholdUpper), ' (', round(sum(accNetChange >= tholdLower & accNetChange < tholdUpper) / 44), '%).')
+		say('Number (%) of species in "increased vulnerability" category (50-99% loss), precise & imprecise: ', sum(allNetChange >= tholdLower & allNetChange < tholdUpper), ' (', round(sum(allNetChange >= tholdLower & allNetChange < tholdUpper) / 44), '%).', post=2)
 	
-		# accCurrent <- x$mcpAccsInaccsAdmin_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		# accFut <- x$mcpAccsInaccsAdmin_futArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='accurate']
-		
-		# allCurrent <- x$mcpAccsInaccsAdmin_currentArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-		# allFut <- x$mcpAccsInaccsAdmin_futArea_km2[x$rcp==45 & x$background=='convexHull' & x$assignMethod=='closest']
-	
-		# accNetChange <- (accFut - accCurrent) / accCurrent
-		# allNetChange <- (allFut - allCurrent) / allCurrent
-	
-		# tholdLower <- -0.99
-		# tholdUpper <- -0.5
-		# say('Number (%) of species in "increased vulnerability" category (50-99% loss), precise-only: ', sum(accNetChange >= tholdLower & accNetChange < tholdUpper), ' (', round(sum(accNetChange >= tholdLower & accNetChange < tholdUpper) / 44), '%).')
-		# say('Number (%) of species in "increased vulnerability" category (50-99% loss), precise & imprecise: ', sum(allNetChange >= tholdLower & allNetChange < tholdUpper), ' (', round(sum(allNetChange >= tholdLower & allNetChange < tholdUpper) / 44), '%).', post=2)
-	
-		# tholdLower <- -0.5
-		# tholdUpper <- -0.2
-		# say('Number (%) of species in "somewhat increased vulnerability" category (20-50% loss), precise-only: ', sum(accNetChange >= tholdLower & accNetChange < tholdUpper), ' (', round(sum(accNetChange >= tholdLower & accNetChange < tholdUpper) / 44), '%).')
-		# say('Number (%) of species in "somewhat increased vulnerability" category (20-50% loss), precise & imprecise: ', sum(allNetChange >= tholdLower & allNetChange < tholdUpper), ' (', round(sum(allNetChange >= tholdLower & allNetChange < tholdUpper) / 44), '%).', post=2)
+		tholdLower <- -0.5
+		tholdUpper <- -0.2
+		say('Number (%) of species in "somewhat increased vulnerability" category (20-50% loss), precise-only: ', sum(accNetChange >= tholdLower & accNetChange < tholdUpper), ' (', round(sum(accNetChange >= tholdLower & accNetChange < tholdUpper) / 44), '%).')
+		say('Number (%) of species in "somewhat increased vulnerability" category (20-50% loss), precise & imprecise: ', sum(allNetChange >= tholdLower & allNetChange < tholdUpper), ' (', round(sum(allNetChange >= tholdLower & allNetChange < tholdUpper) / 44), '%).', post=2)
 		
 # say('####################################################################################################')
 # say('### plot increase in EOO and niche breadth as function of number of precise records using base R ###')

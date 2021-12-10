@@ -9,7 +9,7 @@
 ### calculate climate change exposure from ENMs ###
 ### plot climate change exposure ###
 ### plot maps of climate change exposure ###
-### plot climate change exposure metrics ###
+### plot climate change exposure metrics within MCP of accurate occurrences ###
 
 #############
 ### setup ###
@@ -770,175 +770,283 @@
 		
 	# } # next species
 
-say('############################################')
-say('### plot climate change exposure metrics ###')
-say('############################################')
+# say('###############################################################################')
+# say('### plot climate change exposure metrics within MCP of accurate occurrences ###')
+# say('###############################################################################')
 
-	# exposure estimates
-	cce <- read.csv('./Analysis/ENMs/!Climate Change Exposure - Areal Values for Current, Future, Stable, Gain, and Loss.csv')
+	# # exposure estimates
+	# cce <- read.csv('./Analysis/ENMs/!Climate Change Exposure - Areal Values for Current, Future, Stable, Gain, and Loss.csv')
 
-	### stable area within precise MCP
-	##################################
+	# ### stable area within precise MCP
+	# ##################################
 		
-		accStablePreciseMcp <- cce$mcpAccs_stableArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
-		allStablePreciseMcp <- cce$mcpAccs_stableArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
+		# accStablePreciseMcp <- cce$mcpAccs_stableArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		# allStablePreciseMcp <- cce$mcpAccs_stableArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
 
-		accStablePreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_stableArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
-		allStablePreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_stableArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
+		# accStablePreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_stableArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		# allStablePreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_stableArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
 
-		data <- data.frame(acc=accStablePreciseMcp, all=allStablePreciseMcp)
+		# data <- data.frame(acc=accStablePreciseMcp, all=allStablePreciseMcp)
 		
-		lim <- c(0, max(accStablePreciseMcp, allStablePreciseMcp, accStablePreciseAndImpreciseMcp, allStablePreciseAndImpreciseMcp))
+		# lim <- c(0, max(accStablePreciseMcp, allStablePreciseMcp, accStablePreciseAndImpreciseMcp, allStablePreciseAndImpreciseMcp))
 		
-		lim <- 25 * round(ceiling(lim / 25))
+		# lim <- 25 * round(ceiling(lim / 25))
 		
-		stableMcpPrecise <- ggplot(data, aes(x=acc, y=all)) +
-			geom_abline(slope=1, intercept=0, col='gray45') +
-			geom_point(size=2.1, shape=21, bg=alpha('cornflowerblue', 0.6)) +
-			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
-			labs(title='Stable suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
-			theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
-
-		# print(stable)
-
-	### stable area within precise & imprecise MCP
-	###############################################
-		
-		data <- data.frame(acc=accStablePreciseAndImpreciseMcp, all=allStablePreciseAndImpreciseMcp)
-		
-		stableMcpPreciseAndImprecise <- ggplot(data, aes(x=acc, y=all)) +
-			geom_abline(slope=1, intercept=0, col='gray45') +
-			geom_point(size=2.1, shape=21, bg=alpha('cornflowerblue', 0.6)) +
-			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
-			labs(title='Stable suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
-			theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
-
-		# print(stable)
-
-	### loss area within precise MCP
-	################################
-		
-		accLossPreciseMcp <- cce$mcpAccs_lossArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
-		allLossPreciseMcp <- cce$mcpAccs_lossArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
-
-		accLossPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_lossArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
-		allLossPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_lossArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
-
-		accGainPreciseMcp <- cce$mcpAccs_gainArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
-		allGainPreciseMcp <- cce$mcpAccs_gainArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
-
-		accGainPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_gainArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
-		allGainPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_gainArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
-
-		data <- data.frame(acc=accLossPreciseMcp, all=allLossPreciseMcp)
-		
-		lim <- c(0, max(accLossPreciseMcp, allLossPreciseMcp, accLossPreciseAndImpreciseMcp, allLossPreciseAndImpreciseMcp, accGainPreciseMcp, allGainPreciseMcp, accGainPreciseAndImpreciseMcp, allGainPreciseAndImpreciseMcp))
-		lim <- 25 * round(ceiling(lim / 25))
-		
-		lossMcpPrecise <- ggplot(data, aes(x=acc, y=all)) +
-			geom_abline(slope=1, intercept=0, col='gray45') +
-			geom_point(size=2.1, shape=21, bg=alpha('firebrick1', 0.6)) +
-			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
-			labs(title='Loss in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
-			theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
-
-		# print(loss)
-		
-	### loss area within precise & imprecise MCP
-	############################################
-		
-		data <- data.frame(acc=accLossPreciseAndImpreciseMcp, all=allLossPreciseAndImpreciseMcp)
-		
-		lossMcpPreciseAndImprecise <- ggplot(data, aes(x=acc, y=all)) +
-			geom_abline(slope=1, intercept=0, col='gray45') +
-			geom_point(size=2.1, shape=21, bg=alpha('firebrick1', 0.6)) +
-			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
-			labs(title='Loss in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
-			theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
-
-		# print(loss)
-		
-	### gain area within precise MCP
-	################################
-		
-		data <- data.frame(acc=accGainPreciseMcp, all=allGainPreciseMcp)
-		
-		gainMcpPrecise <- ggplot(data, aes(x=acc, y=all)) +
-			geom_abline(slope=1, intercept=0, col='gray45') +
-			geom_point(size=2.1, shape=21, bg=alpha('chartreuse', 0.6)) +
-			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
-			labs(title='Gain in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
-			theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
-
-		# print(gain)
-
-	### gain area within precise & imprecise MCP
-	############################################
-		
-		data <- data.frame(acc=accGainPreciseAndImpreciseMcp, all=allGainPreciseAndImpreciseMcp)
-		
-		gainMcpPreciseAndImprecise <- ggplot(data, aes(x=acc, y=all)) +
-			geom_abline(slope=1, intercept=0, col='gray45') +
-			geom_point(size=2.1, shape=21, bg=alpha('chartreuse', 0.6)) +
-			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
-			labs(title='Gain in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
-			theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
-
-		# print(gain)
-
-	# ### net change in area within precise MCP
-	# #########################################
-		
-		# accNetChangePreciseMcp <- accGainPreciseMcp - accLossPreciseMcp
-		# allNetChangePreciseMcp <- allGainPreciseMcp - allLossPreciseMcp
-		
-		# accNetChangePreciseAndImpreciseMcp <- accGainPreciseAndImpreciseMcp - accLossPreciseAndImpreciseMcp
-		# allNetChangePreciseAndImpreciseMcp <- allGainPreciseAndImpreciseMcp - allLossPreciseAndImpreciseMcp
-		
-		# lim <- c(
-			# min(accNetChangePreciseMcp, allNetChangePreciseMcp, accNetChangePreciseAndImpreciseMcp, allNetChangePreciseAndImpreciseMcp),
-			# max(accNetChangePreciseMcp, allNetChangePreciseMcp, accNetChangePreciseAndImpreciseMcp, allNetChangePreciseAndImpreciseMcp)
-		# )
-		
-		# lim <- c(20 * round(floor(lim[1] / 20)), 100 * round(ceiling(lim[2] / 100)))
-		
-		# data <- data.frame(
-			# acc=accNetChangePreciseMcp,
-			# all=allNetChangePreciseMcp
-		# )
-		
-		# netChangeMcpPrecise <- ggplot(data, aes(x=acc, y=all)) +
+		# stableMcpPrecise <- ggplot(data, aes(x=acc, y=all)) +
 			# geom_abline(slope=1, intercept=0, col='gray45') +
-			# geom_point(size=2.1, shape=21, bg=alpha('gray', 0.6)) +
+			# geom_point(size=2.1, shape=21, bg=alpha('cornflowerblue', 0.6)) +
 			# xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
-			# labs(title='Next change in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			# labs(title='Stable suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
 			# theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
 
-	# ### net change in area within precise & imprecise MCP
-	# #####################################################
+		# # print(stable)
+
+	# ### stable area within precise & imprecise MCP
+	# ###############################################
 		
-		# data <- data.frame(
-			# acc=accNetChangePreciseAndImpreciseMcp,
-			# all=allNetChangePreciseAndImpreciseMcp
-		# )
+		# data <- data.frame(acc=accStablePreciseAndImpreciseMcp, all=allStablePreciseAndImpreciseMcp)
 		
-		# netChangeMcpPreciseAndImprecise <- ggplot(data, aes(x=acc, y=all)) +
+		# stableMcpPreciseAndImprecise <- ggplot(data, aes(x=acc, y=all)) +
 			# geom_abline(slope=1, intercept=0, col='gray45') +
-			# geom_point(size=2.1, shape=21, bg=alpha('gray', 0.6)) +
+			# geom_point(size=2.1, shape=21, bg=alpha('cornflowerblue', 0.6)) +
 			# xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
-			# labs(title='Next change in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			# labs(title='Stable suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			# theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
+
+		# # print(stable)
+
+	# ### loss area within precise MCP
+	# ################################
+		
+		# accLossPreciseMcp <- cce$mcpAccs_lossArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		# allLossPreciseMcp <- cce$mcpAccs_lossArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		# accLossPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_lossArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		# allLossPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_lossArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		# accGainPreciseMcp <- cce$mcpAccs_gainArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		# allGainPreciseMcp <- cce$mcpAccs_gainArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		# accGainPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_gainArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		# allGainPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_gainArea_km2[cce$rcp==45 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		# data <- data.frame(acc=accLossPreciseMcp, all=allLossPreciseMcp)
+		
+		# lim <- c(0, max(accLossPreciseMcp, allLossPreciseMcp, accLossPreciseAndImpreciseMcp, allLossPreciseAndImpreciseMcp, accGainPreciseMcp, allGainPreciseMcp, accGainPreciseAndImpreciseMcp, allGainPreciseAndImpreciseMcp))
+		# lim <- 25 * round(ceiling(lim / 25))
+		
+		# lossMcpPrecise <- ggplot(data, aes(x=acc, y=all)) +
+			# geom_abline(slope=1, intercept=0, col='gray45') +
+			# geom_point(size=2.1, shape=21, bg=alpha('firebrick1', 0.6)) +
+			# xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			# labs(title='Loss in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			# theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
+
+		# # print(loss)
+		
+	# ### loss area within precise & imprecise MCP
+	# ############################################
+		
+		# data <- data.frame(acc=accLossPreciseAndImpreciseMcp, all=allLossPreciseAndImpreciseMcp)
+		
+		# lossMcpPreciseAndImprecise <- ggplot(data, aes(x=acc, y=all)) +
+			# geom_abline(slope=1, intercept=0, col='gray45') +
+			# geom_point(size=2.1, shape=21, bg=alpha('firebrick1', 0.6)) +
+			# xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			# labs(title='Loss in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			# theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
+
+		# # print(loss)
+		
+	# ### gain area within precise MCP
+	# ################################
+		
+		# data <- data.frame(acc=accGainPreciseMcp, all=allGainPreciseMcp)
+		
+		# gainMcpPrecise <- ggplot(data, aes(x=acc, y=all)) +
+			# geom_abline(slope=1, intercept=0, col='gray45') +
+			# geom_point(size=2.1, shape=21, bg=alpha('chartreuse', 0.6)) +
+			# xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			# labs(title='Gain in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
 			# theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
 
 		# # print(gain)
 
+	# ### gain area within precise & imprecise MCP
+	# ############################################
+		
+		# data <- data.frame(acc=accGainPreciseAndImpreciseMcp, all=allGainPreciseAndImpreciseMcp)
+		
+		# gainMcpPreciseAndImprecise <- ggplot(data, aes(x=acc, y=all)) +
+			# geom_abline(slope=1, intercept=0, col='gray45') +
+			# geom_point(size=2.1, shape=21, bg=alpha('chartreuse', 0.6)) +
+			# xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			# labs(title='Gain in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			# theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
+
+		# # print(gain)
+
+	# # ### net change in area within precise MCP
+	# # #########################################
+		
+		# # accNetChangePreciseMcp <- accGainPreciseMcp - accLossPreciseMcp
+		# # allNetChangePreciseMcp <- allGainPreciseMcp - allLossPreciseMcp
+		
+		# # accNetChangePreciseAndImpreciseMcp <- accGainPreciseAndImpreciseMcp - accLossPreciseAndImpreciseMcp
+		# # allNetChangePreciseAndImpreciseMcp <- allGainPreciseAndImpreciseMcp - allLossPreciseAndImpreciseMcp
+		
+		# # lim <- c(
+			# # min(accNetChangePreciseMcp, allNetChangePreciseMcp, accNetChangePreciseAndImpreciseMcp, allNetChangePreciseAndImpreciseMcp),
+			# # max(accNetChangePreciseMcp, allNetChangePreciseMcp, accNetChangePreciseAndImpreciseMcp, allNetChangePreciseAndImpreciseMcp)
+		# # )
+		
+		# # lim <- c(20 * round(floor(lim[1] / 20)), 100 * round(ceiling(lim[2] / 100)))
+		
+		# # data <- data.frame(
+			# # acc=accNetChangePreciseMcp,
+			# # all=allNetChangePreciseMcp
+		# # )
+		
+		# # netChangeMcpPrecise <- ggplot(data, aes(x=acc, y=all)) +
+			# # geom_abline(slope=1, intercept=0, col='gray45') +
+			# # geom_point(size=2.1, shape=21, bg=alpha('gray', 0.6)) +
+			# # xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			# # labs(title='Next change in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			# # theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
+
+	# # ### net change in area within precise & imprecise MCP
+	# # #####################################################
+		
+		# # data <- data.frame(
+			# # acc=accNetChangePreciseAndImpreciseMcp,
+			# # all=allNetChangePreciseAndImpreciseMcp
+		# # )
+		
+		# # netChangeMcpPreciseAndImprecise <- ggplot(data, aes(x=acc, y=all)) +
+			# # geom_abline(slope=1, intercept=0, col='gray45') +
+			# # geom_point(size=2.1, shape=21, bg=alpha('gray', 0.6)) +
+			# # xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			# # labs(title='Next change in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			# # theme(axis.text=element_text(size=8), axis.title=element_text(size=11, face='bold'))
+
+		# # # print(gain)
+
+	# ### composite
+	# # main <- plot_grid(stableMcpPrecise, lossMcpPrecise, gainMcpPrecise, netChangeMcpPrecise, stableMcpPreciseAndImprecise, lossMcpPreciseAndImprecise, gainMcpPreciseAndImprecise, netChangeMcpPreciseAndImprecise, labels=c('a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h'), align='h', label_size=14, ncol=4, rel_widths=1)
+	# # main <- plot_grid(stableMcpPrecise, lossMcpPrecise, gainMcpPrecise, stableMcpPreciseAndImprecise, lossMcpPreciseAndImprecise, gainMcpPreciseAndImprecise, labels=c('a)', 'b)', 'c)', 'd)', 'e)', 'f)'), align='h', label_size=14, ncol=3, rel_widths=1)
+	# main <- plot_grid(stableMcpPrecise, lossMcpPrecise, gainMcpPrecise, labels=c('d)', 'e)', 'f)'), align='h', label_size=14, ncol=3, rel_widths=1)
+	
+	# print(main)
+	
+	# ggsave('./Analysis/ENMs/!Climate Change Exposure within MCP of Precise Records.pdf', width=8, height=8/3, units='in')
+
+say('###################################################################################')
+say('### plot climate change exposure metrics within buffered MCP of all occurrences ###')
+say('###################################################################################')
+
+	# exposure estimates
+	cce <- read.csv('./Analysis/ENMs/!Climate Change Exposure - Areal Values for Current, Future, Stable, Gain, and Loss.csv')
+
+	### current suitable area
+	#########################
+		
+		accPreciseMcp <- cce$buffAccsInaccsAdmin_currentArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		allPreciseMcp <- cce$buffAccsInaccsAdmin_currentArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		accPreciseAndImpreciseMcp <- cce$buffAccsInaccsAdmin_currentArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		allPreciseAndImpreciseMcp <- cce$buffAccsInaccsAdmin_currentArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		data <- data.frame(acc=accPreciseMcp, all=allPreciseMcp)
+		
+		lim <- c(0, max(accPreciseMcp, allPreciseMcp, accPreciseAndImpreciseMcp, allPreciseAndImpreciseMcp))
+		
+		lim <- 25 * round(ceiling(lim / 25))
+		
+		sq <- ggplot(data, aes(x=acc, y=all)) +
+			geom_abline(slope=1, intercept=0, col='gray45') +
+			geom_point(size=2.1, shape=21, bg=alpha('cornflowerblue', 0.6)) +
+			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			labs(title='Current suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			theme(axis.text=element_text(size=8), axis.title=element_text(size=10, face='bold'))
+
+	### future suitable area
+	########################
+		
+		accPreciseMcp <- cce$buffAccsInaccsAdmin_futArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		allPreciseMcp <- cce$buffAccsInaccsAdmin_futArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		accPreciseAndImpreciseMcp <- cce$buffAccsInaccsAdmin_futArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		allPreciseAndImpreciseMcp <- cce$buffAccsInaccsAdmin_futArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		data <- data.frame(acc=accPreciseMcp, all=allPreciseMcp)
+		
+		lim <- c(0, max(accPreciseMcp, allPreciseMcp, accPreciseAndImpreciseMcp, allPreciseAndImpreciseMcp))
+		
+		lim <- 25 * round(ceiling(lim / 25))
+		
+		fut <- ggplot(data, aes(x=acc, y=all)) +
+			geom_abline(slope=1, intercept=0, col='gray45') +
+			geom_point(size=2.1, shape=21, bg=alpha('cornflowerblue', 0.6)) +
+			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			labs(title='Future suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			theme(axis.text=element_text(size=8), axis.title=element_text(size=10, face='bold'))
+
+		# print(stable)
+
+	### gain in suitable area
+	#########################
+		
+		accPreciseMcp <- cce$mcpAccsInaccsAdmin_gainArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		allPreciseMcp <- cce$mcpAccsInaccsAdmin_gainArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		accPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_gainArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		allPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_gainArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		data <- data.frame(acc=accPreciseMcp, all=allPreciseMcp)
+		
+		lim <- c(0, max(accPreciseMcp, allPreciseMcp, accPreciseAndImpreciseMcp, allPreciseAndImpreciseMcp))
+		
+		lim <- 10 * round(ceiling(lim / 25))
+		
+		gain <- ggplot(data, aes(x=acc, y=all)) +
+			geom_abline(slope=1, intercept=0, col='gray45') +
+			geom_point(size=2.1, shape=21, bg=alpha('cornflowerblue', 0.6)) +
+			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			labs(title='Gain in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			theme(axis.text=element_text(size=8), axis.title=element_text(size=10, face='bold'))
+
+		# print(stable)
+
+	### loss in suitable area
+	#########################
+		
+		accPreciseMcp <- cce$mcpAccsInaccsAdmin_lossArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		allPreciseMcp <- cce$mcpAccsInaccsAdmin_lossArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		accPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_lossArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='accurate']
+		allPreciseAndImpreciseMcp <- cce$mcpAccsInaccsAdmin_lossArea_km2[cce$rcp==85 & cce$background=='convexHull' & cce$assignMethod=='closest']
+
+		data <- data.frame(acc=accPreciseMcp, all=allPreciseMcp)
+		
+		lim <- c(0, max(accPreciseMcp, allPreciseMcp, accPreciseAndImpreciseMcp, allPreciseAndImpreciseMcp))
+		
+		lim <- 10 * round(ceiling(lim / 25))
+		
+		loss <- ggplot(data, aes(x=acc, y=all)) +
+			geom_abline(slope=1, intercept=0, col='gray45') +
+			geom_point(size=2.1, shape=21, bg=alpha('cornflowerblue', 0.6)) +
+			xlim(lim[1], lim[2]) + ylim(lim[1], lim[2]) +
+			labs(title='Loss in suitable area', x=bquote('Precise only'~(km^2)), y=bquote('Precise & imprecise'~(km^2))) +
+			theme(axis.text=element_text(size=8), axis.title=element_text(size=10, face='bold'))
+
+		# print(stable)
+
 	### composite
-	# main <- plot_grid(stableMcpPrecise, lossMcpPrecise, gainMcpPrecise, netChangeMcpPrecise, stableMcpPreciseAndImprecise, lossMcpPreciseAndImprecise, gainMcpPreciseAndImprecise, netChangeMcpPreciseAndImprecise, labels=c('a)', 'b)', 'c)', 'd)', 'e)', 'f)', 'g)', 'h'), align='h', label_size=14, ncol=4, rel_widths=1)
-	main <- plot_grid(stableMcpPrecise, lossMcpPrecise, gainMcpPrecise, stableMcpPreciseAndImprecise, lossMcpPreciseAndImprecise, gainMcpPreciseAndImprecise, labels=c('a)', 'b)', 'c)', 'd)', 'e)', 'f)'), align='h', label_size=14, ncol=3, rel_widths=1)
-	main <- plot_grid(stableMcpPrecise, lossMcpPrecise, gainMcpPrecise, labels=c('a)', 'b)', 'c)'), align='h', label_size=14, ncol=3, rel_widths=1)
+	main <- plot_grid(sq, fut, gain, loss, labels=c('d)', 'e)', 'f)', 'g)'), align='h', label_size=14, ncol=2, rel_widths=1)
 	
 	print(main)
 	
-	ggsave('./Analysis/ENMs/!Climate Change Exposure within MCP of Precise Records.pdf', width=8, height=8/3, units='in')
+	ggsave('./Analysis/ENMs/!Climate Change Exposure within MCP of All Records.pdf', width=5, height=5, units='in')
 
 
 

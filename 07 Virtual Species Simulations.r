@@ -8,9 +8,6 @@
 ### setup ###
 ### calculate ensemble future rasters ###
 ### generate simulated species ###
-### collate results ###
-### make composite plot with subset of EOO and niche breadth results ###
-### make composite plot with subset of ENM & climate change exposure results ###
 
 #############
 ### setup ###
@@ -44,16 +41,6 @@
 	library(enmSdm)
 	library(omnibus)
 	library(statisfactory)
-	
-	ll <- c('longitude', 'latitude')
-
-	# designations for accurate, inaccurate, and county records
-	accAssigns <- 'certain/precise'
-	inaccAssigns <- c('uncertain/precise', 'certain/imprecise', 'uncertain/imprecise')
-	adminAssigns <- c('county/precise', 'county/imprecise', 'county-only', 'state/imprecise', 'state-only')
-	countyAssigns <- c('county/precise', 'county/imprecise', 'county-only')
-	stateAssigns <- c('state/imprecise', 'state-only')
-
 
 	### create series of scenarios for species simulations
 	######################################################
@@ -153,18 +140,15 @@ say('##################################')
 	################
 	
 		series <- makeSeries()
-		# series <- series[c(102, 104, 115, 116, 117, 118), , drop=FALSE] # DONE!
-		# series <- series[c(119, 120, 129, 130, 131, 132), , drop=FALSE] # DONE!
-		# series <- series[c(133, 134, 135, 143, 144, 145), , drop=FALSE] # DONE!
-		# series <- series[c(146, 147, 148, 149, 150, 156), , drop=FALSE] # DONE!
-		# series <- series[c(157, 158, 159, 160, 161, 162), , drop=FALSE] # DONE!
-		# series <- series[c(163, 164, 165, 170, 171, 172), , drop=FALSE] # DONE!
-		# series <- series[c(173, 174, 175, 176, 177, 178), , drop=FALSE] # #1
-		# series <- series[c(179, 180, 186, 187, 188, 189), , drop=FALSE] # #1
-		# series <- series[c(190, 191, 192, 193, 194, 195), , drop=FALSE] # #1
-		# series <- series[c(196, 197, 198, 199, 200, 201), , drop=FALSE] # #1
-		# series <- series[c(202, 203, 204, 205), , drop=FALSE] # DONE!
-		# series <- series[c(162), , drop=FALSE] # DONE!
+		series <- series[1:20, , drop=FALSE] # work
+		# series <- series[21:40, , drop=FALSE] # work
+		# series <- series[41:60, , drop=FALSE] # work
+		# series <- series[61:80, , drop=FALSE] # work
+		
+		# series <- series[81:112, , drop=FALSE] # #1
+		# series <- series[113:144, , drop=FALSE] # #1
+		# series <- series[145:176, , drop=FALSE] # #1
+		# series <- series[177:204, , drop=FALSE] # #1
 		
 		repStart <- 1
 		repEnd <- 200
@@ -247,7 +231,7 @@ say('##################################')
 			conusMexMask <- rasterize(conusMex, conusMexMask)
 			conusMexMask <- conusMexMask * 0 + 1
 			sqPcaRastsConusMex <- sqPcaRasts * conusMexMask
-			areaConusMexMask_km2 <- area(sqPcaRastsConusMex)
+			areaConusMexMask_km2 <- raster::area(sqPcaRastsConusMex)
 			areaConusMexMask_km2 <- as.data.frame(areaConusMexMask_km2)
 			names(areaConusMexMask_km2) <- 'area_km2'
 			
@@ -424,6 +408,8 @@ say('##################################')
 				errorlessBuffSp <- sp::spTransform(errorlessBuffSpEa, getCRS('wgs84', TRUE))
 
 				errorlessMcpBuffMask <- rasterize(errorlessBuffSp, sqPcaRasts)
+				areaErrorlessMcpBuffMask <- raster::area(errorlessMcpBuffMask, na.rm=TRUE)
+				areaErrorlessMcpBuffMask_km2 <- cellStats(areaErrorlessMcpBuffMask, 'sum')
 				
 				errorlessMaskedSqPcaRasts <- errorlessMcpBuffMask * sqPcaRasts
 				names(errorlessMaskedSqPcaRasts) <- names(sqPcaRasts)
@@ -603,6 +589,7 @@ say('##################################')
 				
 				say('| model', post=0)
 				
+				# claibrate models
 				errorlessModel <- trainMaxNet(errorlessData, regMult=regMult, classes=maxEntClasses)
 				preciseModel <- if (numPrecise >= 5) {
 					trainMaxNet(preciseData, regMult=regMult, classes=maxEntClasses)
@@ -610,6 +597,19 @@ say('##################################')
 					trainMaxEnt(preciseData, regMult=regMult, classes=maxEntClasses)
 				}
 				impreciseModel <- trainMaxNet(impreciseData, regMult=regMult, classes=maxEntClasses)
+
+				# model complexity
+				modelTermsErrorless <- length(errorlessModel$betas)
+				modelTermsPrecise <- if (inherits(preciseModel, 'maxnet')) {
+					length(preciseModel$betas)
+				} else {
+					sum(
+						grepl(pattern='pc1', preciseModel@lambdas) |
+						grepl(pattern='pc2', preciseModel@lambdas) |
+						grepl(pattern='pc3', preciseModel@lambdas)
+					)
+				}
+				modelTermsImprecise <- length(impreciseModel$betas)
 
 			### predictions to evaluation background sites in buffered MCP around errorless records
 			#######################################################################################
@@ -780,26 +780,22 @@ say('##################################')
 				# MAT
 				x <- extract(sqRasts[[1]], errorlessRecsSp)
 				errorlessNicheBreadthMat_range_degC <- diff(range(x))
-				errorlessNicheBreadthMat_095_degC <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
 				errorlessNicheBreadthMat_090_degC <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
 				# TAP
 				x <- extract(sqRasts[[12]], errorlessRecsSp)
 				errorlessNicheBreadthTap_range_mm <- diff(range(x))
-				errorlessNicheBreadthTap_095_mm <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
 				errorlessNicheBreadthTap_090_mm <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
 				### precise
 				# MAT
 				x <- extract(sqRasts[[1]], preciseRecsSp)
 				preciseNicheBreadthMat_range_degC <- diff(range(x))
-				preciseNicheBreadthMat_095_degC <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
 				preciseNicheBreadthMat_090_degC <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
 				# TAP
 				x <- extract(sqRasts[[12]], preciseRecsSp)
 				preciseNicheBreadthTap_range_mm <- diff(range(x))
-				preciseNicheBreadthTap_095_mm <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
 				preciseNicheBreadthTap_090_mm <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
 				### precise + imprecise
@@ -817,7 +813,6 @@ say('##################################')
 				
 				x <- c(preciseRecsEnv, adminEnv)
 				impreciseNicheBreadthMat_range_degC <- diff(range(x))
-				impreciseNicheBreadthMat_095_degC <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
 				impreciseNicheBreadthMat_090_degC <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
 				# TAP
@@ -834,7 +829,6 @@ say('##################################')
 				
 				x <- c(preciseRecsEnv, adminEnv)
 				impreciseNicheBreadthTap_range_mm <- diff(range(x))
-				impreciseNicheBreadthTap_095_mm <- diff(range(x[x >= quantile(x, 0.025) & x <= quantile(x, 0.975)]))
 				impreciseNicheBreadthTap_090_mm <- diff(range(x[x >= quantile(x, 0.05) & x <= quantile(x, 0.95)]))
 
 			### remember
@@ -872,14 +866,15 @@ say('##################################')
 					regMult = paste(regMult, collapse=', '),
 					maxEntClasses = maxEntClasses,
 					
+					# EOO
+					eooErrorless_km2 = eooErrorless_km2,
+					eooPrecise_km2 = eooPrecise_km2,
+					eooImprecise_km2 = eooImprecise_km2,
+					
 					# univariate niche breadth
 					errorlessNicheBreadthMat_range_degC = errorlessNicheBreadthMat_range_degC,
 					preciseNicheBreadthMat_range_degC = preciseNicheBreadthMat_range_degC,
 					impreciseNicheBreadthMat_range_degC = impreciseNicheBreadthMat_range_degC,
-
-					errorlessNicheBreadthMat_095_degC = errorlessNicheBreadthMat_095_degC,
-					preciseNicheBreadthMat_095_degC = preciseNicheBreadthMat_095_degC,
-					impreciseNicheBreadthMat_095_degC = impreciseNicheBreadthMat_095_degC,
 
 					errorlessNicheBreadthMat_090_degC = errorlessNicheBreadthMat_090_degC,
 					preciseNicheBreadthMat_090_degC = preciseNicheBreadthMat_090_degC,
@@ -888,10 +883,6 @@ say('##################################')
 					errorlessNicheBreadthTap_range_mm = errorlessNicheBreadthTap_range_mm,
 					preciseNicheBreadthTap_range_mm = preciseNicheBreadthTap_range_mm,
 					impreciseNicheBreadthTap_range_mm = impreciseNicheBreadthTap_range_mm,
-
-					errorlessNicheBreadthTap_095_mm = errorlessNicheBreadthTap_095_mm,
-					preciseNicheBreadthTap_095_mm = preciseNicheBreadthTap_095_mm,
-					impreciseNicheBreadthTap_095_mm = impreciseNicheBreadthTap_095_mm,
 
 					errorlessNicheBreadthTap_090_mm = errorlessNicheBreadthTap_090_mm,
 					preciseNicheBreadthTap_090_mm = preciseNicheBreadthTap_090_mm,
@@ -915,12 +906,13 @@ say('##################################')
 					corTruthVsPreciseFut = corTruthVsPreciseFut,
 					corTruthVsImpreciseFut = corTruthVsImpreciseFut,
 					
-					# EOO
-					eooErrorless_km2 = eooErrorless_km2,
-					eooPrecise_km2 = eooPrecise_km2,
-					eooImprecise_km2 = eooImprecise_km2,
-					
 					# ENM range and climate exposure
+					modelTermsErrorless = modelTermsErrorless,
+					modelTermsPrecise = modelTermsPrecise,
+					modelTermsImprecise = modelTermsImprecise,
+
+					areaOfEnmAnalysisRegion_km2 = areaErrorlessMcpBuffMask_km2,
+
 					sqSuitArea_errorless_km2 = sqSuitArea_errorless_km2,
 					sqSuitArea_precise_km2 = sqSuitArea_precise_km2,
 					sqSuitArea_imprecise_km2 = sqSuitArea_imprecise_km2,
@@ -950,6 +942,7 @@ say('##################################')
 	### MAIN
 	########
 	
+	dirCreate('./Analysis/Virtual Species/Raw Results')
 	for (countSeries in 1:nrow(series)) {
 	
 		numErrorless <- series$totalErrorless[countSeries]
@@ -957,7 +950,7 @@ say('##################################')
 		numImprecise <- series$totalImprecise[countSeries]
 
 		# initiate/re-initiate storage
-		fileName <- paste0('./Analysis/Virtual Species/Virtual Species Synthetic Results - Errorless ', numErrorless, ' Precise ', numPrecise, ' Imprecise ', numImprecise, '.csv')
+		fileName <- paste0('./Analysis/Virtual Species/Raw Results/Virtual Species Synthetic Results - Errorless ', numErrorless, ' Precise ', numPrecise, ' Imprecise ', numImprecise, '.csv')
 		if (file.exists(fileName)) {
 			remember <- read.csv(fileName)
 			repStart <- max(remember$rep) + 1

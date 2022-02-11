@@ -19,9 +19,9 @@
 	gc()
 	options(stringsAsFactors=FALSE)
 	
-	# drive <- 'C:'
+	drive <- 'C:'
 	# drive <- 'D:'
-	drive <- 'E:'
+	# drive <- 'E:'
 	
 	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
 
@@ -140,7 +140,7 @@ say('##################################')
 	################
 	
 		series <- makeSeries()
-		series <- series[1:20, , drop=FALSE] # work
+		# series <- series[1:20, , drop=FALSE] # DONE!
 		# series <- series[21:40, , drop=FALSE] # work
 		# series <- series[41:60, , drop=FALSE] # work
 		# series <- series[61:80, , drop=FALSE] # work
@@ -148,7 +148,9 @@ say('##################################')
 		# series <- series[81:112, , drop=FALSE] # #1
 		# series <- series[113:144, , drop=FALSE] # #1
 		# series <- series[145:176, , drop=FALSE] # #1
-		# series <- series[177:204, , drop=FALSE] # #1
+		# series <- series[177:208, , drop=FALSE] # #1
+		
+		# series <- series[c(79, 80), , drop=FALSE] # work for #1
 		
 		repStart <- 1
 		repEnd <- 200

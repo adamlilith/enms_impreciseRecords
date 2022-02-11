@@ -29,9 +29,9 @@
 	gc()
 	options(stringsAsFactors=FALSE)
 	
-	# drive <- 'C:'
+	drive <- 'C:'
 	# drive <- 'D:'
-	drive <- 'E:'
+	# drive <- 'E:'
 	
 	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
 
@@ -68,63 +68,88 @@
 
 	### figure captions
 
-	enmCalibPresentCaption <- paste0('Figure S2 Calibration accuracy of ENMs against the true present-day probability of occurrence. Violin plots, and gray and green points represent the correlation between predictions from ENMs calibrated using omniscient and precise records (respectively) with the true probability of presence in the present. Green points represent the correlation between predictions from models calibrated using precise plus imprecise records and the true probability of presence. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Higher values connote better calibration accuracy of ENMs.')
+	enmCalibPresentCaption <- paste0('Figure S3 Calibration accuracy of ENMs against the true present-day probability of occurrence. Violin plots, and gray and green points represent the correlation between predictions from ENMs calibrated using omniscient and precise records (respectively) with the true probability of presence in the present. Green points represent the correlation between predictions from models calibrated using precise plus imprecise records and the true probability of presence. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Higher values connote better calibration accuracy of ENMs.')
 	
-	enmCalibFutureCaption <- paste0('Figure S3 Calibration accuracy of ENMs against the true future-day probability of occurrence. Violin plots, and gray and green points represent the correlation between predictions from ENMs calibrated using omniscient and precise records (respectively) with the true probability of presence in the future. Green points represent the correlation between predictions from models calibrated using precise plus imprecise records and the true probability of presence. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Higher values connote better calibration accuracy of ENMs.')
+	enmCalibFutureCaption <- paste0('Figure S4 Calibration accuracy of ENMs against the true future-day probability of occurrence. Violin plots, and gray and green points represent the correlation between predictions from ENMs calibrated using omniscient and precise records (respectively) with the true probability of presence in the future. Green points represent the correlation between predictions from models calibrated using precise plus imprecise records and the true probability of presence. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Higher values connote better calibration accuracy of ENMs.')
 
-	lostCaption <- paste0('Figure S4 Climatically suitable area estimated using ecological niche models that is lost due to climate change. Violin plots and green points depict the ratio of lost suitable area estimated using only precise records to suitable area estimated using omniscient records.  Orange points represent the ratio of lost suitable area estimated using precise plus imprecise records to lost suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Ratios were calculated as (estimated value + 1) / (omniscient value + 1). To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
+	lostCaption <- paste0('Figure S5 Climatically suitable area estimated using ecological niche models that is lost due to climate change. Violin plots and green points depict the ratio of lost suitable area estimated using only precise records to suitable area estimated using omniscient records.  Orange points represent the ratio of lost suitable area estimated using precise plus imprecise records to lost suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Ratios were calculated as (estimated value + 1) / (omniscient value + 1). To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
 
-	gainCaption <- paste0('Figure S5 Climatically suitable area estimated using ecological niche models that is gained due to climate change. Violin plots and green points depict the ratio of gain in suitable area estimated using only precise records to gain in suitable area estimated using omniscient records.  Orange points represent the ratio of gained suitable area estimated using precise plus imprecise records to gained suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Ratios were calculated as (estimated value + 1) / (omniscient value + 1). To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
+	gainCaption <- paste0('Figure S6 Climatically suitable area estimated using ecological niche models that is gained due to climate change. Violin plots and green points depict the ratio of gain in suitable area estimated using only precise records to gain in suitable area estimated using omniscient records.  Orange points represent the ratio of gained suitable area estimated using precise plus imprecise records to gained suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Ratios were calculated as (estimated value + 1) / (omniscient value + 1). To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
 	
-	stableCaption <- paste0('Figure S6 Climatically suitable area estimated using ecological niche models that remains suitable in time. Violin plots and green points depict the ratio of stable suitable area estimated using only precise records to suitable area estimated using omniscient records.  Orange points represent the ratio of stable suitable area estimated using precise plus imprecise records to stable suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Ratios were calculated as (estimated value + 1) / (omniscient value + 1). To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
+	stableCaption <- paste0('Figure S7 Climatically suitable area estimated using ecological niche models that remains suitable in time. Violin plots and green points depict the ratio of stable suitable area estimated using only precise records to suitable area estimated using omniscient records.  Orange points represent the ratio of stable suitable area estimated using precise plus imprecise records to stable suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Ratios were calculated as (estimated value + 1) / (omniscient value + 1). To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
 
-	sqSuitCaption <- paste0('Figure S7 Present-day climatically suitable area estimated using ecological niche models. Violin plots and green points depict the ratio of present-day suitable area estimated using only precise records to suitable area estimated using omniscient records.  Orange points represent the ratio of present-day suitable area estimated using precise plus imprecise records to suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
+	sqSuitCaption <- paste0('Figure S8 Present-day climatically suitable area estimated using ecological niche models. Violin plots and green points depict the ratio of present-day suitable area estimated using only precise records to suitable area estimated using omniscient records.  Orange points represent the ratio of present-day suitable area estimated using precise plus imprecise records to suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
 
-	futSuitCaption <- paste0('Figure S8 Future climatically suitable area estimated using ecological niche models. Violin plots and green points depict the ratio of future suitable area estimated using only precise records to suitable area estimated using omniscient records.  Orange points represent the ratio of future suitable area estimated using precise plus imprecise records to suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Ratios were calculated as (estimated value + 1) / (omniscient value + 1). To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
+	futSuitCaption <- paste0('Figure S9 Future climatically suitable area estimated using ecological niche models. Violin plots and green points depict the ratio of future suitable area estimated using only precise records to suitable area estimated using omniscient records.  Orange points represent the ratio of future suitable area estimated using precise plus imprecise records to suitable area estimated using omniscient records. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. Ratios were calculated as (estimated value + 1) / (omniscient value + 1). To aid visualization, only the inner ', (1 - 2 * (1 - outlierQuant)) * 100, '% of values across all scenarios are shown.')
 
-	eooCaption <- 'Figure S9 Estimates of extent of occurrence (EOO) compared to true EOO. The violin plot and green points depict the ratio of EOO estimated using only precise records to the true EOO obtained from omniscient records. The violin plot covers the inner 90% of estimates, and the median is represented by the horizontal bar within it. Orange points represent the ratio of EOO estimated using precise plus imprecise records to true EOO. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values.'
+	eooCaption <- 'Figure S10 Estimates of extent of occurrence (EOO) compared to true EOO. The violin plot and green points depict the ratio of EOO estimated using only precise records to the true EOO obtained from omniscient records. The violin plot covers the inner 90% of estimates, and the median is represented by the horizontal bar within it. Orange points represent the ratio of EOO estimated using precise plus imprecise records to true EOO. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values.'
 
-	matCaption <- paste0('Figure S10 Estimates of realized niche breadth in mean annual temperature (MAT). In each panel the violin plot and green points show the ratio of realized niche breadth in MAT estimated using only precise records to the true realized niche breadth obtained from omniscient records. The violin plot encompasses the inner 90% of values and the horizontal line within represents the median value. The points and ratio of niche breadth estimated using precise plus imprecise records to true niche breadth (points). The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. To assist in visualization, the top ', 100 * (1 - outlierQuant), '% of values across all scenarios are not shown.')
+	matCaption <- paste0('Figure S11 Estimates of realized niche breadth in mean annual temperature (MAT). In each panel the violin plot and green points show the ratio of realized niche breadth in MAT estimated using only precise records to the true realized niche breadth obtained from omniscient records. The violin plot encompasses the inner 90% of values and the horizontal line within represents the median value. The points and ratio of niche breadth estimated using precise plus imprecise records to true niche breadth (points). The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. To assist in visualization, the top ', 100 * (1 - outlierQuant), '% of values across all scenarios are not shown.')
 
-	tapCaption <- paste0('Figure S11 Estimates of realized niche breadth in total annual precipitation (TAP). In each panel the violin plot and green points show the ratio of realized niche breadth in TAP estimated using only precise records to the true realized niche breadth obtained from omniscient records. The violin plot encompasses the inner 90% of values and the horizontal line within represents the median value. The points and ratio of niche breadth estimated using precise plus imprecise records to true niche breadth (points). The thick black trend line traces the median trend and thin black lines bound the inner 90% of values.')
+	tapCaption <- paste0('Figure S12 Estimates of realized niche breadth in total annual precipitation (TAP). In each panel the violin plot and green points show the ratio of realized niche breadth in TAP estimated using only precise records to the true realized niche breadth obtained from omniscient records. The violin plot encompasses the inner 90% of values and the horizontal line within represents the median value. The points and ratio of niche breadth estimated using precise plus imprecise records to true niche breadth (points). The thick black trend line traces the median trend and thin black lines bound the inner 90% of values.')
 
-	volCaption <- paste0('Figure S12 Estimates of realized multivariate niche breadth volume. The violin plot and green points show the ratio of realized niche volume estimated using only precise records to the true realized niche volume obtained from omniscient records. The violin plot encompasses the inner 90% of values and the horizontal line within represents the median value. The orange points represent the ratio of niche volume estimated using precise plus imprecise records to true niche breadth. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. To assist in visualization, the top ', 100 * (1 - outlierQuant), '% of values across all scenarios are not shown.')
+	volCaption <- paste0('Figure S13 Estimates of realized multivariate niche breadth volume. The violin plot and green points show the ratio of realized niche volume estimated using only precise records to the true realized niche volume obtained from omniscient records. The violin plot encompasses the inner 90% of values and the horizontal line within represents the median value. The orange points represent the ratio of niche volume estimated using precise plus imprecise records to true niche breadth. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. To assist in visualization, the top ', 100 * (1 - outlierQuant), '% of values across all scenarios are not shown.')
 
-	areaCaption <- paste0('Figure S13 Estimates of realized multivariate niche surface area. The violin plot and green points show the ratio of realized niche area estimated using only precise records to the true realized niche area obtained from omniscient records. The violin plot encompasses the inner 90% of values and the horizontal line within represents the median value. The orange points represent the ratio of niche area estimated using precise plus imprecise records to true niche breadth. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. To assist in visualization, the top ', 100 * (1 - outlierQuant), '% of values across all scenarios are not shown.')
+	areaCaption <- paste0('Figure S14 Estimates of realized multivariate niche surface area. The violin plot and green points show the ratio of realized niche area estimated using only precise records to the true realized niche area obtained from omniscient records. The violin plot encompasses the inner 90% of values and the horizontal line within represents the median value. The orange points represent the ratio of niche area estimated using precise plus imprecise records to true niche breadth. The thick black trend line traces the median trend and thin black lines bound the inner 90% of values. To assist in visualization, the top ', 100 * (1 - outlierQuant), '% of values across all scenarios are not shown.')
 
-
-# say('#######################')
-# say('### collate results ###')
-# say('#######################')
-
-	# # generalization
-	# numReps <- 200
-
-	# ### load results
-	# files <- listFiles('./Analysis/Virtual Species', pattern='.csv')
-	# results <- read.csv(files[1])
-	# if (length(files) > 1) {
-		# for (file in files[2:length(files)]) {
-			# this <- read.csv(file)
-			# results <- rbind(results, this)
-		# }
-	# }
+	### create series of scenarios for species simulations
+	######################################################
+	makeSeries <- function() {
 	
-	# # tally reps
+		series <- data.frame()
+		for (totalErrorless in c(20, 40, 80, 160, 320)) {
+		
+			totalPrecise <- seq(5, min(totalErrorless - 5, 30), by=5)
+			
+			for (thisTotalPrecise in totalPrecise) {
+			
+				totalImprecise <- 2^(0:16)
+				totalImprecise <- totalImprecise[totalImprecise < totalErrorless - max(thisTotalPrecise)]
+				totalImprecise <- c(totalImprecise, totalErrorless - thisTotalPrecise)
+			
+				this <- expand.grid(totalErrorless = totalErrorless, totalPrecise=thisTotalPrecise, totalImprecise=totalImprecise)
+				series <- rbind(series, this)
+				
+			}
+			
+		}
+		
+		series
+		
+	}
 
-	# series <- makeSeries()
-	# series$n <- NA
+say('#######################')
+say('### collate results ###')
+say('#######################')
+
+	# generalization
+	numReps <- 200
+
+	### load results
+	files <- listFiles('./Analysis/Virtual Species/Raw Results', pattern='.csv')
+	results <- read.csv(files[1])
+	if (length(files) > 1) {
+		for (file in files[2:length(files)]) {
+			this <- read.csv(file)
+			results <- rbind(results, this)
+		}
+	}
 	
-	# for (i in 1:nrow(series)) {
-		# these <- (results$numErrorless == series$totalErrorless[i] & results$numPrecise == series$totalPrecise[i] & results$numImprecise == series$totalImprecise[i])
-		# series$n[i] <- sum(these)
-	# }
+	# tally reps
+
+	series <- makeSeries()
+	series$n <- NA
 	
-	# if (!all(series$n == numReps)) say('Incomplete!!!')
+	for (i in 1:nrow(series)) {
+		these <- (results$numErrorless == series$totalErrorless[i] & results$numPrecise == series$totalPrecise[i] & results$numImprecise == series$totalImprecise[i])
+		series$n[i] <- sum(these)
+	}
 	
-	# print(series)
+	if (!all(series$n == numReps)) say('Incomplete!!!')
 	
-	# save(results, file='./Analysis/Virtual Species/!!Collated Results.rda')
+	print(series)
+	
+	save(results, file='./Analysis/Virtual Species/!!Collated Results.rda')
 
 say('###################################################################################################')
 say('### make composite plot with SUBSET of EOO and niche breadth results - TWO omniscient scenarios ###')
@@ -4117,7 +4142,7 @@ say('###########################################################')
 						draw_quantiles = 0.5,
 						fill = NA
 					) +
-					scale_x_continuous(breaks=c(-0.5, 0.5), labels=c('Err.', 'Pre.')) +
+					scale_x_continuous(breaks=c(-0.5, 0.5), labels=c('Omni', 'Prec')) +
 					scale_y_continuous(breaks=ybreaks) +
 					coord_cartesian(xlim=c(-1, 1), ylim=c(ymin, ymax), expand=FALSE) +
 					ggtitle(main) +
@@ -4353,7 +4378,7 @@ say('###########################################################')
 						draw_quantiles = 0.5,
 						fill = NA
 					) +
-					scale_x_continuous(breaks=c(-0.5, 0.5), labels=c('Err.', 'Pre.')) +
+					scale_x_continuous(breaks=c(-0.5, 0.5), labels=c('Omni', 'Prec')) +
 					scale_y_continuous(breaks=ybreaks) +
 					coord_cartesian(xlim=c(-1, 1), ylim=c(ymin, ymax), expand=FALSE) +
 					ggtitle(main) +

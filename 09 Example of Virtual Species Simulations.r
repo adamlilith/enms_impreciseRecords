@@ -14,7 +14,7 @@
 
 	cat(date(), '\n'); flush.console()
 	memory.limit(memory.limit() * 2^29)
-	rm(list=ls())
+	# rm(list=ls())
 	gc()
 	options(stringsAsFactors=FALSE)
 	
@@ -39,6 +39,97 @@
 	library(enmSdm)
 	library(omnibus)
 	library(statisfactory)
+
+# say('############################')
+# say('### map of US and Mexico ###')
+# say('############################')
+
+	# # PCA
+	# load('./Analysis/PCA on North American Climate.rda')
+
+	# mask <- raster('./Regions/mask_northAmerica.tif')
+	# load('./Regions/GADM Ver 3pt6 North America Level 1 WGS84.rda')
+	# load('./Regions/GADM Ver 3pt6 North America Level 2 WGS84.rda')
+
+	# # contemporary climate rasters
+	# sqRasts <- stack(paste0('./Data/WorldClim/worldclim_2.1_10arcmin_historical/wc2.1_10m_bio_', 1:19, '.tif'))
+
+	# ### contemporary rasters
+
+	# sqRasts <- sqRasts * mask
+	# names(sqRasts) <- paste0('bio', 1:19)
+
+	# # PCA on climate (only)
+	# climDf <- as.data.frame(sqRasts)
+	# nonNas <- which(complete.cases(climDf))
+	# climDf <- climDf[nonNas, ]
+	
+	# pcPredictionNoNas <- predictEnmSdm(pca, climDf)
+	# colnames(pcPredictionNoNas) <- paste0('pc', 1:19)
+
+	# # predict PCA back to rasters
+	# pcPrediction <- as.data.frame(sqRasts)
+	# pcPrediction[nonNas, ] <- pcPredictionNoNas
+	
+	# sqPcaRasts <- sqRasts[[1:3]] * NA
+	# for (pc in 1:3) sqPcaRasts <- setValues(sqPcaRasts, values=pcPrediction[ , pc], layer=pc)
+	# names(sqPcaRasts) <- paste0('pc', 1:3)
+	
+	# sqPcaDf <- as.data.frame(sqPcaRasts)
+	# sqPcaDfNoNA <- sqPcaDf[complete.cases(sqPcaDf), ]
+	# sqPcaDfNoNAMat <- as.matrix(sqPcaDfNoNA)
+
+	# # get climate for just Mexico and USA for selecting niche mean value
+	# conusMexSp <- nam1Sp[nam1Sp$NAME_0 != 'Canada' & nam1Sp$NAME_1 != 'Alaska' & nam1Sp$NAME_1 != 'Hawaii', ]
+	# conusMexMask <- crop(mask, conusMexSp)
+	# conusMexMask <- rasterize(conusMexSp, conusMexMask)
+	# conusMexMask <- conusMexMask * 0 + 1
+	# sqPcaRastsConusMex <- sqPcaRasts * conusMexMask
+
+	# conusMexSp <- vect(conusMexSp)
+
+	# conusMexSpEa <- project(conusMexSp, getCRS('albersNA'))
+	# conusMexBuffSpEa <- buffer(conusMexSpEa, width=200000)
+	# conusMexBuffSp <- project(conusMexBuffSpEa, getCRS('wgs84'))
+
+	# # plot US & Mexico
+	# png('./Analysis/Examples/Example - US & Mexico.png', res=600, width=1600, height=1200)
+
+		# par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+		# plot(conusMexBuffSp, border=NA)
+		# plot(conusMexMask, col='gray30', add=TRUE, legend=FALSE)
+	
+	# dev.off()
+	
+	# ### plot PCs
+	# cols <- hcl.colors(100)
+	# cols <- rainbow(100, start=5)
+	
+	# png('./Analysis/Examples/Example - PC1.png', res=600, width=1600, height=1200)
+
+		# par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+		# plot(conusMexBuffSp, border=NA)
+		# plot(sqPcaRastsConusMex[[1]], col=cols, legend=FALSE, add=TRUE)
+	
+	# dev.off()
+	
+
+	# png('./Analysis/Examples/Example - PC2.png', res=600, width=1600, height=1200)
+
+		# par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+		# plot(conusMexBuffSp, border=NA)
+		# plot(sqPcaRastsConusMex[[2]], col=cols, legend=FALSE, add=TRUE)
+	
+	# dev.off()
+	
+
+	# png('./Analysis/Examples/Example - PC3.png', res=600, width=1600, height=1200)
+
+		# par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+		# plot(conusMexBuffSp, border=NA)
+		# plot(sqPcaRastsConusMex[[3]], col=cols, legend=FALSE, add=TRUE)
+	
+	# dev.off()
 	
 say('#############################################')
 say('### generate example of simulated species ###')
@@ -65,119 +156,119 @@ say('#############################################')
 		minNicheRate <- 7.5
 		maxNicheRate <- 30
 		
-	### data
-	########
+	# ### data
+	# ########
 		
-		say('Load data...')
+		# say('Load data...')
 		
-		# PCA
-		load('./Analysis/PCA on North American Climate.rda')
+		# # PCA
+		# load('./Analysis/PCA on North American Climate.rda')
 
-		# state/county environmental data
-		load('./Data/Environment for North American Counties at Resolution 10 arcmin for Present.rda')
-		mask <- raster('./Regions/mask_northAmerica.tif')
+		# # state/county environmental data
+		# load('./Data/Environment for North American Counties at Resolution 10 arcmin for Present.rda')
+		# mask <- raster('./Regions/mask_northAmerica.tif')
 
-		# North American spatial polygons
-		load('./Regions/GADM Ver 3pt6 North America Level 1 WGS84.rda')
-		load('./Regions/GADM Ver 3pt6 North America Level 2 WGS84.rda')
-		load('./Regions/GADM Ver 3pt6 North America Level 2 Albers.rda')
+		# # North American spatial polygons
+		# load('./Regions/GADM Ver 3pt6 North America Level 1 WGS84.rda')
+		# load('./Regions/GADM Ver 3pt6 North America Level 2 WGS84.rda')
+		# load('./Regions/GADM Ver 3pt6 North America Level 2 Albers.rda')
 			
-		nam2Sp <- nam2Sp[nam2Sp$NAME_1 != 'Hawaii', ]
-		nam2SpEa <- nam2SpEa[nam2SpEa$NAME_1 != 'Hawaii', ]
-		nam2SpEa$nam2area_km2 <- gArea(nam2SpEa, byid=TRUE) / 1000^2
-		nam2Sp$nam2area_km2 <- nam2SpEa$nam2area_km2
-		maxArea_km2 <- nam2SpEa$nam2area_km2[nam2SpEa$NAME_1 == 'California' & nam2SpEa$NAME_2 == 'San Bernardino']
+		# nam2Sp <- nam2Sp[nam2Sp$NAME_1 != 'Hawaii', ]
+		# nam2SpEa <- nam2SpEa[nam2SpEa$NAME_1 != 'Hawaii', ]
+		# nam2SpEa$nam2area_km2 <- gArea(nam2SpEa, byid=TRUE) / 1000^2
+		# nam2Sp$nam2area_km2 <- nam2SpEa$nam2area_km2
+		# maxArea_km2 <- nam2SpEa$nam2area_km2[nam2SpEa$NAME_1 == 'California' & nam2SpEa$NAME_2 == 'San Bernardino']
 	
-		# contemporary climate rasters
-		sqRasts <- stack(paste0('./Data/WorldClim/worldclim_2.1_10arcmin_historical/wc2.1_10m_bio_', 1:19, '.tif'))
+		# # contemporary climate rasters
+		# sqRasts <- stack(paste0('./Data/WorldClim/worldclim_2.1_10arcmin_historical/wc2.1_10m_bio_', 1:19, '.tif'))
 		
-		# future climate rasters
-		futScenario <- paste0('ensemble of ', paste(c('BCC-CSM2-MR', 'CNRM-ESM2-1', 'CanESM5', 'IPSL-CM6A-LR', 'MIROC-ES2L'), collapse=', '))
-		futRasts <- stack('./Data/WorldClim/cmip6_ensemble_ssp585_2061-2080/bioclim.tif')
+		# # future climate rasters
+		# futScenario <- paste0('ensemble of ', paste(c('BCC-CSM2-MR', 'CNRM-ESM2-1', 'CanESM5', 'IPSL-CM6A-LR', 'MIROC-ES2L'), collapse=', '))
+		# futRasts <- stack('./Data/WorldClim/cmip6_ensemble_ssp585_2061-2080/bioclim.tif')
 		
-		rm(nam2SpEa); gc()
+		# rm(nam2SpEa); gc()
 
-	### apply PCA to climate rasters
-	################################
+	# ### apply PCA to climate rasters
+	# ################################
 	
-		say('PCA rasters...')
+		# say('PCA rasters...')
 	
-		### contemporary rasters
+		# ### contemporary rasters
 		
-			sqRasts <- sqRasts * mask
-			names(sqRasts) <- paste0('bio', 1:19)
+			# sqRasts <- sqRasts * mask
+			# names(sqRasts) <- paste0('bio', 1:19)
 
-			# PCA on climate (only)
-			climDf <- as.data.frame(sqRasts)
-			nonNas <- which(complete.cases(climDf))
-			climDf <- climDf[nonNas, ]
+			# # PCA on climate (only)
+			# climDf <- as.data.frame(sqRasts)
+			# nonNas <- which(complete.cases(climDf))
+			# climDf <- climDf[nonNas, ]
 			
-			pcPredictionNoNas <- predictEnmSdm(pca, climDf)
-			colnames(pcPredictionNoNas) <- paste0('pc', 1:19)
+			# pcPredictionNoNas <- predictEnmSdm(pca, climDf)
+			# colnames(pcPredictionNoNas) <- paste0('pc', 1:19)
 
-			# predict PCA back to rasters
-			pcPrediction <- as.data.frame(sqRasts)
-			pcPrediction[nonNas, ] <- pcPredictionNoNas
+			# # predict PCA back to rasters
+			# pcPrediction <- as.data.frame(sqRasts)
+			# pcPrediction[nonNas, ] <- pcPredictionNoNas
 			
-			sqPcaRasts <- sqRasts[[1:3]] * NA
-			for (pc in 1:3) sqPcaRasts <- setValues(sqPcaRasts, values=pcPrediction[ , pc], layer=pc)
-			names(sqPcaRasts) <- paste0('pc', 1:3)
+			# sqPcaRasts <- sqRasts[[1:3]] * NA
+			# for (pc in 1:3) sqPcaRasts <- setValues(sqPcaRasts, values=pcPrediction[ , pc], layer=pc)
+			# names(sqPcaRasts) <- paste0('pc', 1:3)
 			
-			sqPcaDf <- as.data.frame(sqPcaRasts)
-			sqPcaDfNoNA <- sqPcaDf[complete.cases(sqPcaDf), ]
-			sqPcaDfNoNAMat <- as.matrix(sqPcaDfNoNA)
+			# sqPcaDf <- as.data.frame(sqPcaRasts)
+			# sqPcaDfNoNA <- sqPcaDf[complete.cases(sqPcaDf), ]
+			# sqPcaDfNoNAMat <- as.matrix(sqPcaDfNoNA)
 
-			# get climate for just Mexico and USA for selecting niche mean value
-			conusMex <- nam1Sp[nam1Sp$NAME_0 != 'Canada' & nam1Sp$NAME_1 != 'Alaska' & nam1Sp$NAME_1 != 'Hawaii', ]
-			conusMexMask <- crop(mask, conusMex)
-			conusMexMask <- rasterize(conusMex, conusMexMask)
-			conusMexMask <- conusMexMask * 0 + 1
-			sqPcaRastsConusMex <- sqPcaRasts * conusMexMask
-			areaConusMexMask_km2 <- area(sqPcaRastsConusMex)
-			areaConusMexMask_km2 <- as.data.frame(areaConusMexMask_km2)
-			names(areaConusMexMask_km2) <- 'area_km2'
+			# # get climate for just Mexico and USA for selecting niche mean value
+			# conusMexSp <- nam1Sp[nam1Sp$NAME_0 != 'Canada' & nam1Sp$NAME_1 != 'Alaska' & nam1Sp$NAME_1 != 'Hawaii', ]
+			# conusMexMask <- crop(mask, conusMexSp)
+			# conusMexMask <- rasterize(conusMexSp, conusMexMask)
+			# conusMexMask <- conusMexMask * 0 + 1
+			# sqPcaRastsConusMex <- sqPcaRasts * conusMexMask
+			# areaConusMexMask_km2 <- area(sqPcaRastsConusMex)
+			# areaConusMexMask_km2 <- as.data.frame(areaConusMexMask_km2)
+			# names(areaConusMexMask_km2) <- 'area_km2'
 			
-			sqPcaDfConusMex <- as.data.frame(sqPcaRastsConusMex)
-			names(sqPcaDfConusMex) <- paste0('PC', 1:3)
-			sqPcaDfConusMex <- cbind(sqPcaDfConusMex, areaConusMexMask_km2)
-			sqPcaDfConusMexNoNA <- sqPcaDfConusMex[complete.cases(sqPcaDfConusMex), ]
+			# sqPcaDfConusMex <- as.data.frame(sqPcaRastsConusMex)
+			# names(sqPcaDfConusMex) <- paste0('PC', 1:3)
+			# sqPcaDfConusMex <- cbind(sqPcaDfConusMex, areaConusMexMask_km2)
+			# sqPcaDfConusMexNoNA <- sqPcaDfConusMex[complete.cases(sqPcaDfConusMex), ]
 			
-			rm(climDf, conusMex, conusMexMask, sqPcaDfConusMex, areaConusMexMask_km2, sqPcaDfNoNA); gc()
+			# rm(climDf, conusMexSp, conusMexMask, sqPcaDfConusMex, areaConusMexMask_km2, sqPcaDfNoNA); gc()
 
-		### future rasters
+		# ### future rasters
 				
-			futRasts <- futRasts * mask
-			names(futRasts) <- paste0('bio', 1:19)
+			# futRasts <- futRasts * mask
+			# names(futRasts) <- paste0('bio', 1:19)
 
-			# PCA on climate (only)
-			climDf <- as.data.frame(futRasts)
-			nonNas <- which(complete.cases(climDf))
-			climDf <- climDf[nonNas, ]
+			# # PCA on climate (only)
+			# climDf <- as.data.frame(futRasts)
+			# nonNas <- which(complete.cases(climDf))
+			# climDf <- climDf[nonNas, ]
 			
-			pcPredictionNoNas <- predictEnmSdm(pca, climDf)
-			colnames(pcPredictionNoNas) <- paste0('pc', 1:19)
+			# pcPredictionNoNas <- predictEnmSdm(pca, climDf)
+			# colnames(pcPredictionNoNas) <- paste0('pc', 1:19)
 			
-			# predict PCA back to rasters
-			pcPrediction <- as.data.frame(futRasts)
-			pcPrediction[nonNas, ] <- pcPredictionNoNas
+			# # predict PCA back to rasters
+			# pcPrediction <- as.data.frame(futRasts)
+			# pcPrediction[nonNas, ] <- pcPredictionNoNas
 			
-			futPcaRasts <- futRasts[[1:3]] * NA
-			for (pc in 1:3) futPcaRasts <- setValues(futPcaRasts, values=pcPrediction[ , pc], layer=pc)
-			names(futPcaRasts) <- paste0('pc', 1:3)
+			# futPcaRasts <- futRasts[[1:3]] * NA
+			# for (pc in 1:3) futPcaRasts <- setValues(futPcaRasts, values=pcPrediction[ , pc], layer=pc)
+			# names(futPcaRasts) <- paste0('pc', 1:3)
 			
-			futPcaDf <- as.data.frame(futPcaRasts)
-			futPcaDfNoNA <- futPcaDf[complete.cases(futPcaDf), ]
-			futPcaDfNoNAMat <- as.matrix(futPcaDfNoNA)
+			# futPcaDf <- as.data.frame(futPcaRasts)
+			# futPcaDfNoNA <- futPcaDf[complete.cases(futPcaDf), ]
+			# futPcaDfNoNAMat <- as.matrix(futPcaDfNoNA)
 
-			rm(futRasts, climDf, pcPrediction, futPcaDfNoNA); gc()
+			# rm(futRasts, climDf, pcPrediction, futPcaDfNoNA); gc()
 			
-	### area raster
-	###############
+	# ### area raster
+	# ###############
 
-		areaRast_km2 <- raster::area(sqPcaRasts[[1]])
-		areaRast_km2 <- areaRast_km2 * mask
-		areaVect_km2 <- as.vector(areaRast_km2)
-		areaVect_km2 <- areaVect_km2[!is.na(areaVect_km2)]
+		# areaRast_km2 <- raster::area(sqPcaRasts[[1]])
+		# areaRast_km2 <- areaRast_km2 * mask
+		# areaVect_km2 <- as.vector(areaRast_km2)
+		# areaVect_km2 <- areaVect_km2[!is.na(areaVect_km2)]
 
 	### generate species
 	####################
@@ -278,7 +369,11 @@ say('#############################################')
 		say('| records', post=0)
 	
 		# errorless
+		selectExt <- extent(-119.1299, -112.1632, 32.05502, 37.76023)
+		selectRast <- crop(sqNicheRast, selectExt)
 		errorlessRecs <- randomPoints(sqNicheRast, numErrorless, prob=TRUE)
+		# errorlessRecs <- errorlessRecs[errorlessRecs[ , 'x'] < -112.597 & errorlessRecs[ , 'y'] < 37.76019, ]
+		errorlessRecs <- errorlessRecs[1:numErrorless, ]
 		preciseRecs <- errorlessRecs[1:numPrecise, , drop=FALSE]
 		impreciseErrorlessRecs <- errorlessRecs[(numPrecise + 1):(numPrecise + numImprecise), , drop=FALSE]
 	
@@ -827,8 +922,12 @@ say('#############################################')
 	### plot
 	########
 
-		cols <- colorRampPalette(c('gray40', 'white'))
-		cols <- cols(10)
+	### plot
+	########
+
+		cols <- colorRampPalette(c('gray40', 'gray80', 'white', 'white'))
+		# cols <- hcl.colors(100)
+		cols <- cols(100)
 
 		# MCPs
 		errorlessMcpSp <- sp::spTransform(errorlessMcpSpEa, getCRS('wgs84', TRUE))
@@ -836,18 +935,20 @@ say('#############################################')
 		impreciseMcpSp <- sp::spTransform(impreciseMcpSpEa, getCRS('wgs84', TRUE))
 
 		plot(errorlessBuffSp)
-		surround <- createPlotPoly(errorlessBuffX2Sp)
+		surround <- createPlotPoly(errorlessBuffSp)
+		dev.off()
 
-		png('./Analysis/Example - Virtual Species with Present-Day Suitability.png', res=600, width=1600, height=1200)
+		dirCreate('./Analysis/Examples')
+		png('./Analysis/Examples/Example - Virtual Species with Present-Day Suitability & All Occurrence Types.png', res=600, width=1600, height=1200)
 
 			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
 
 			# present
 			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
-			plot(adminSp, border='orange', lwd=0.6, add=TRUE)
-			points(errorlessRecsSp, pch=1, lwd=0.4, cex=0.3)
-			points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.3)
-			points(impreciseErrorlessRecs, bg='orange', lwd=0.4, pch=21, cex=0.3)
+			plot(adminSp, border='orange', lwd=1.2, add=TRUE)
+			points(errorlessRecsSp, pch=1, lwd=0.4, cex=0.6)
+			points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
+			points(impreciseErrorlessRecs, bg='orange', lwd=0.4, pch=21, cex=0.6)
 
 			plot(errorlessMcpSp, lty='dotted', lwd=0.6, add=TRUE)
 			plot(preciseMcpSp, border='#1b9e77', lwd=0.6, lty='dotted', add=TRUE)
@@ -859,7 +960,7 @@ say('#############################################')
 				inset=-0.6,
 				xpd=NA,
 				bty='n',
-				cex=0.36,
+				cex=0.56,
 				pt.lwd=0.4,
 				legend=c(
 					'Omniscient occurrence',
@@ -926,30 +1027,91 @@ say('#############################################')
 			
 		dev.off()
 			
-		png('./Analysis/Example - Virtual Species with Future Suitability.png', res=600, width=1600, height=1200)
+		png('./Analysis/Examples/Example - Virtual Species with Present-Day Suitability.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			
+		dev.off()
+			
+		png('./Analysis/Examples/Example - Virtual Species with Present-Day Suitability & All Errorless Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			points(errorlessRecsSp, pch=1, lwd=0.4, cex=0.6)
+			
+		dev.off()
+			
+		png('./Analysis/Examples/Example - Virtual Species with Present-Day Suitability & All Precise Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
+			
+			
+		dev.off()
+			
+		png('./Analysis/Examples/Example - Virtual Species with Present-Day Suitability & All Imprecise Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			points(impreciseErrorlessRecs, bg='orange', lwd=0.4, pch=21, cex=0.6)
+			
+		dev.off()
+			
+		png('./Analysis/Examples/Example - Virtual Species with Present-Day Suitability & All Imprecise & County Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			plot(adminSp, border='orange', lwd=1.2, add=TRUE)
+			points(impreciseErrorlessRecs, bg='orange', lwd=0.4, pch=21, cex=0.6)
+			
+		dev.off()
+			
+		png('./Analysis/Examples/Example - Virtual Species with Present-Day Suitability & All Precise & County Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			plot(adminSp, border='orange', lwd=1.2, add=TRUE)
+			points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
+			
+		dev.off()
+			
+		png('./Analysis/Examples/Example - Virtual Species with Future Suitability.png', res=600, width=1600, height=1200)
 
 			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
 
 			# present
 			plot(futNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
-			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
+			# plot(errorlessBuffSp, lwd=0.6, add=TRUE)
 
 		dev.off()
 			
 		
-		png('./Analysis/Example - Virtual Species with Present Suitability from Errorless Model.png', res=600, width=1600, height=1200)
+		png('./Analysis/Examples/Example - Virtual Species with Present Suitability from Errorless Model.png', res=600, width=1600, height=1200)
 
 			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
 
 			# present
 			plot(futNicheRast, ext=surround, col='gray75', legend=FALSE, axes=FALSE)
 			plot(sqPredRast_errorless, col=c('gray65', 'forestgreen'), legend=FALSE, add=TRUE)
-			points(errorlessRecsSp, pch=1, lwd=0.4, cex=0.3)
 			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
 			
 		dev.off()
 			
-		png('./Analysis/Example - Virtual Species with FUTURE Suitability from Errorless Model.png', res=600, width=1600, height=1200)
+		png('./Analysis/Examples/Example - Virtual Species with FUTURE Suitability from Errorless Model.png', res=600, width=1600, height=1200)
 
 			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
 
@@ -960,19 +1122,19 @@ say('#############################################')
 			
 		dev.off()
 			
-		png('./Analysis/Example - Virtual Species with PRESENT Suitability from Precise Model.png', res=600, width=1600, height=1200)
+		png('./Analysis/Examples/Example - Virtual Species with PRESENT Suitability from Precise Model.png', res=600, width=1600, height=1200)
 
 			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
 
 			# present
 			plot(futNicheRast, ext=surround, col='gray75', legend=FALSE, axes=FALSE)
 			plot(sqPredRast_precise, col=c('gray65', 'forestgreen'), legend=FALSE, add=TRUE)
-			points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.3)
+			# points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
 			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
 			
 		dev.off()
 			
-		png('./Analysis/Example - Virtual Species with FUTURE Suitability from Precise Model.png', res=600, width=1600, height=1200)
+		png('./Analysis/Examples/Example - Virtual Species with FUTURE Suitability from Precise Model.png', res=600, width=1600, height=1200)
 
 			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
 
@@ -983,20 +1145,20 @@ say('#############################################')
 			
 		dev.off()
 			
-		png('./Analysis/Example - Virtual Species with PRESENT Suitability from Imprecise Model.png', res=600, width=1600, height=1200)
+		png('./Analysis/Examples/Example - Virtual Species with PRESENT Suitability from Imprecise Model.png', res=600, width=1600, height=1200)
 
 			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
 
 			# present
 			plot(futNicheRast, ext=surround, col='gray75', legend=FALSE, axes=FALSE)
 			plot(sqPredRast_imprecise, col=c('gray65', 'forestgreen'), legend=FALSE, add=TRUE)
-			plot(adminSp, border='orange', lwd=0.6, add=TRUE)
-			points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.3)
+			# plot(adminSp, border='orange', lwd=1.2, add=TRUE)
+			# points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
 			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
 			
 		dev.off()
 			
-		png('./Analysis/Example - Virtual Species with FUTURE Suitability from Imprecise Model.png', res=600, width=1600, height=1200)
+		png('./Analysis/Examples/Example - Virtual Species with FUTURE Suitability from Imprecise Model.png', res=600, width=1600, height=1200)
 
 			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
 

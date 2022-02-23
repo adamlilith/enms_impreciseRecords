@@ -29,9 +29,9 @@
 	gc()
 	options(stringsAsFactors=FALSE)
 	
-	drive <- 'C:'
+	# drive <- 'C:'
 	# drive <- 'D:'
-	# drive <- 'E:'
+	drive <- 'E:'
 	
 	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
 
@@ -118,38 +118,38 @@
 		
 	}
 
-say('#######################')
-say('### collate results ###')
-say('#######################')
+# say('#######################')
+# say('### collate results ###')
+# say('#######################')
 
-	# generalization
-	numReps <- 200
+	# # generalization
+	# numReps <- 200
 
-	### load results
-	files <- listFiles('./Analysis/Virtual Species/Raw Results', pattern='.csv')
-	results <- read.csv(files[1])
-	if (length(files) > 1) {
-		for (file in files[2:length(files)]) {
-			this <- read.csv(file)
-			results <- rbind(results, this)
-		}
-	}
+	# ### load results
+	# files <- listFiles('./Analysis/Virtual Species/Raw Results', pattern='.csv')
+	# results <- read.csv(files[1])
+	# if (length(files) > 1) {
+		# for (file in files[2:length(files)]) {
+			# this <- read.csv(file)
+			# results <- rbind(results, this)
+		# }
+	# }
 	
-	# tally reps
+	# # tally reps
 
-	series <- makeSeries()
-	series$n <- NA
+	# series <- makeSeries()
+	# series$n <- NA
 	
-	for (i in 1:nrow(series)) {
-		these <- (results$numErrorless == series$totalErrorless[i] & results$numPrecise == series$totalPrecise[i] & results$numImprecise == series$totalImprecise[i])
-		series$n[i] <- sum(these)
-	}
+	# for (i in 1:nrow(series)) {
+		# these <- (results$numErrorless == series$totalErrorless[i] & results$numPrecise == series$totalPrecise[i] & results$numImprecise == series$totalImprecise[i])
+		# series$n[i] <- sum(these)
+	# }
 	
-	if (!all(series$n == numReps)) say('Incomplete!!!')
+	# if (!all(series$n == numReps)) say('Incomplete!!!')
 	
-	print(series)
+	# print(series)
 	
-	save(results, file='./Analysis/Virtual Species/!!Collated Results.rda')
+	# save(results, file='./Analysis/Virtual Species/!!Collated Results.rda')
 
 say('###################################################################################################')
 say('### make composite plot with SUBSET of EOO and niche breadth results - TWO omniscient scenarios ###')
@@ -288,7 +288,7 @@ say('###########################################################################
 				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -449,7 +449,7 @@ say('###########################################################################
 				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -610,7 +610,7 @@ say('###########################################################################
 				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -771,7 +771,7 @@ say('###########################################################################
 				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -932,7 +932,7 @@ say('###########################################################################
 				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -1164,7 +1164,7 @@ say('###########################################################################
 				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(errorlessPreciseDf, aes(x=x, y=resp)) +
 					geom_point(
@@ -1336,7 +1336,7 @@ say('###########################################################################
 				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(errorlessPreciseDf, aes(x=x, y=resp)) +
 					geom_point(
@@ -1504,7 +1504,7 @@ say('###########################################################################
 				preciseDf$resp <- 10^(preciseDf$resp)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -1665,7 +1665,7 @@ say('###########################################################################
 				)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -1829,7 +1829,7 @@ say('###########################################################################
 				)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -1993,7 +1993,7 @@ say('###########################################################################
 				)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -2228,7 +2228,7 @@ say('###########################################################################
 				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(errorlessPreciseDf, aes(x=x, y=resp)) +
 					geom_point(
@@ -2400,7 +2400,7 @@ say('###########################################################################
 				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(errorlessPreciseDf, aes(x=x, y=resp)) +
 					geom_point(
@@ -2568,7 +2568,7 @@ say('###########################################################################
 				preciseDf$resp <- 10^(preciseDf$resp)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -2729,7 +2729,7 @@ say('###########################################################################
 				)
 
 				# labels and titles
-				main <- paste0(thisNumErrorless, ' omniscient ', thisNumPrecise, ' precise')
+				main <- paste0(thisNumErrorless, ' omniscient, ', thisNumPrecise, ' precise')
 
 				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
 					geom_point(
@@ -2820,2792 +2820,2792 @@ say('###########################################################################
 		say('Displaying only lower ', outlierQuant, 'quantile of points.', level=2, deco='!')
 		
 		
-say('##################################################################')
-say('### make composite plot of ALL CLIMATE CHANGE EXPOSURE results ###')
-say('##################################################################')
+# say('##################################################################')
+# say('### make composite plot of ALL CLIMATE CHANGE EXPOSURE results ###')
+# say('##################################################################')
 
-	# panels, one per scenario, with each column number of errorless, rows number of precise
+	# # panels, one per scenario, with each column number of errorless, rows number of precise
 
-	### generalization
-	##################
+	# ### generalization
+	# ##################
 
-		# text size
-		panelSize <- 8 # panel title
-		axisSizeX <- 8 # axes with labels
-		axisSizeY <- 16 # axes with labels
-		axisNumSize <- 8 # numbers on axes
+		# # text size
+		# panelSize <- 8 # panel title
+		# axisSizeX <- 8 # axes with labels
+		# axisSizeY <- 16 # axes with labels
+		# axisNumSize <- 8 # numbers on axes
 		
-		# lines
-		medianSize <- 1
-		hlineSize <- 0.6 # thickness of horizontal line at 1
-		boundaryLineThickness <- 0.4 # thickness of inner quantile boundary's lines
+		# # lines
+		# medianSize <- 1
+		# hlineSize <- 0.6 # thickness of horizontal line at 1
+		# boundaryLineThickness <- 0.4 # thickness of inner quantile boundary's lines
 		
-		# point size
-		pointSize <- 0.25
+		# # point size
+		# pointSize <- 0.25
 		
-		# colors
-		pointCol <- '#d95f02'
-		imprecisePointCol <- '#d95f02'
+		# # colors
+		# pointCol <- '#d95f02'
+		# imprecisePointCol <- '#d95f02'
 		
-		impreciseFill <- NA
-		impreciseLineCol <- 'black'
+		# impreciseFill <- NA
+		# impreciseLineCol <- 'black'
 
-		preciseFill <- '#1b9e77'
-		precisePointColAlpha <- alpha('#1b9e77', 0.5)
+		# preciseFill <- '#1b9e77'
+		# precisePointColAlpha <- alpha('#1b9e77', 0.5)
 
-		# quantiles to plot
-		lower <- 0.05
-		upper <- 0.95
+		# # quantiles to plot
+		# lower <- 0.05
+		# upper <- 0.95
 	
-	### preliminary
-	###############
+	# ### preliminary
+	# ###############
 
-		load('./Analysis/Virtual Species/!!Collated Results.rda')
-		numErrorlessSelected <- sort(unique(results$numErrorless))
-		numPreciseSelected <- sort(unique(results$numPrecise))
+		# load('./Analysis/Virtual Species/!!Collated Results.rda')
+		# numErrorlessSelected <- sort(unique(results$numErrorless))
+		# numPreciseSelected <- sort(unique(results$numPrecise))
 
-	### suitable area: current
-	#########################
+	# ### suitable area: current
+	# #########################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'SQ SUITABLE AREA'
-		errorless <- 'sqSuitArea_errorless_km2'
-		precise <- 'sqSuitArea_precise_km2'
-		imprecise <- 'sqSuitArea_imprecise_km2'
+		# subject <- 'SQ SUITABLE AREA'
+		# errorless <- 'sqSuitArea_errorless_km2'
+		# precise <- 'sqSuitArea_precise_km2'
+		# imprecise <- 'sqSuitArea_imprecise_km2'
 		
-		# ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
-		ylab <- 'Ratio of estimated-to-true suitable area'
+		# # ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
+		# ylab <- 'Ratio of estimated-to-true suitable area'
 		
-		plotFileName <- '!Climate Change Exposure - Current Suitable Area - All Results'
-		trendsFileName <- '!Trends - Climate Change Exposure - Current Suitable Area'
+		# plotFileName <- '!Climate Change Exposure - Current Suitable Area - All Results'
+		# trendsFileName <- '!Trends - Climate Change Exposure - Current Suitable Area'
 
-		caption <- sqSuitCaption
+		# caption <- sqSuitCaption
 
-		### y-axis limits
-		these <- c(
-			(results[ , imprecise] + 1) / (results[ , errorless] + 1),
-			(results[ , precise] + 1) / (results[ , errorless] + 1)
-		)
-		these <- log10(these)
-		ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
-		ymin <- as.numeric(ys[1])
-		ymax <- as.numeric(ys[2])
-		ymin <- 10^ymin
-		ymax <- 10^ymax
+		# ### y-axis limits
+		# these <- c(
+			# (results[ , imprecise] + 1) / (results[ , errorless] + 1),
+			# (results[ , precise] + 1) / (results[ , errorless] + 1)
+		# )
+		# these <- log10(these)
+		# ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
+		# ymin <- as.numeric(ys[1])
+		# ymax <- as.numeric(ys[2])
+		# ymin <- 10^ymin
+		# ymax <- 10^ymax
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- ((thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1))
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- ((thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1))
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 				
-				middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
-				lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
-				upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
+				# middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
+				# lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
+				# upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						max95thQuant = max(upperQuant),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# max95thQuant = max(upperQuant),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Prec')) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
+					# ) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Prec')) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=1),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=1),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 		
-	### suitable area: future
-	#########################
+	# ### suitable area: future
+	# #########################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'FUT SUITABLE AREA'
-		errorless <- 'futSuitArea_errorless_km2'
-		precise <- 'futSuitArea_precise_km2'
-		imprecise <- 'futSuitArea_imprecise_km2'
+		# subject <- 'FUT SUITABLE AREA'
+		# errorless <- 'futSuitArea_errorless_km2'
+		# precise <- 'futSuitArea_precise_km2'
+		# imprecise <- 'futSuitArea_imprecise_km2'
 		
-		# ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
-		ylab <- 'Ratio of estimated-to-true suitable area'
+		# # ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
+		# ylab <- 'Ratio of estimated-to-true suitable area'
 		
-		plotFileName <- '!Climate Change Exposure - Future Suitable Area - All Results'
-		trendsFileName <- '!Trends - Climate Change Exposure - Future Suitable Area'
+		# plotFileName <- '!Climate Change Exposure - Future Suitable Area - All Results'
+		# trendsFileName <- '!Trends - Climate Change Exposure - Future Suitable Area'
 
-		caption <- futSuitCaption
+		# caption <- futSuitCaption
 
-		### y-axis limits
-		these <- c(
-			(results[ , imprecise] + 1) / (results[ , errorless] + 1),
-			(results[ , precise] + 1) / (results[ , errorless] + 1)
-		)
-		these <- log10(these)
-		ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
-		ymin <- as.numeric(ys[1])
-		ymax <- as.numeric(ys[2])
-		ymin <- 10^ymin
-		ymax <- 10^ymax
+		# ### y-axis limits
+		# these <- c(
+			# (results[ , imprecise] + 1) / (results[ , errorless] + 1),
+			# (results[ , precise] + 1) / (results[ , errorless] + 1)
+		# )
+		# these <- log10(these)
+		# ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
+		# ymin <- as.numeric(ys[1])
+		# ymax <- as.numeric(ys[2])
+		# ymin <- 10^ymin
+		# ymax <- 10^ymax
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- ((thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1))
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- ((thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1))
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 				
-				middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
-				lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
-				upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
+				# middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
+				# lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
+				# upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						max95thQuant = max(upperQuant),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# max95thQuant = max(upperQuant),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Prec')) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
+					# ) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Prec')) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=1),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=1),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 		
-	### suitable area: stable
-	#########################
+	# ### suitable area: stable
+	# #########################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'STABLE SUITABLE AREA'
-		errorless <- 'stableArea_errorless_km2'
-		precise <- 'stableArea_precise_km2'
-		imprecise <- 'stableArea_imprecise_km2'
+		# subject <- 'STABLE SUITABLE AREA'
+		# errorless <- 'stableArea_errorless_km2'
+		# precise <- 'stableArea_precise_km2'
+		# imprecise <- 'stableArea_imprecise_km2'
 		
-		# ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
-		ylab <- 'Ratio of estimated-to-true stable suitable area'
+		# # ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
+		# ylab <- 'Ratio of estimated-to-true stable suitable area'
 		
-		plotFileName <- '!Climate Change Exposure - Stable Suitable Area - All Results'
-		trendsFileName <- '!Trends - Climate Change Exposure - Stable Suitable Area'
+		# plotFileName <- '!Climate Change Exposure - Stable Suitable Area - All Results'
+		# trendsFileName <- '!Trends - Climate Change Exposure - Stable Suitable Area'
 
-		caption <- stableCaption
+		# caption <- stableCaption
 
-		### y-axis limits
-		these <- c(
-			(results[ , imprecise] + 1) / (results[ , errorless] + 1),
-			(results[ , precise] + 1) / (results[ , errorless] + 1)
-		)
-		these <- log10(these)
-		ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
-		ymin <- as.numeric(ys[1])
-		ymax <- as.numeric(ys[2])
-		ymin <- 10^ymin
-		ymax <- 10^ymax
+		# ### y-axis limits
+		# these <- c(
+			# (results[ , imprecise] + 1) / (results[ , errorless] + 1),
+			# (results[ , precise] + 1) / (results[ , errorless] + 1)
+		# )
+		# these <- log10(these)
+		# ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
+		# ymin <- as.numeric(ys[1])
+		# ymax <- as.numeric(ys[2])
+		# ymin <- 10^ymin
+		# ymax <- 10^ymax
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- (thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1)
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- (thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1)
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 				
-				middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
-				lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
-				upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
+				# middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
+				# lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
+				# upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						max95thQuant = max(upperQuant),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# max95thQuant = max(upperQuant),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Prec')) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
+					# ) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Prec')) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=1),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=1),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 		
-	### suitable area: lost
-	#######################
+	# ### suitable area: lost
+	# #######################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'LOST SUITABLE AREA'
-		errorless <- 'lostArea_errorless_km2'
-		precise <- 'lostArea_precise_km2'
-		imprecise <- 'lostArea_imprecise_km2'
+		# subject <- 'LOST SUITABLE AREA'
+		# errorless <- 'lostArea_errorless_km2'
+		# precise <- 'lostArea_precise_km2'
+		# imprecise <- 'lostArea_imprecise_km2'
 		
-		# ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
-		ylab <- 'Ratio of estimated-to-true lost suitable area'
+		# # ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
+		# ylab <- 'Ratio of estimated-to-true lost suitable area'
 		
-		plotFileName <- '!Climate Change Exposure - Lost Suitable Area - All Results'
-		trendsFileName <- '!Trends - Climate Change Exposure - Lost Suitable Area'
+		# plotFileName <- '!Climate Change Exposure - Lost Suitable Area - All Results'
+		# trendsFileName <- '!Trends - Climate Change Exposure - Lost Suitable Area'
 
-		caption <- lostCaption
+		# caption <- lostCaption
 
-		### y-axis limits
-		these <- c(
-			(results[ , imprecise] + 1) / (results[ , errorless] + 1),
-			(results[ , precise] + 1) / (results[ , errorless] + 1)
-		)
-		these <- log10(these)
-		ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
-		ymin <- as.numeric(ys[1])
-		ymax <- as.numeric(ys[2])
-		ymin <- 10^ymin
-		ymax <- 10^ymax
+		# ### y-axis limits
+		# these <- c(
+			# (results[ , imprecise] + 1) / (results[ , errorless] + 1),
+			# (results[ , precise] + 1) / (results[ , errorless] + 1)
+		# )
+		# these <- log10(these)
+		# ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
+		# ymin <- as.numeric(ys[1])
+		# ymax <- as.numeric(ys[2])
+		# ymin <- 10^ymin
+		# ymax <- 10^ymax
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- ((thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1))
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- ((thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1))
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 				
-				middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
-				lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
-				upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
+				# middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
+				# lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
+				# upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						max95thQuant = max(upperQuant),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# max95thQuant = max(upperQuant),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Prec')) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
+					# ) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Prec')) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=1),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=1),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 		
-	### suitable area: gain
-	#######################
+	# ### suitable area: gain
+	# #######################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'GAINED SUITABLE AREA'
-		errorless <- 'gainArea_errorless_km2'
-		precise <- 'gainArea_precise_km2'
-		imprecise <- 'gainArea_imprecise_km2'
+		# subject <- 'GAINED SUITABLE AREA'
+		# errorless <- 'gainArea_errorless_km2'
+		# precise <- 'gainArea_precise_km2'
+		# imprecise <- 'gainArea_imprecise_km2'
 		
-		# ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
-		ylab <- 'Ratio of estimated-to-true gain in suitable area'
+		# # ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
+		# ylab <- 'Ratio of estimated-to-true gain in suitable area'
 		
-		plotFileName <- '!Climate Change Exposure - Gained Suitable Area - All Results'
-		trendsFileName <- '!Trends - Climate Change Exposure - Gained Suitable Area'
+		# plotFileName <- '!Climate Change Exposure - Gained Suitable Area - All Results'
+		# trendsFileName <- '!Trends - Climate Change Exposure - Gained Suitable Area'
 
-		caption <- gainCaption
+		# caption <- gainCaption
 
-		### y-axis limits
-		these <- c(
-			(results[ , imprecise] + 1) / (results[ , errorless] + 1),
-			(results[ , precise] + 1) / (results[ , errorless] + 1)
-		)
-		these <- log10(these)
-		ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
-		ymin <- as.numeric(ys[1])
-		ymax <- as.numeric(ys[2])
-		ymin <- 10^ymin
-		ymax <- 10^ymax
+		# ### y-axis limits
+		# these <- c(
+			# (results[ , imprecise] + 1) / (results[ , errorless] + 1),
+			# (results[ , precise] + 1) / (results[ , errorless] + 1)
+		# )
+		# these <- log10(these)
+		# ys <- quantile(these, c(1 - outlierQuant, outlierQuant), na.rm=TRUE)
+		# ymin <- as.numeric(ys[1])
+		# ymax <- as.numeric(ys[2])
+		# ymin <- 10^ymin
+		# ymax <- 10^ymax
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- (thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1)
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- (thisResults[ , imprecise] + 1) / (thisResults[ , errorless] + 1)
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(log10(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 				
-				middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
-				lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
-				upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
+				# middleQuant <- 10^predict(middleQuant, impreciseDf, type='response')
+				# lowerQuant <- 10^predict(lowerQuant, impreciseDf, type='response')
+				# upperQuant <- 10^predict(upperQuant, impreciseDf, type='response')
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = (thisResults[ , precise] + 1) / (thisResults[ , errorless] + 1)
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						max95thQuant = max(upperQuant),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# max95thQuant = max(upperQuant),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Prec')) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
+					# ) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Prec')) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
-					# scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=1),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=imprecisePointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_log10(limits=c(ymin, ymax), labels=scales::label_number_auto()) +
+					# # scale_y_continuous(limits=c(ymin, ymax), trans='log10') +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=1),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 
-say('###########################################################')
-say('### make composite plot of ALL ENM calibration accuracy ###')
-say('###########################################################')
+# say('###########################################################')
+# say('### make composite plot of ALL ENM calibration accuracy ###')
+# say('###########################################################')
 
-	# panels, one per scenario, with each column number of errorless, rows number of precise
+	# # panels, one per scenario, with each column number of errorless, rows number of precise
 
-	### generalization
-	##################
+	# ### generalization
+	# ##################
 
-		# text size
-		panelSize <- 8 # panel title
-		axisSizeX <- 8 # axes with labels
-		axisSizeY <- 16 # axes with labels
-		axisNumSize <- 8 # numbers on axes
+		# # text size
+		# panelSize <- 8 # panel title
+		# axisSizeX <- 8 # axes with labels
+		# axisSizeY <- 16 # axes with labels
+		# axisNumSize <- 8 # numbers on axes
 		
-		# lines
-		medianSize <- 1
-		boundaryLineThickness <- 0.4 # thickness of inner quantile boundary's lines
+		# # lines
+		# medianSize <- 1
+		# boundaryLineThickness <- 0.4 # thickness of inner quantile boundary's lines
 		
-		# point size
-		pointSize <- 0.25
+		# # point size
+		# pointSize <- 0.25
 		
-		# colors
-		pointCol <- '#d95f02'
+		# # colors
+		# pointCol <- '#d95f02'
 		
-		impreciseFill <- NA
-		impreciseLineCol <- 'black'
+		# impreciseFill <- NA
+		# impreciseLineCol <- 'black'
 
-		preciseFill <- '#1b9e77'
-		precisePointColAlpha <- alpha('#1b9e77', 0.5)
+		# preciseFill <- '#1b9e77'
+		# precisePointColAlpha <- alpha('#1b9e77', 0.5)
 
-		errorlessPointColAlpha <- alpha('gray50', 0.5)
+		# errorlessPointColAlpha <- alpha('gray50', 0.5)
 
-		# quantiles to plot
-		lower <- 0.05
-		upper <- 0.95
+		# # quantiles to plot
+		# lower <- 0.05
+		# upper <- 0.95
 	
-	### preliminary
-	###############
+	# ### preliminary
+	# ###############
 
-		load('./Analysis/Virtual Species/!!Collated Results.rda')
-		numErrorlessSelected <- sort(unique(results$numErrorless))
-		numPreciseSelected <- sort(unique(results$numPrecise))
+		# load('./Analysis/Virtual Species/!!Collated Results.rda')
+		# numErrorlessSelected <- sort(unique(results$numErrorless))
+		# numPreciseSelected <- sort(unique(results$numPrecise))
 
-	### ENM calibration: present
-	############################
+	# ### ENM calibration: present
+	# ############################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'ENM CALIBRATION PRESENT'
-		errorless <- 'corTruthVsErrorlessSq'
-		precise <- 'corTruthVsPreciseSq'
-		imprecise <- 'corTruthVsImpreciseSq'
+		# subject <- 'ENM CALIBRATION PRESENT'
+		# errorless <- 'corTruthVsErrorlessSq'
+		# precise <- 'corTruthVsPreciseSq'
+		# imprecise <- 'corTruthVsImpreciseSq'
 		
-		ylab <- 'Correlation between predicted and true probability of presence'
+		# ylab <- 'Correlation between predicted and true probability of presence'
 		
-		plotFileName <- '!ENM Calibration - Present - All Results'
-		trendsFileName <- '!Trends - ENM Calibration Present'
+		# plotFileName <- '!ENM Calibration - Present - All Results'
+		# trendsFileName <- '!Trends - ENM Calibration Present'
 
-		caption <- enmCalibPresentCaption
+		# caption <- enmCalibPresentCaption
 
-		### y-axis limits
-		these <- c(
-			results[ , 'corTruthVsErrorlessSq'], results[ , 'corTruthVsPreciseSq'], results[ , 'corTruthVsImpreciseSq'],
-			results[ , 'corTruthVsErrorlessFut'], results[ , 'corTruthVsPreciseFut'], results[ , 'corTruthVsImpreciseFut']
-		)
-		ymin <- min(0, these, na.rm=TRUE)
-		ymin <- roundTo(ymin, 0.2, floor)
-		ymax <- 1
-		ybreaks <- pretty(c(ymin, ymax))
+		# ### y-axis limits
+		# these <- c(
+			# results[ , 'corTruthVsErrorlessSq'], results[ , 'corTruthVsPreciseSq'], results[ , 'corTruthVsImpreciseSq'],
+			# results[ , 'corTruthVsErrorlessFut'], results[ , 'corTruthVsPreciseFut'], results[ , 'corTruthVsImpreciseFut']
+		# )
+		# ymin <- min(0, these, na.rm=TRUE)
+		# ymin <- roundTo(ymin, 0.2, floor)
+		# ymax <- 1
+		# ybreaks <- pretty(c(ymin, ymax))
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- thisResults[ , imprecise]
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- thisResults[ , imprecise]
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 
-				middleQuant <- predict(middleQuant, impreciseDf, type='response')
-				lowerQuant <- predict(lowerQuant, impreciseDf, type='response')
-				upperQuant <- predict(upperQuant, impreciseDf, type='response')
+				# middleQuant <- predict(middleQuant, impreciseDf, type='response')
+				# lowerQuant <- predict(lowerQuant, impreciseDf, type='response')
+				# upperQuant <- predict(upperQuant, impreciseDf, type='response')
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				n <- nrow(thisResults)
-				errorlessDf <- data.frame(
-					x = rep(-0.5, n),
-					resp = thisResults[ , errorless]
-				)
-				preciseDf <- data.frame(
-					x = rep(0.5, n),
-					resp = thisResults[ , precise]
-				)
-				errorlessPreciseDf <- rbind(errorlessDf, preciseDf)
+				# # frames for violin plot of precise
+				# n <- nrow(thisResults)
+				# errorlessDf <- data.frame(
+					# x = rep(-0.5, n),
+					# resp = thisResults[ , errorless]
+				# )
+				# preciseDf <- data.frame(
+					# x = rep(0.5, n),
+					# resp = thisResults[ , precise]
+				# )
+				# errorlessPreciseDf <- rbind(errorlessDf, preciseDf)
 				
-				errorlessUpper <- quantile(errorlessDf$resp, upper, na.rm=TRUE)
-				errorlessMiddle <- quantile(errorlessDf$resp, 0.5, na.rm=TRUE)
-				errorlessLower <- quantile(errorlessDf$resp, lower, na.rm=TRUE)
+				# errorlessUpper <- quantile(errorlessDf$resp, upper, na.rm=TRUE)
+				# errorlessMiddle <- quantile(errorlessDf$resp, 0.5, na.rm=TRUE)
+				# errorlessLower <- quantile(errorlessDf$resp, lower, na.rm=TRUE)
 
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						errorlessLower = as.numeric(errorlessLower),
-						errorlessMedian = as.numeric(errorlessMiddle),
-						errorlessUpper = as.numeric(errorlessUpper),
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# errorlessLower = as.numeric(errorlessLower),
+						# errorlessMedian = as.numeric(errorlessMiddle),
+						# errorlessUpper = as.numeric(errorlessUpper),
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(errorlessPreciseDf, aes(y=resp)) +
-					geom_point(
-						data=errorlessDf,
-						mapping=aes(x=x, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = errorlessPointColAlpha,
-						size = pointSize
-					) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=x, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= preciseLower & preciseDf$resp <= preciseUpper, ],
-						mapping = aes(x=x, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					geom_violin(
-						data = errorlessDf[errorlessDf$resp >= preciseLower & errorlessDf$resp <= preciseUpper, ],
-						mapping = aes(x=x, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=c(-0.5, 0.5), labels=c('Omni', 'Prec')) +
-					scale_y_continuous(breaks=ybreaks) +
-					coord_cartesian(xlim=c(-1, 1), ylim=c(ymin, ymax), expand=FALSE) +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 90, hjust=1, vjust=0, size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-						legend.position='none'
-					)
+				# boxPanel <- ggplot(errorlessPreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=errorlessDf,
+						# mapping=aes(x=x, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = errorlessPointColAlpha,
+						# size = pointSize
+					# ) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=x, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
+					# ) +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= preciseLower & preciseDf$resp <= preciseUpper, ],
+						# mapping = aes(x=x, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# geom_violin(
+						# data = errorlessDf[errorlessDf$resp >= preciseLower & errorlessDf$resp <= preciseUpper, ],
+						# mapping = aes(x=x, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=c(-0.5, 0.5), labels=c('Omni', 'Prec')) +
+					# scale_y_continuous(breaks=ybreaks) +
+					# coord_cartesian(xlim=c(-1, 1), ylim=c(ymin, ymax), expand=FALSE) +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 90, hjust=1, vjust=0, size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+						# legend.position='none'
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					coord_cartesian(xlim=c(xmin, xmax), ylim=c(ymin, ymax), expand=FALSE) +
-					xlab('County records') +
-					scale_x_continuous(breaks = xbreaks) +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=7),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# coord_cartesian(xlim=c(xmin, xmax), ylim=c(ymin, ymax), expand=FALSE) +
+					# xlab('County records') +
+					# scale_x_continuous(breaks = xbreaks) +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=7),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.65, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.65, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 		
-	### ENM calibration: future
-	###########################
+	# ### ENM calibration: future
+	# ###########################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'ENM CALIBRATION FUTURE'
-		errorless <- 'corTruthVsErrorlessFut'
-		precise <- 'corTruthVsPreciseFut'
-		imprecise <- 'corTruthVsImpreciseFut'
+		# subject <- 'ENM CALIBRATION FUTURE'
+		# errorless <- 'corTruthVsErrorlessFut'
+		# precise <- 'corTruthVsPreciseFut'
+		# imprecise <- 'corTruthVsImpreciseFut'
 		
-		ylab <- 'Correlation between predicted and true probability of presence'
+		# ylab <- 'Correlation between predicted and true probability of presence'
 		
-		plotFileName <- '!ENM Calibration - Future - All Results'
-		trendsFileName <- '!Trends - ENM Calibration Future'
+		# plotFileName <- '!ENM Calibration - Future - All Results'
+		# trendsFileName <- '!Trends - ENM Calibration Future'
 
-		caption <- enmCalibFutureCaption
+		# caption <- enmCalibFutureCaption
 
-		### y-axis limits
-		these <- c(
-			results[ , 'corTruthVsErrorlessSq'], results[ , 'corTruthVsPreciseSq'], results[ , 'corTruthVsImpreciseSq'],
-			results[ , 'corTruthVsErrorlessFut'], results[ , 'corTruthVsPreciseFut'], results[ , 'corTruthVsImpreciseFut']
-		)
-		ymin <- min(0, these, na.rm=TRUE)
-		ymin <- roundTo(ymin, 0.2, floor)
-		ymax <- 1
-		ybreaks <- pretty(c(ymin, ymax))
+		# ### y-axis limits
+		# these <- c(
+			# results[ , 'corTruthVsErrorlessSq'], results[ , 'corTruthVsPreciseSq'], results[ , 'corTruthVsImpreciseSq'],
+			# results[ , 'corTruthVsErrorlessFut'], results[ , 'corTruthVsPreciseFut'], results[ , 'corTruthVsImpreciseFut']
+		# )
+		# ymin <- min(0, these, na.rm=TRUE)
+		# ymin <- roundTo(ymin, 0.2, floor)
+		# ymax <- 1
+		# ybreaks <- pretty(c(ymin, ymax))
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- thisResults[ , imprecise]
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- thisResults[ , imprecise]
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 
-				middleQuant <- predict(middleQuant, impreciseDf, type='response')
-				lowerQuant <- predict(lowerQuant, impreciseDf, type='response')
-				upperQuant <- predict(upperQuant, impreciseDf, type='response')
+				# middleQuant <- predict(middleQuant, impreciseDf, type='response')
+				# lowerQuant <- predict(lowerQuant, impreciseDf, type='response')
+				# upperQuant <- predict(upperQuant, impreciseDf, type='response')
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				n <- nrow(thisResults)
-				errorlessDf <- data.frame(
-					x = rep(-0.5, n),
-					resp = thisResults[ , errorless]
-				)
-				preciseDf <- data.frame(
-					x = rep(0.5, n),
-					resp = thisResults[ , precise]
-				)
-				errorlessPreciseDf <- rbind(errorlessDf, preciseDf)
+				# # frames for violin plot of precise
+				# n <- nrow(thisResults)
+				# errorlessDf <- data.frame(
+					# x = rep(-0.5, n),
+					# resp = thisResults[ , errorless]
+				# )
+				# preciseDf <- data.frame(
+					# x = rep(0.5, n),
+					# resp = thisResults[ , precise]
+				# )
+				# errorlessPreciseDf <- rbind(errorlessDf, preciseDf)
 				
-				errorlessUpper <- quantile(errorlessDf$resp, upper, na.rm=TRUE)
-				errorlessMiddle <- quantile(errorlessDf$resp, 0.5, na.rm=TRUE)
-				errorlessLower <- quantile(errorlessDf$resp, lower, na.rm=TRUE)
+				# errorlessUpper <- quantile(errorlessDf$resp, upper, na.rm=TRUE)
+				# errorlessMiddle <- quantile(errorlessDf$resp, 0.5, na.rm=TRUE)
+				# errorlessLower <- quantile(errorlessDf$resp, lower, na.rm=TRUE)
 
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						errorlessLower = as.numeric(errorlessLower),
-						errorlessMedian = as.numeric(errorlessMiddle),
-						errorlessUpper = as.numeric(errorlessUpper),
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# errorlessLower = as.numeric(errorlessLower),
+						# errorlessMedian = as.numeric(errorlessMiddle),
+						# errorlessUpper = as.numeric(errorlessUpper),
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(errorlessPreciseDf, aes(y=resp)) +
-					geom_point(
-						data=errorlessDf,
-						mapping=aes(x=x, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = errorlessPointColAlpha,
-						size = pointSize
-					) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=x, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= preciseLower & preciseDf$resp <= preciseUpper, ],
-						mapping = aes(x=x, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					geom_violin(
-						data = errorlessDf[errorlessDf$resp >= preciseLower & errorlessDf$resp <= preciseUpper, ],
-						mapping = aes(x=x, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=c(-0.5, 0.5), labels=c('Omni', 'Prec')) +
-					scale_y_continuous(breaks=ybreaks) +
-					coord_cartesian(xlim=c(-1, 1), ylim=c(ymin, ymax), expand=FALSE) +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 90, hjust=1, vjust=0, size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-						legend.position='none'
-					)
+				# boxPanel <- ggplot(errorlessPreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=errorlessDf,
+						# mapping=aes(x=x, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = errorlessPointColAlpha,
+						# size = pointSize
+					# ) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=x, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
+					# ) +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= preciseLower & preciseDf$resp <= preciseUpper, ],
+						# mapping = aes(x=x, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# geom_violin(
+						# data = errorlessDf[errorlessDf$resp >= preciseLower & errorlessDf$resp <= preciseUpper, ],
+						# mapping = aes(x=x, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=c(-0.5, 0.5), labels=c('Omni', 'Prec')) +
+					# scale_y_continuous(breaks=ybreaks) +
+					# coord_cartesian(xlim=c(-1, 1), ylim=c(ymin, ymax), expand=FALSE) +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 90, hjust=1, vjust=0, size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+						# legend.position='none'
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					coord_cartesian(xlim=c(xmin, xmax), ylim=c(ymin, ymax), expand=FALSE) +
-					xlab('County records') +
-					scale_x_continuous(breaks = xbreaks) +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=7),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# coord_cartesian(xlim=c(xmin, xmax), ylim=c(ymin, ymax), expand=FALSE) +
+					# xlab('County records') +
+					# scale_x_continuous(breaks = xbreaks) +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=7),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.65, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.65, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 
-say('################################################################')
-say('### make composite plot of ALL EOO and NICHE BREADTH results ###')
-say('################################################################')
+# say('################################################################')
+# say('### make composite plot of ALL EOO and NICHE BREADTH results ###')
+# say('################################################################')
 
-	# panels, one per scenario, with each column number of errorless, rows number of precise
+	# # panels, one per scenario, with each column number of errorless, rows number of precise
 
-	### generalization
-	##################
+	# ### generalization
+	# ##################
 
-		# text size
-		panelSize <- 8 # panel title
-		axisSizeX <- 8 # axes with labels
-		axisSizeY <- 16 # axes with labels
-		axisNumSize <- 8 # numbers on axes
+		# # text size
+		# panelSize <- 8 # panel title
+		# axisSizeX <- 8 # axes with labels
+		# axisSizeY <- 16 # axes with labels
+		# axisNumSize <- 8 # numbers on axes
 		
-		# lines
-		medianSize <- 1
-		hlineSize <- 0.6 # thickness of horizontal line at 1
-		boundaryLineThickness <- 0.4 # thickness of inner quantile boundary's lines
+		# # lines
+		# medianSize <- 1
+		# hlineSize <- 0.6 # thickness of horizontal line at 1
+		# boundaryLineThickness <- 0.4 # thickness of inner quantile boundary's lines
 		
-		# point size
-		pointSize <- 0.25
+		# # point size
+		# pointSize <- 0.25
 		
-		# colors
-		pointCol <- '#d95f02'
+		# # colors
+		# pointCol <- '#d95f02'
 		
-		impreciseFill <- NA
-		impreciseLineCol <- 'black'
+		# impreciseFill <- NA
+		# impreciseLineCol <- 'black'
 
-		preciseFill <- '#1b9e77'
-		precisePointColAlpha <- alpha('#1b9e77', 0.5)
+		# preciseFill <- '#1b9e77'
+		# precisePointColAlpha <- alpha('#1b9e77', 0.5)
 
-		# quantiles to plot
-		lower <- 0.05
-		upper <- 0.95
+		# # quantiles to plot
+		# lower <- 0.05
+		# upper <- 0.95
 	
-	### preliminary
-	###############
+	# ### preliminary
+	# ###############
 
-		load('./Analysis/Virtual Species/!!Collated Results.rda')
-		numErrorlessSelected <- sort(unique(results$numErrorless))
-		numPreciseSelected <- sort(unique(results$numPrecise))
+		# load('./Analysis/Virtual Species/!!Collated Results.rda')
+		# numErrorlessSelected <- sort(unique(results$numErrorless))
+		# numPreciseSelected <- sort(unique(results$numPrecise))
 
-	### EOO
-	#######
+	# ### EOO
+	# #######
 
-		### generalization
+		# ### generalization
 
-		subject <- 'EOO'
-		errorless <- 'eooErrorless_km2'
-		precise <- 'eooPrecise_km2'
-		imprecise <- 'eooImprecise_km2'
+		# subject <- 'EOO'
+		# errorless <- 'eooErrorless_km2'
+		# precise <- 'eooPrecise_km2'
+		# imprecise <- 'eooImprecise_km2'
 		
-		# ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
-		ylab <- 'Ratio of estimated-to-true EOO'
+		# # ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
+		# ylab <- 'Ratio of estimated-to-true EOO'
 		
-		plotFileName <- '!EOO - All Results'
-		trendsFileName <- '!Trends - EOO'
+		# plotFileName <- '!EOO - All Results'
+		# trendsFileName <- '!Trends - EOO'
 
-		caption <- eooCaption
+		# caption <- eooCaption
 
-		### y-axis limits
-		these <- c(
-			results[ , imprecise] / results[ , errorless],
-			results[ , precise] / results[ , errorless]
-		)
-		ymin <- 0
-		# ymax <- quantile(these, outlierQuant), na.rm=TRUE)
-		ymax <- max(these)
+		# ### y-axis limits
+		# these <- c(
+			# results[ , imprecise] / results[ , errorless],
+			# results[ , precise] / results[ , errorless]
+		# )
+		# ymin <- 0
+		# # ymax <- quantile(these, outlierQuant), na.rm=TRUE)
+		# ymax <- max(these)
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- thisResults[ , imprecise] / thisResults[ , errorless]
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- thisResults[ , imprecise] / thisResults[ , errorless]
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 				
-				middleQuant <- exp(predict(middleQuant, impreciseDf, type='response'))
-				lowerQuant <- exp(predict(lowerQuant, impreciseDf, type='response'))
-				upperQuant <- exp(predict(upperQuant, impreciseDf, type='response'))
+				# middleQuant <- exp(predict(middleQuant, impreciseDf, type='response'))
+				# lowerQuant <- exp(predict(lowerQuant, impreciseDf, type='response'))
+				# upperQuant <- exp(predict(upperQuant, impreciseDf, type='response'))
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = thisResults[ , precise] / thisResults[ , errorless]
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = thisResults[ , precise] / thisResults[ , errorless]
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
 					# ) +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
-					# ) +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=8),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=8),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 		
-	### univariate niche breadth: MAT
-	#################################
+	# ### univariate niche breadth: MAT
+	# #################################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'MAT'
-		errorless <- 'errorlessNicheBreadthMat_range_degC'
-		precise <- 'preciseNicheBreadthMat_range_degC'
-		imprecise <- 'impreciseNicheBreadthMat_range_degC'
+		# subject <- 'MAT'
+		# errorless <- 'errorlessNicheBreadthMat_range_degC'
+		# precise <- 'preciseNicheBreadthMat_range_degC'
+		# imprecise <- 'impreciseNicheBreadthMat_range_degC'
 		
-		# ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
-		ylab <- 'Ratio of estimated-to-true realized niche breadth'
+		# # ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
+		# ylab <- 'Ratio of estimated-to-true realized niche breadth'
 		
-		plotFileName <- '!Univariate Niche Breadth MAT - All Results'
-		trendsFileName <- '!Trends - Univariate Niche Breadth MAT'
+		# plotFileName <- '!Univariate Niche Breadth MAT - All Results'
+		# trendsFileName <- '!Trends - Univariate Niche Breadth MAT'
 
-		caption <- matCaption
+		# caption <- matCaption
 
-		### y-axis limits
-		these <- c(
-			results[ , imprecise] / results[ , errorless],
-			results[ , precise] / results[ , errorless]
-		)
-		ymin <- 0
-		ymax <- quantile(these, outlierQuant)
+		# ### y-axis limits
+		# these <- c(
+			# results[ , imprecise] / results[ , errorless],
+			# results[ , precise] / results[ , errorless]
+		# )
+		# ymin <- 0
+		# ymax <- quantile(these, outlierQuant)
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- thisResults[ , imprecise] / thisResults[ , errorless]
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- thisResults[ , imprecise] / thisResults[ , errorless]
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 				
-				middleQuant <- exp(predict(middleQuant, impreciseDf, type='response'))
-				lowerQuant <- exp(predict(lowerQuant, impreciseDf, type='response'))
-				upperQuant <- exp(predict(upperQuant, impreciseDf, type='response'))
+				# middleQuant <- exp(predict(middleQuant, impreciseDf, type='response'))
+				# lowerQuant <- exp(predict(lowerQuant, impreciseDf, type='response'))
+				# upperQuant <- exp(predict(upperQuant, impreciseDf, type='response'))
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = thisResults[ , precise] / thisResults[ , errorless]
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = thisResults[ , precise] / thisResults[ , errorless]
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
 					# ) +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
-					# ) +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=8),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=8),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 		
-	### univariate niche breadth: TAP
-	#################################
+	# ### univariate niche breadth: TAP
+	# #################################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'TAP'
-		errorless <- 'errorlessNicheBreadthTap_range_mm'
-		precise <- 'preciseNicheBreadthTap_range_mm'
-		imprecise <- 'impreciseNicheBreadthTap_range_mm'
+		# subject <- 'TAP'
+		# errorless <- 'errorlessNicheBreadthTap_range_mm'
+		# precise <- 'preciseNicheBreadthTap_range_mm'
+		# imprecise <- 'impreciseNicheBreadthTap_range_mm'
 		
-		# ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
-		ylab <- 'Ratio of estimated-to-true realized niche breadth'
+		# # ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
+		# ylab <- 'Ratio of estimated-to-true realized niche breadth'
 		
-		plotFileName <- '!Univariate Niche Breadth TAP - All Results'
-		trendsFileName <- '!Trends - Univariate Niche Breadth TAP'
+		# plotFileName <- '!Univariate Niche Breadth TAP - All Results'
+		# trendsFileName <- '!Trends - Univariate Niche Breadth TAP'
 
-		caption <- tapCaption
+		# caption <- tapCaption
 
-		### y-axis limits
-		these <- c(
-			(results[ , imprecise]) / (results[ , errorless]),
-			(results[ , precise]) / (results[ , errorless])
-		)
-		ymin <- 0
-		ymax <- max(these)
+		# ### y-axis limits
+		# these <- c(
+			# (results[ , imprecise]) / (results[ , errorless]),
+			# (results[ , precise]) / (results[ , errorless])
+		# )
+		# ymin <- 0
+		# ymax <- max(these)
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- thisResults[ , imprecise] / thisResults[ , errorless]
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- thisResults[ , imprecise] / thisResults[ , errorless]
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(log(resp) ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 
-				middleQuant <- exp(predict(middleQuant, impreciseDf, type='response'))
-				lowerQuant <- exp(predict(lowerQuant, impreciseDf, type='response'))
-				upperQuant <- exp(predict(upperQuant, impreciseDf, type='response'))
+				# middleQuant <- exp(predict(middleQuant, impreciseDf, type='response'))
+				# lowerQuant <- exp(predict(lowerQuant, impreciseDf, type='response'))
+				# upperQuant <- exp(predict(upperQuant, impreciseDf, type='response'))
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = thisResults[ , precise] / thisResults[ , errorless]
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = thisResults[ , precise] / thisResults[ , errorless]
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
 					# ) +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
-					# ) +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=8),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=8),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 		
-	### multivariate niche breadth: volume
-	######################################
+	# ### multivariate niche breadth: volume
+	# ######################################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'VOLUME'
-		errorless <- 'errorlessConvHullVol'
-		precise <- 'preciseConvHullVol'
-		imprecise <- 'impreciseConvHullVol'
+		# subject <- 'VOLUME'
+		# errorless <- 'errorlessConvHullVol'
+		# precise <- 'preciseConvHullVol'
+		# imprecise <- 'impreciseConvHullVol'
 		
-		# ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
-		ylab <- 'Ratio of estimated-to-true realized niche volume'
+		# # ylab <- expression(paste0(log[10]*'(Ratio of estimated-to-true EOO)'))
+		# ylab <- 'Ratio of estimated-to-true realized niche volume'
 		
-		plotFileName <- '!Multivariate Niche Breadth Volume - All Results'
-		trendsFileName <- '!Trends - Multivariate Niche Breadth Volume'
+		# plotFileName <- '!Multivariate Niche Breadth Volume - All Results'
+		# trendsFileName <- '!Trends - Multivariate Niche Breadth Volume'
 
-		caption <- volCaption
+		# caption <- volCaption
 
-		### y-axis limits
-		these <- c(
-			(results[ , imprecise]) / (results[ , errorless]),
-			(results[ , precise]) / (results[ , errorless])
-		)
-		ymin <- 0
-		ymax <- quantile(these, outlierQuant, na.rm=TRUE)
+		# ### y-axis limits
+		# these <- c(
+			# (results[ , imprecise]) / (results[ , errorless]),
+			# (results[ , precise]) / (results[ , errorless])
+		# )
+		# ymin <- 0
+		# ymax <- quantile(these, outlierQuant, na.rm=TRUE)
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- ((thisResults[ , imprecise]) / (thisResults[ , errorless]))
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- ((thisResults[ , imprecise]) / (thisResults[ , errorless]))
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 
-				middleQuant <- (predict(middleQuant, impreciseDf, type='response'))
-				lowerQuant <- (predict(lowerQuant, impreciseDf, type='response'))
-				upperQuant <- (predict(upperQuant, impreciseDf, type='response'))
+				# middleQuant <- (predict(middleQuant, impreciseDf, type='response'))
+				# lowerQuant <- (predict(lowerQuant, impreciseDf, type='response'))
+				# upperQuant <- (predict(upperQuant, impreciseDf, type='response'))
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = ((thisResults[ , precise]) / (thisResults[ , errorless]))
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = ((thisResults[ , precise]) / (thisResults[ , errorless]))
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
 					# ) +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
-					# ) +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=8),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=8),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 		
-	### multivariate niche breadth: area
-	####################################
+	# ### multivariate niche breadth: area
+	# ####################################
 
-		### generalization
+		# ### generalization
 
-		subject <- 'AREA'
-		errorless <- 'errorlessConvHullArea'
-		precise <- 'preciseConvHullArea'
-		imprecise <- 'impreciseConvHullArea'
+		# subject <- 'AREA'
+		# errorless <- 'errorlessConvHullArea'
+		# precise <- 'preciseConvHullArea'
+		# imprecise <- 'impreciseConvHullArea'
 		
-		ylab <- 'Ratio of estimated-to-true realized niche surface area'
+		# ylab <- 'Ratio of estimated-to-true realized niche surface area'
 		
-		plotFileName <- '!Multivariate Niche Breadth Area - All Results'
-		trendsFileName <- '!Trends - Multivariate Niche Breadth Area'
+		# plotFileName <- '!Multivariate Niche Breadth Area - All Results'
+		# trendsFileName <- '!Trends - Multivariate Niche Breadth Area'
 
-		caption <- areaCaption
+		# caption <- areaCaption
 
-		### y-axis limits
-		these <- c(
-			(results[ , imprecise]) / (results[ , errorless]),
-			(results[ , precise]) / (results[ , errorless])
-		)
-		ymin <- 0
-		ymax <- quantile(these, outlierQuant, na.rm=TRUE)
+		# ### y-axis limits
+		# these <- c(
+			# (results[ , imprecise]) / (results[ , errorless]),
+			# (results[ , precise]) / (results[ , errorless])
+		# )
+		# ymin <- 0
+		# ymax <- quantile(these, outlierQuant, na.rm=TRUE)
 		
-		trends <- data.frame()
-		panels <- list()
-		count <- 0
-		for (thisNumErrorless in numErrorlessSelected) {
+		# trends <- data.frame()
+		# panels <- list()
+		# count <- 0
+		# for (thisNumErrorless in numErrorlessSelected) {
 		
-			# subset number of precise so it's < total errorless
-			allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
+			# # subset number of precise so it's < total errorless
+			# allowableNumPreciseSelected <- numPreciseSelected[numPreciseSelected < thisNumErrorless]
 
-			# x-axis limits
-			these <- results[results$numErrorless == thisNumErrorless, ]
-			xmax <- 1.015 * max(these$numAdmin)
-			xmin <- 1 - 0.015 * xmax
+			# # x-axis limits
+			# these <- results[results$numErrorless == thisNumErrorless, ]
+			# xmax <- 1.015 * max(these$numAdmin)
+			# xmin <- 1 - 0.015 * xmax
 
-			for (thisNumPrecise in allowableNumPreciseSelected) {
+			# for (thisNumPrecise in allowableNumPreciseSelected) {
 
-				say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
-				count <- count + 1
+				# say(subject, ' omniscient ', thisNumErrorless, ' precise ', thisNumPrecise)
+				# count <- count + 1
 
-				# tall imprecise data
-				thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
-				resp <- ((thisResults[ , imprecise]) / (thisResults[ , errorless]))
-				n <- nrow(thisResults)
-				impreciseDf <- data.frame(
-					numAdmin = thisResults$numAdmin,
-					resp = resp
-				)
+				# # tall imprecise data
+				# thisResults <- results[results$numErrorless == thisNumErrorless & results$numPrecise == thisNumPrecise, ]
+				# resp <- ((thisResults[ , imprecise]) / (thisResults[ , errorless]))
+				# n <- nrow(thisResults)
+				# impreciseDf <- data.frame(
+					# numAdmin = thisResults$numAdmin,
+					# resp = resp
+				# )
 				
-				# calculate quantiles for regression: imprecise
-				impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
-				impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
-				k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
-				middleQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
-				lowerQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
-				upperQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
+				# # calculate quantiles for regression: imprecise
+				# impreciseDf <- impreciseDf[order(impreciseDf$numAdmin), ]
+				# impreciseDf <- impreciseDf[!is.infinite(impreciseDf$resp), ]
+				# k <- if (length(unique(impreciseDf$numAdmin)) <= 6) { 1 } else { -1 }
+				# middleQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=0.5)
+				# lowerQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=lower)
+				# upperQuant <- qgam(resp ~ s(numAdmin, bs='cr', k=k), data=impreciseDf, qu=upper)
 
-				middleQuant <- predict(middleQuant, impreciseDf, type='response')
-				lowerQuant <- predict(lowerQuant, impreciseDf, type='response')
-				upperQuant <- predict(upperQuant, impreciseDf, type='response')
+				# middleQuant <- predict(middleQuant, impreciseDf, type='response')
+				# lowerQuant <- predict(lowerQuant, impreciseDf, type='response')
+				# upperQuant <- predict(upperQuant, impreciseDf, type='response')
 
-				middleImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					middle = middleQuant
-				)
+				# middleImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# middle = middleQuant
+				# )
 				
-				topBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = upperQuant
-				)
+				# topBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = upperQuant
+				# )
 				
-				bottomBoundaryImprecise <- data.frame(
-					numAdmin = impreciseDf$numAdmin,
-					boundary = lowerQuant
-				)
+				# bottomBoundaryImprecise <- data.frame(
+					# numAdmin = impreciseDf$numAdmin,
+					# boundary = lowerQuant
+				# )
 
-				# frames for violin plot of precise
-				preciseDf <- data.frame(
-					numAdmin = 0,
-					resp = thisResults[ , precise] / thisResults[ , errorless]
-				)
-				preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
-				preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
-				preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
+				# # frames for violin plot of precise
+				# preciseDf <- data.frame(
+					# numAdmin = 0,
+					# resp = thisResults[ , precise] / thisResults[ , errorless]
+				# )
+				# preciseUpper <- quantile(preciseDf$resp, upper, na.rm=TRUE)
+				# preciseMiddle <- quantile(preciseDf$resp, 0.5, na.rm=TRUE)
+				# preciseLower <- quantile(preciseDf$resp, lower, na.rm=TRUE)
 
-				# trends
-				trends <- rbind(
-					trends,
-					data.frame(
-						numErrorless = thisNumErrorless,
-						numPrecise = thisNumPrecise,
-						preciseLower = as.numeric(preciseLower),
-						preciseMedian = as.numeric(preciseMiddle),
-						preciseUpper = as.numeric(preciseUpper),
-						propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
-						lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
-						medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
-						upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
-					)
-				)
+				# # trends
+				# trends <- rbind(
+					# trends,
+					# data.frame(
+						# numErrorless = thisNumErrorless,
+						# numPrecise = thisNumPrecise,
+						# preciseLower = as.numeric(preciseLower),
+						# preciseMedian = as.numeric(preciseMiddle),
+						# preciseUpper = as.numeric(preciseUpper),
+						# propImpreciseGt1 = sum(resp > 1, na.rm=TRUE) / length(na.omit(resp)),
+						# lowerImpreciseQuantAtMaxNumberOfCounties = as.numeric(lowerQuant[which.max(impreciseDf$numAdmin)]),
+						# medianImpreciseAtMaxNumberOfCounties = as.numeric(middleQuant[which.max(impreciseDf$numAdmin)]),
+						# upperImpreciseQuantAtMaxNumberOfCounties = as.numeric(upperQuant[which.max(impreciseDf$numAdmin)])
+					# )
+				# )
 
-				# labels and titles
-				letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
-				main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
+				# # labels and titles
+				# letter <- if (count <= 26) { letters[count] } else { paste0(letters[count - 26], '\'') }
+				# main <- paste0(letter, ') ', thisNumErrorless, ' omniscient\n& ', thisNumPrecise, ' precise')
 
-				boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
-					geom_point(
-						data=preciseDf,
-						mapping=aes(x=0, y=resp),
-						position = position_jitter(w = 0.4, h = 0),
-						color = precisePointColAlpha,
-						size = pointSize
-					) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					geom_violin(
-						data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
-						mapping = aes(x=0, y = resp),
-						draw_quantiles = 0.5,
-						fill = NA
-					) +
-					scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
+				# boxPanel <- ggplot(impreciseDf, aes(y=resp)) +
+					# geom_point(
+						# data=preciseDf,
+						# mapping=aes(x=0, y=resp),
+						# position = position_jitter(w = 0.4, h = 0),
+						# color = precisePointColAlpha,
+						# size = pointSize
 					# ) +
-					ggtitle(main) +
-					theme(
-						plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
-						plot.background = element_blank(),
-						panel.grid.major.x = element_blank(),
-						panel.grid.minor.x = element_blank(),
-						axis.title.x = element_blank(),
-						axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
-						axis.title.y = element_blank(),
-						axis.text.y = element_text(size=axisNumSize),
-					)
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# geom_violin(
+						# data = preciseDf[preciseDf$resp >= quantile(preciseDf$resp, lower, na.rm=TRUE) & preciseDf$resp <= quantile(preciseDf$resp, upper, na.rm=TRUE), ],
+						# mapping = aes(x=0, y = resp),
+						# draw_quantiles = 0.5,
+						# fill = NA
+					# ) +
+					# scale_x_continuous(breaks=0, labels=c('Pre-\ncise')) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# ggtitle(main) +
+					# theme(
+						# plot.title = element_text(hjust = 0, vjust=-1.5, size=panelSize),
+						# plot.background = element_blank(),
+						# panel.grid.major.x = element_blank(),
+						# panel.grid.minor.x = element_blank(),
+						# axis.title.x = element_blank(),
+						# axis.text.x = element_text(angle = 0, hjust=0.5, vjust=0),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_text(size=axisNumSize),
+					# )
 
-				xbreaks <- pretty(c(1, xmax), 3)
-				xbreaks[1] <- 1
+				# xbreaks <- pretty(c(1, xmax), 3)
+				# xbreaks[1] <- 1
 					
-				imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
-					geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
-					geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
-					geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
-					geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
-					scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
-					scale_y_continuous(limits=c(ymin, ymax)) +
-					# scale_y_log10(
-						# limits=c(ymin, ymax),
-						# breaks=trans_breaks('log10', function(x) 10^x),
-						# labels=trans_format('log10', math_format(10^.x))
-					# ) +
-					xlab('County records') +
-					theme(
-						plot.background = element_blank(),
-						plot.title = element_blank(),
-						axis.title.x = element_text(size=axisSizeX, vjust=8),
-						axis.text.x = element_text(size=axisNumSize),
-						axis.title.y = element_blank(),
-						axis.text.y = element_blank(),
-						axis.ticks.y = element_blank()
-					)
+				# imprecisePanel <- ggplot(impreciseDf, aes(x=numAdmin, y=resp)) +
+					# geom_point(data=impreciseDf, color=pointCol, size=pointSize) +					
+					# geom_line(data=topBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=bottomBoundaryImprecise, mapping=aes(x=numAdmin, y=boundary), size=boundaryLineThickness) +
+					# geom_line(data=middleImprecise, mapping=aes(x=numAdmin, y=middle), col=impreciseLineCol, size=medianSize) +
+					# geom_hline(yintercept = 1, size=0.4, linetype='solid', col='gray40') +
+					# scale_x_continuous(breaks = xbreaks, limits=c(xmin, xmax)) +
+					# scale_y_continuous(limits=c(ymin, ymax)) +
+					# # scale_y_log10(
+						# # limits=c(ymin, ymax),
+						# # breaks=trans_breaks('log10', function(x) 10^x),
+						# # labels=trans_format('log10', math_format(10^.x))
+					# # ) +
+					# xlab('County records') +
+					# theme(
+						# plot.background = element_blank(),
+						# plot.title = element_blank(),
+						# axis.title.x = element_text(size=axisSizeX, vjust=8),
+						# axis.text.x = element_text(size=axisNumSize),
+						# axis.title.y = element_blank(),
+						# axis.text.y = element_blank(),
+						# axis.ticks.y = element_blank()
+					# )
 
-				boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
-				imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
+				# boxPanel <- boxPanel + theme(plot.margin = grid::unit(c(0, 0, 0, 0.1), 'cm'))
+				# imprecisePanel <- imprecisePanel + theme(plot.margin = grid::unit(c(0, 0.2, 0, 0), 'cm'))
 
-				comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
-				if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
-				if (count == 3) comboPanel <- comboPanel +
-					geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
+				# comboPanel <- plot_grid(boxPanel, imprecisePanel, ncol=2, rel_widths=c(0.55, 1), align='h')
+				# if (count %in% 1:3) comboPanel <- comboPanel + theme(plot.margin=grid::unit(c(0, 0, 0, 1), 'cm'))
+				# if (count == 3) comboPanel <- comboPanel +
+					# geom_text(aes(x=0, y=0, label=ylab, angle=90, size=axisSizeY, vjust=-1))
 
-				top <- 0.5
-				right <- 0.5
-				bottom <- 0
-				left <- 1
+				# top <- 0.5
+				# right <- 0.5
+				# bottom <- 0
+				# left <- 1
 
-				if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
-				if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
-				if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
-				if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
-				if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
-				if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
-				if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
+				# if (count %in% c(1)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, right), 'in'))
+				# if (count %in% c(2:3)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, 0, right), 'in'))
+				# if (count %in% c(4, 10, 16)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, 0, 0, 0), 'in'))
+				# if (count %in% c(22)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(top, right, 0, 0), 'in'))
+				# if (count %in% c(22:27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, 0, 0), 'in'))
+				# if (count %in% c(27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, right, bottom, 0), 'in'))
+				# if (count %in% c(9, 15, 21, 27)) comboPanel <- comboPanel + theme(plot.margin = grid::unit(c(0, 0, bottom, 0), 'in'))
 
-				panels[[count]] <- comboPanel
-				names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
+				# panels[[count]] <- comboPanel
+				# names(panels)[count] <- paste0('errorless', thisNumErrorless, '_precise', thisNumPrecise)
 				
-			} # next number of precise
+			# } # next number of precise
 			
-		} # next number of errorless
+		# } # next number of errorless
 
-		main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
-			panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
-			panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
-			panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
-			panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
-			plot_layout(byrow=FALSE, nrow=6)
+		# main <- panels[[1]] + panels[[2]] + panels[[3]] + plot_spacer() + plot_spacer() + plot_spacer() + # errorless 20
+			# panels[[4]] + panels[[5]] + panels[[6]] + panels[[7]] + panels[[8]] + panels[[9]] + # errorless 40
+			# panels[[10]] + panels[[11]] + panels[[12]] + panels[[13]] + panels[[14]] + panels[[15]] + # errorless 80
+			# panels[[16]] + panels[[17]] + panels[[18]] + panels[[19]] + panels[[20]] + panels[[21]] + # errorless 160
+			# panels[[22]] + panels[[23]] + panels[[24]] + panels[[25]] + panels[[26]] + panels[[27]] + # errorless 320
+			# plot_layout(byrow=FALSE, nrow=6)
 
-		main <- main +
-			plot_annotation(
-				caption = str_wrap(caption, width=105),
-				theme=theme(
-					plot.caption=element_text(
-						size=11,
-						hjust=0,
-						vjust=5
-					)
-				)
-			)
+		# main <- main +
+			# plot_annotation(
+				# caption = str_wrap(caption, width=105),
+				# theme=theme(
+					# plot.caption=element_text(
+						# size=11,
+						# hjust=0,
+						# vjust=5
+					# )
+				# )
+			# )
 
-		ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
-		write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
+		# ggsave(plot=main, filename=paste0('./Analysis/Virtual Species/', plotFileName, '.pdf'), width=8.5, height=11, units='in')
+		# write.csv(trends, paste0('./Analysis/Virtual Species/', trendsFileName, '.csv'), row.names=FALSE)
 
 say('DONE!', deco='&', level=1)

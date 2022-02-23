@@ -1,65 +1,248 @@
-# source('E:/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records/Code/TEMP.r')
+# source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/TEMP.r')
 
-		# calculate quantiles for regression
-		this <- tall[tall$data == 'precise', ]
-		middleQuantPrecise <- qgam(log(ratio) ~ numAdmin, data=this, qu=0.5)
-		lowerQuantPrecise <- qgam(log(ratio) ~ numAdmin, data=this, qu=lower)
-		upperQuantPrecise <- qgam(log(ratio) ~ numAdmin, data=this, qu=upper)
-		
-		middleQuantPrecise <- exp(predict(middleQuantPrecise, this, type='response'))
-		lowerQuantPrecise <- exp(predict(lowerQuantPrecise, this, type='response'))
-		upperQuantPrecise <- exp(predict(upperQuantPrecise, this, type='response'))
 
-		this <- tall[tall$data == 'precise + imprecise', ]
-		middleQuantVague <- qgam(log(ratio) ~ numAdmin, data=this, qu=0.5)
-		lowerQuantVague <- qgam(log(ratio) ~ numAdmin, data=this, qu=lower)
-		upperQuantVague <- qgam(log(ratio) ~ numAdmin, data=this, qu=upper)
-		
-		middleQuantVague <- exp(predict(middleQuantVague, this, type='response'))
-		lowerQuantVague <- exp(predict(lowerQuantVague, this, type='response'))
-		upperQuantVague <- exp(predict(upperQuantVague, this, type='response'))
+	### plot
+	########
 
-		middlePrecise <- data.frame(
-			numAdmin = tall$numAdmin,
-			data = rep('precise', length(lowerQuantPrecise)),
-			middle = middleQuantPrecise
-		)
-		
-		middleVague <- data.frame(
-			numAdmin = tall$numAdmin,
-			data = rep('precise', length(lowerQuantVague)),
-			middle = middleQuantVague
-		)
-		
-		middlePrecise <- middlePrecise[!duplicated(middlePrecise), ]
-		middleVague <- middleVague[!duplicated(middleVague), ]
+		cols <- colorRampPalette(c('gray40', 'gray80', 'white', 'white'))
+		# cols <- hcl.colors(100)
+		cols <- cols(100)
 
-		order <- order(tall$numAdmin[tall$data=='precise'])
-		numAdmin <- thisResults$numAdmin[order]
-		quants <- data.frame(
-			numAdmin = c(numAdmin, rev(numAdmin), numAdmin, rev(numAdmin)),
-			ratio = c(lowerQuantPrecise[order], rev(upperQuantPrecise[order]), lowerQuantVague[order], rev(upperQuantVague[order])),
-			data = c(rep('precise', 2 * length(lowerQuantPrecise)), rep('precise + imprecise', 2 * length(lowerQuantVague)))
-		)
-		
-		quants <- quants[!duplicated(quants), ]
+		# MCPs
+		errorlessMcpSp <- sp::spTransform(errorlessMcpSpEa, getCRS('wgs84', TRUE))
+		preciseMcpSp <- sp::spTransform(preciseMcpSpEa, getCRS('wgs84', TRUE))
+		impreciseMcpSp <- sp::spTransform(impreciseMcpSpEa, getCRS('wgs84', TRUE))
 
-		### plot!
-		p[[countPrecise]] <- ggplot() +
-			geom_polygon(data=quants, mapping=aes(x=numAdmin, y=ratio, fill=data)) +
-			geom_point(data=tall, size=2, aes(x=numAdmin, y=ratio, shape=data, color=data)) +
-			scale_fill_manual(values=c('precise'=preciseFill, 'precise + imprecise'=vagueFill)) +
-			scale_color_manual(values=c('precise'=preciseCol, 'precise + imprecise'=vagueCol)) +
-			scale_shape_manual(values=c('precise'=2, 'precise + imprecise'=1)) +
-			geom_line(data=middlePrecise, aes(x=numAdmin, y=middle), color='#01665e', size=2) +
-			geom_line(data=middleVague, aes(x=numAdmin, y=middle), color='#d73027', size=2) +
-			ggtitle(paste0(letter, ') ', numPrecise, ' precise occurrences')) + 
-			xlab('Additional imprecise occurrences') +
-			ylab('Ratio of estimated-to-errorless\nextent of occurrence') +
-			ylim(ylim[1], ylim[2]) +
-			theme(
-				text = element_text(size=12),
-				axis.text.x = element_text(angle = 60, vjust = 0.9, hjust=1),
-				legend.position='bottom'
+		plot(errorlessBuffSp)
+		surround <- createPlotPoly(errorlessBuffSp)
+		dev.off()
+
+		png('./Analysis/Example - Virtual Species with Present-Day Suitability & All Occurrence Types.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			plot(adminSp, border='orange', lwd=1.2, add=TRUE)
+			points(errorlessRecsSp, pch=1, lwd=0.4, cex=0.6)
+			points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
+			points(impreciseErrorlessRecs, bg='orange', lwd=0.4, pch=21, cex=0.6)
+
+			plot(errorlessMcpSp, lty='dotted', lwd=0.6, add=TRUE)
+			plot(preciseMcpSp, border='#1b9e77', lwd=0.6, lty='dotted', add=TRUE)
+			plot(impreciseMcpSp, border='orange', lwd=0.6, lty='dotted', add=TRUE)
+			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
+			
+			legend(
+				'right',
+				inset=-0.6,
+				xpd=NA,
+				bty='n',
+				cex=0.56,
+				pt.lwd=0.4,
+				legend=c(
+					'Omniscient occurrence',
+					'Omniscient MCP',
+					'Precise occurrence',
+					'Precise MCP',
+					'Imprecise occurrence',
+					'County occurrence',
+					'Precise/county MCP',
+					'Focal region'
+				),
+				pch=c(
+					1,
+					NA,
+					21,
+					NA,
+					21,
+					NA,
+					NA,
+					NA
+				),
+				pt.bg=c(
+					NA,
+					NA,
+					'#1b9e77',
+					NA,
+					'orange',
+					NA,
+					NA,
+					NA
+				),
+				col=c(
+					'black',
+					'black',
+					'black',
+					'#1b9e77',
+					'black',
+					'orange',
+					'orange',
+					'black'
+				),
+				lty=c(
+					NA,
+					'dotted',
+					NA,
+					'dotted',
+					NA,
+					'solid',
+					'dotted',
+					'solid'
+				),
+				lwd=c(
+					NA,
+					0.6,
+					NA,
+					0.6,
+					NA,
+					0.6,
+					0.6,
+					0.7
+				)
+				
 			)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with Present-Day Suitability.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with Present-Day Suitability & All Errorless Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			points(errorlessRecsSp, pch=1, lwd=0.4, cex=0.6)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with Present-Day Suitability & All Precise Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
+			
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with Present-Day Suitability & All Imprecise Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			points(impreciseErrorlessRecs, bg='orange', lwd=0.4, pch=21, cex=0.6)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with Present-Day Suitability & All Imprecise & County Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			plot(adminSp, border='orange', lwd=1.2, add=TRUE)
+			points(impreciseErrorlessRecs, bg='orange', lwd=0.4, pch=21, cex=0.6)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with Present-Day Suitability & All Precise & County Occurrences.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(sqNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			plot(adminSp, border='orange', lwd=1.2, add=TRUE)
+			points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with Future Suitability.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(futNicheRast, ext=surround, col=cols, legend=FALSE, axes=FALSE)
+			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
+
+		dev.off()
+			
 		
+		png('./Analysis/Example - Virtual Species with Present Suitability from Errorless Model.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(futNicheRast, ext=surround, col='gray75', legend=FALSE, axes=FALSE)
+			plot(sqPredRast_errorless, col=c('gray65', 'forestgreen'), legend=FALSE, add=TRUE)
+			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with FUTURE Suitability from Errorless Model.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(futNicheRast, ext=surround, col='gray75', legend=FALSE, axes=FALSE)
+			plot(futPredRast_errorless, col=c('gray65', 'forestgreen'), legend=FALSE, add=TRUE)
+			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with PRESENT Suitability from Precise Model.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(futNicheRast, ext=surround, col='gray75', legend=FALSE, axes=FALSE)
+			plot(sqPredRast_precise, col=c('gray65', 'forestgreen'), legend=FALSE, add=TRUE)
+			# points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
+			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with FUTURE Suitability from Precise Model.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(futNicheRast, ext=surround, col='gray75', legend=FALSE, axes=FALSE)
+			plot(futPredRast_precise, col=c('gray65', 'forestgreen'), legend=FALSE, add=TRUE)
+			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with PRESENT Suitability from Imprecise Model.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(futNicheRast, ext=surround, col='gray75', legend=FALSE, axes=FALSE)
+			plot(sqPredRast_imprecise, col=c('gray65', 'forestgreen'), legend=FALSE, add=TRUE)
+			# plot(adminSp, border='orange', lwd=1.2, add=TRUE)
+			# points(preciseRecsSp, bg='#1b9e77', pch=21, lwd=0.4, cex=0.6)
+			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
+			
+		dev.off()
+			
+		png('./Analysis/Example - Virtual Species with FUTURE Suitability from Imprecise Model.png', res=600, width=1600, height=1200)
+
+			par(mfrow=c(1, 1), oma=c(1, 1, 1, 1), mar=c(0, 0, 0, 0))
+
+			# present
+			plot(futNicheRast, ext=surround, col='gray75', legend=FALSE, axes=FALSE)
+			plot(futPredRast_imprecise, col=c('gray65', 'forestgreen'), legend=FALSE, add=TRUE)
+			plot(errorlessBuffSp, lwd=0.6, add=TRUE)
+			
+		dev.off()

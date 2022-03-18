@@ -1,9 +1,9 @@
 ### ANALYSIS OF RANGE SIZE FOR "VAGUELY-GEOREFERENCED SPECIMENS" PROJECT
 ### David Henderson 2019 | Adam B. Smith 2020
 ### 
-### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/01 Extent of Occurrence.r')
-### source('D:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/01 Extent of Occurrence.r')
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/01 Extent of Occurrence.r')
+### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/01 Extent of Occurrence.r')
+### source('D:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/01 Extent of Occurrence.r')
+### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/01 Extent of Occurrence.r')
 
 ### CONTENTS ###
 ### setup ###
@@ -37,7 +37,7 @@
 	library(omnibus)
 	library(enmSdm)
 	library(legendary)
-	# source('./Code/Functions for Calculating Range Size.r')
+	# source('./enms_impreciseRecords/Functions for Calculating Range Size.r')
 
 	### names
 

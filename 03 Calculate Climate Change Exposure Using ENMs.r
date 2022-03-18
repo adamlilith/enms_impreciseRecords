@@ -1,8 +1,8 @@
 ### CALCULATE CLIMATE EXPOSURE USING ENMS
 ### David Henderson 2019 | Adam B. Smith 2020
 ### 
-### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/03 Calculate Climate Change Exposure Using ENMs.r')
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/03 Calculate Climate Change Exposure Using ENMs.r')
+### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/03 Calculate Climate Change Exposure Using ENMs.r')
+### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/03 Calculate Climate Change Exposure Using ENMs.r')
 
 ### CONTENTS ###
 ### setup ###

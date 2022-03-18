@@ -1,13 +1,12 @@
 ### EFFECT OF INCLUDING IMPRECISE SPECIMENS ON CLIMATE CHANGE EXPOSURE - VIRTUAL SPECIES
 ### Adam B. Smith | Missouri Botanical Garden | adam.smith@mobot.org | 2021-10
 ### 
-### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/08 Virtual Species Summaries.r')
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/08 Virtual Species Summaries.r')
+### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/08 Virtual Species Summaries.r')
+### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/08 Virtual Species Summaries.r')
 
 ### CONTENTS ###
 ### setup ###
-### calculate ensemble future rasters ###
-### generate simulated species ###
+
 ### collate results ###
 
 ### make composite plot with SUBSET of EOO and niche breadth results - TWO omniscient scenarios ###

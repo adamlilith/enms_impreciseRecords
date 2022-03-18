@@ -1,9 +1,9 @@
 ### CLEANING DATA FOR "VAGUELY-GEOREFERENCED SPECIMENS" PROJECT
 ### David Henderson 2019 | Adam B. Smith 2020
 ### 
-### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/00 Asclepias Record Cleaning.R')
-### source('D:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/00 Asclepias Record Cleaning.R')
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/00 Asclepias Record Cleaning.R')
+### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/00 Asclepias Record Cleaning.R')
+### source('D:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/00 Asclepias Record Cleaning.R')
+### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/00 Asclepias Record Cleaning.R')
 
 ### CONTENTS ###
 ### setup ###
@@ -589,7 +589,7 @@ say('##########################')
 	# say('### assign records to geospatial confidence level ###')
 	# ############################################################
 		
-		# source('./Code/darwinCoreSpatialAssign.r')
+		# source('./enms_impreciseRecords/darwinCoreSpatialAssign.r')
 
 		# assigned <- darwinCoreSpatialAssign(
 			# darwin = records,

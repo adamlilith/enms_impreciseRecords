@@ -1,7 +1,7 @@
 ### CALCULATE UNIVARIATE NICHE BREADTH
 ### David Henderson 2019 | Adam B. Smith 2020
 ### 
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/06 Compile Supplemental Results.r')
+### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/06 Compile Supplemental Results.r')
 
 ### CONTENTS ###
 ### setup ###

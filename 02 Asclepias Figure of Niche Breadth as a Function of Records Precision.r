@@ -2,8 +2,8 @@
 ### This script creates a figure demonstrating the difference in niche breadth calculated using precise vs precise + imprecise records
 ### Adam B. Smith | Missouri Botanical Garden | 2020-04
 ###
-### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/02 Figure of Niche Breadth As a Function of Records Precision.r')
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/02 Figure of Niche Breadth As a Function of Records Precision.r')
+### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/02 Asclepias Figure of Niche Breadth as a Function of Records Precision.r')
+### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/02 Asclepias Figure of Niche Breadth as a Function of Records Precision.r')
 
 ### CONTENTS ###
 ### setup ###

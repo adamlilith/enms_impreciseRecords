@@ -7,7 +7,7 @@
 ### CONTENTS ###
 ### setup ###
 ### calculate ensemble future rasters ###
-### generate simulated species ###
+### generate simulated species and analyze ###
 
 #############
 ### setup ###
@@ -19,9 +19,9 @@
 	gc()
 	options(stringsAsFactors=FALSE)
 	
-	drive <- 'C:'
+	# drive <- 'C:'
 	# drive <- 'D:'
-	# drive <- 'E:'
+	drive <- 'E:'
 	
 	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
 
@@ -132,9 +132,9 @@
 	# dirCreate('./Data/WorldClim/cmip6_ensemble_ssp585_2061-2080')
 	# writeRaster(bc, './Data/WorldClim/cmip6_ensemble_ssp585_2061-2080/bioclim.tif', overwrite=TRUE)
 
-say('##################################')
-say('### generate simulated species ###')
-say('##################################')
+say('##############################################')
+say('### generate simulated species and analyze ###')
+say('##############################################')
 
 	### user-defined
 	################

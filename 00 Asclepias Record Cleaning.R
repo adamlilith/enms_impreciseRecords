@@ -1,9 +1,9 @@
 ### CLEANING DATA FOR "VAGUELY-GEOREFERENCED SPECIMENS" PROJECT
 ### David Henderson 2019 | Adam B. Smith 2020
 ### 
-### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/00 Asclepias Record Cleaning.R')
-### source('D:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/00 Asclepias Record Cleaning.R')
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/00 Asclepias Record Cleaning.R')
+### source('C:/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/00 Asclepias Record Cleaning.R')
+### source('D:/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/00 Asclepias Record Cleaning.R')
+### source('E:/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/00 Asclepias Record Cleaning.R')
 
 ### CONTENTS ###
 ### setup ###
@@ -33,7 +33,7 @@
 	# drive <- 'D:'
 	drive <- 'E:'
 	
-	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
+	setwd(paste0(drive, '/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records'))
 
 	### libraries
 	library(raster)

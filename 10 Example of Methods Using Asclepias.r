@@ -1,9 +1,9 @@
 ### ANALYSIS OF RANGE SIZE FOR "VAGUELY-GEOREFERENCED SPECIMENS" PROJECT
 ### David Henderson 2019 | Adam B. Smith 2020
 ### 
-### source('C:/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/10 Example of Methods Using Asclepias.r')
-### source('D:/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/10 Example of Methods Using Asclepias.r')
-### source('E:/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/10 Example of Methods Using Asclepias.r')
+### source('C:/Ecology/Drive/Research/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/10 Example of Methods Using Asclepias.r')
+### source('D:/Ecology/Drive/Research/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/10 Example of Methods Using Asclepias.r')
+### source('E:/Ecology/Drive/Research/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/10 Example of Methods Using Asclepias.r')
 
 ### CONTENTS ###
 ### setup ###
@@ -23,7 +23,7 @@
 	# drive <- 'D:'
 	drive <- 'E:'
 	
-	setwd(paste0(drive, '/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records'))
+	setwd(paste0(drive, '/Ecology/Drive/Research/ENMs - Vaguely Georeferenced Specimen Records'))
 
 	### libraries
 	library(dismo)

@@ -1,8 +1,8 @@
 ### CALCULATE UNIVARIATE NICHE BREADTH
 ### David Henderson 2019 | Adam B. Smith 2020
 ### 
-### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/04 Asclepias Calculate Univariate Niche Breadth.r')
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/04 Asclepias Calculate Univariate Niche Breadth.r')
+### source('C:/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/04 Asclepias Calculate Univariate Niche Breadth.r')
+### source('E:/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/04 Asclepias Calculate Univariate Niche Breadth.r')
 
 ### CONTENTS ###
 ### setup ###
@@ -22,7 +22,7 @@
 	# drive <- 'D:'
 	drive <- 'E:'
 	
-	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
+	setwd(paste0(drive, '/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records'))
 
 	library(cowplot)
 	library(ggplot2)

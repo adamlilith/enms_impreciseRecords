@@ -1,8 +1,8 @@
 ### EFFECT OF INCLUDING IMPRECISE SPECIMENS ON CLIMATE CHANGE EXPOSURE - VIRTUAL SPECIES
 ### Adam B. Smith | Missouri Botanical Garden | adam.smith@mobot.org | 2021-10
 ### 
-### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/07 Virtual Species Simulations.r')
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/enms_impreciseRecords/07 Virtual Species Simulations.r')
+### source('C:/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/07 Virtual Species Simulations.r')
+### source('E:/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/07 Virtual Species Simulations.r')
 
 ### CONTENTS ###
 ### setup ###
@@ -23,7 +23,7 @@
 	# drive <- 'D:'
 	drive <- 'E:'
 	
-	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
+	setwd(paste0(drive, '/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records'))
 
 	library(adehabitatHR)
 	library(cowplot)

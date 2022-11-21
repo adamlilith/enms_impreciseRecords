@@ -1,7 +1,7 @@
 # enms_impreciseRecords
 What is the cost of discarding imprecisely-georeferenced specimens from evaluations of species' climate change vulnerability? This repository contains the code used to generate and evaluate the effect of including spatially imprecise specimens when estimating species niches and distributions. The full citation for this work is:
 
-Smith, A.B., Murphy, S.J., Henderson, D., and Erickson, K.D. 2023. Including imprecisely georeferenced specimens improves accuracy of species distribution models and estimates of niche breadth.  \emph{Global Ecology and Biogeography} In press. <a href="http://dx.doi.org/10.1101/2021.06.10.447988">Open access pre-print.</a>
+Smith, A.B., Murphy, S.J., Henderson, D., and Erickson, K.D. 2023. Including imprecisely georeferenced specimens improves accuracy of species distribution models and estimates of niche breadth.  <i>Global Ecology and Biogeography</i> In press. <a href="http://dx.doi.org/10.1101/2021.06.10.447988">Open access pre-print.</a>
 
 ### Abstract ###
 <strong>Aim</strong> Museum and herbarium specimen records are frequently used to assess species’ conservation status and responses to climate change. Typically, occurrences with imprecise geolocality information are discarded because they cannot be matched confidently to environmental conditions, and are thus expected to increase uncertainty in downstream analyses. However, using only precisely georeferenced records risks undersampling of species’ environmental and geographic distributions. We present two related methods to allow the use of imprecisely georeferenced occurrences in biogeographic analysis.

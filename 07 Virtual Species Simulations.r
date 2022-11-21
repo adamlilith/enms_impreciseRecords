@@ -1,13 +1,13 @@
 ### EFFECT OF INCLUDING IMPRECISE SPECIMENS ON CLIMATE CHANGE EXPOSURE - VIRTUAL SPECIES
 ### Adam B. Smith | Missouri Botanical Garden | adam.smith@mobot.org | 2021-10
 ### 
-### source('C:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/07 Virtual Species Simulations.r')
-### source('E:/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records/Code/07 Virtual Species Simulations.r')
+### source('C:/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/07 Virtual Species Simulations.r')
+### source('E:/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records/enms_impreciseRecords/07 Virtual Species Simulations.r')
 
 ### CONTENTS ###
 ### setup ###
 ### calculate ensemble future rasters ###
-### generate simulated species ###
+### generate simulated species and analyze ###
 
 #############
 ### setup ###
@@ -19,11 +19,11 @@
 	gc()
 	options(stringsAsFactors=FALSE)
 	
-	drive <- 'C:'
+	# drive <- 'C:'
 	# drive <- 'D:'
-	# drive <- 'E:'
+	drive <- 'E:'
 	
-	setwd(paste0(drive, '/Ecology/Drive/Research Active/Vaguely Georeferenced Specimen Records'))
+	setwd(paste0(drive, '/Ecology/Drive/Research Active/ENMs - Vaguely Georeferenced Specimen Records'))
 
 	library(adehabitatHR)
 	library(cowplot)
@@ -132,9 +132,9 @@
 	# dirCreate('./Data/WorldClim/cmip6_ensemble_ssp585_2061-2080')
 	# writeRaster(bc, './Data/WorldClim/cmip6_ensemble_ssp585_2061-2080/bioclim.tif', overwrite=TRUE)
 
-say('##################################')
-say('### generate simulated species ###')
-say('##################################')
+say('##############################################')
+say('### generate simulated species and analyze ###')
+say('##############################################')
 
 	### user-defined
 	################

@@ -87,7 +87,7 @@ x <- data.frame(
 		'Removed\ngeographic\noutliers',
 		'Removed\nimprecise\nrecords',
 		'Removed\nunnatural\nrecords',
-		'Removed\nenvironmental\noutliers'
+		'Removed\nenviron-\nmental\noutliers'
 	),
 	Percent = c(
 		# sum(needsCleaned$cleaningDescribed, na.rm=TRUE),
@@ -127,10 +127,10 @@ graph <- ggplot(data=x, aes(x=name, y=Percent, fill=name)) +
 	theme(
 		legend.position = 'none',
 		axis.title.x = element_blank(),
-		axis.text.x = element_text(size=15),
-		axis.title.y = element_text(size=18),
-		axis.text.y = element_text(size=12)
+		axis.text.x = element_text(size=17),
+		axis.title.y = element_text(size=20),
+		axis.text.y = element_text(size=18)
 	)
 	
-ggsave(graph, filename='E:/Ecology/Drive/Research/Vaguely Georeferenced Specimen Records/Analysis/Literature Survey/Studies Reporting Cleaning Methods.pdf')
+ggsave(graph, filename='E:/Ecology/Drive/Research/ENMs - Vaguely Georeferenced Specimen Records/Analysis/Literature Survey/Studies Reporting Cleaning Methods.pdf')
 	

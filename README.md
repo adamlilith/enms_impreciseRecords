@@ -1,7 +1,7 @@
 <a href="https://zenodo.org/badge/latestdoi/373253131"><img src="https://zenodo.org/badge/373253131.svg" alt="DOI"></a>
+# Using imprecisely georeferenced specimens in species distribution modeling
 
-# enms_impreciseRecords
-What is the cost of discarding imprecisely-georeferenced specimens from evaluations of species' climate change vulnerability? This repository contains the code used to generate and evaluate the effect of including spatially imprecise specimens when estimating species niches and distributions. The full citation for this work is:
+Code for generation and analysis of virtual species in:
 
 Smith, A.B., Murphy, S.J., Henderson, D., and Erickson, K.D. 2023. Including imprecisely georeferenced specimens improves accuracy of species distribution models and estimates of niche breadth.  <i>Global Ecology and Biogeography</i> In press. <a href="http://dx.doi.org/10.1101/2021.06.10.447988">Open access pre-print.</a>
 

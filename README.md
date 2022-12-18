@@ -1,6 +1,6 @@
 <!-- badges: start -->
 [![DOI](https://zenodo.org/badge/373253131.svg)](https://zenodo.org/badge/latestdoi/373253131)
-[![DOI](https://img.shields.io/badge/DOI-10.1101%2021.06.10.447988-green)](https://doi.org/10.1101/2021.06.10.447988)
+[![DOI](https://img.shields.io/badge/Open Access-10.1101%2021.06.10.447988-green)](https://doi.org/10.1101/2021.06.10.447988)
 <!-- badges: end -->
 
 

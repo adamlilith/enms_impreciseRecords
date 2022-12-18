@@ -1,4 +1,9 @@
-<a href="https://zenodo.org/badge/latestdoi/373253131"><img src="https://zenodo.org/badge/373253131.svg" alt="DOI"></a>
+<!-- badges: start -->
+[![DOI](https://zenodo.org/badge/373253131.svg)](https://zenodo.org/badge/latestdoi/373253131)
+[![DOI](https://img.shields.io/badge/DOI-10.1101%2021.06.10.447988 -green)](https://doi.org/10.1111/2041-210X.13874)
+<!-- badges: end -->
+
+
 # Using imprecisely georeferenced specimens in species distribution modeling
 
 Code for generation and analysis of virtual species in:
